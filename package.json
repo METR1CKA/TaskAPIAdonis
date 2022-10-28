@@ -5,12 +5,7 @@
   "scripts": {
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
-    "start": "node server.js",
-    "refresh": "node ace  migration:refresh --seed",
-    "migration":"node ace migration:run",
-    "migrations":"node ace migration:run --seed",
-    "seed":"node ace db:seed -i",
-    "seeds":"node ace db:seed"
+    "start": "node server.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.9.3",
