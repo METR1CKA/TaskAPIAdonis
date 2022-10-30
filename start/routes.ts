@@ -21,9 +21,5 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
-  return {SERVER: 'ACTIVE'}
-})
-
-Route.get('api/v1', async () => {
-  return {API: 'V1'}
+  return { hello: 'world' }
 })
