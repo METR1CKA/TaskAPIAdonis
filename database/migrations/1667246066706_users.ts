@@ -10,9 +10,9 @@ export default class UsersSchema extends BaseSchema {
       table.string('password', 200).notNullable()
       table.string('remember_me_token').nullable()
       table.boolean('active').notNullable()
-      table.foreign('rol_id').references('id')
+      table.integer('rol_id').references('id')
         .inTable('roles').unsigned().onDelete('CASCADE')
-      table.foreign('profile_id').references('id')
+      table.integer('profile_id').references('id')
         .inTable('profiles').unsigned().onDelete('CASCADE')
 
       /**
