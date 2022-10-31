@@ -25,9 +25,9 @@ import './Passwords/routes'
 import './Users/routes'
 
 Route.get('/', async () => {
-  return {SERVER: 'ACTIVE'}
+  return { SERVER: 'ACTIVE' }
 })
 
 Route.get('api/v1', async () => {
-  return {API: 'V1'}
+  return { API: 'V1' }
 })
