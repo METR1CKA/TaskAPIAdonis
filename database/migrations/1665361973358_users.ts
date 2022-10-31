@@ -7,8 +7,13 @@ export default class UsersSchema extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.string('email', 255).notNullable()
-      table.string('password', 180).notNullable()
+      table.string('password', 200).notNullable()
       table.string('remember_me_token').nullable()
+      table.boolean('active').notNullable()
+      table.foreign('rol_id').references('id')
+        .inTable('roles').unsigned().onDelete('CASCADE')
+      table.foreign('profile_id').references('id')
+        .inTable('profiles').unsigned().onDelete('CASCADE')
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
