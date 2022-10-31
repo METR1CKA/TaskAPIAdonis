@@ -12,8 +12,6 @@ export default class UsersSchema extends BaseSchema {
       table.boolean('active').notNullable()
       table.integer('rol_id').references('id')
         .inTable('roles').unsigned().onDelete('CASCADE')
-      table.integer('profile_id').references('id')
-        .inTable('profiles').unsigned().onDelete('CASCADE')
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
