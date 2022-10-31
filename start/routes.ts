@@ -19,6 +19,10 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import './Auth/routes'
+import './Files/routes'
+import './Passwords/routes'
+import './Users/routes'
 
 Route.get('/', async () => {
   return {SERVER: 'ACTIVE'}
