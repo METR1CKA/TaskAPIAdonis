@@ -15,9 +15,7 @@ export default class DetectUserLocale {
       return ctx.response.badRequest({})
     }
 
-    if (language) {
-      ctx.i18n.switchLocale(language)
-    }
+    ctx.i18n.switchLocale(language)
 
     await next()
   }
