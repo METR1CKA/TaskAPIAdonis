@@ -1,6 +1,14 @@
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import User from './User'
+
 
 export default class Role extends BaseModel {
+  public static ROLES = {
+    DEV: 1,
+    ADMIN: 2,
+    EDITOR: 3
+  }
+
   @column({ isPrimary: true })
   public id: number
 
@@ -12,4 +20,12 @@ export default class Role extends BaseModel {
 
   @column()
   public description?: string
+
+  // Relations
+
+  @hasMany(() => User, {
+    localKey: 'id',
+    foreignKey: 'role_id'
+  })
+  public role: HasMany<typeof User>
 }

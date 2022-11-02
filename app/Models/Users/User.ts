@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel, hasOne, HasOne, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import Profile from './Profile'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -27,6 +28,8 @@ export default class User extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
+  // Functions
+
   @beforeSave()
   public static async hashPassword (User: User) {
     if (User.$dirty.password) {
@@ -34,5 +37,17 @@ export default class User extends BaseModel {
     }
   }
 
-  
+  // Relations
+
+  @hasOne(() => Profile, {
+    localKey: 'id',
+    foreignKey: 'user_id'
+  })
+  public profile: HasOne<typeof Profile>
+
+  @belongsTo(() => User, {
+    localKey: 'id',
+    foreignKey: 'role_id'
+  })
+  public role: BelongsTo<typeof User>
 }
