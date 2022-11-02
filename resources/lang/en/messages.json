@@ -1,0 +1,39 @@
+{
+  "success":
+  {
+    "authUser": "Your data was obtained",
+    "login":"Successful login",
+    "logout":"Session closed successfully",
+    "all":"All {data} were obtained successfully",
+    "one":"{data} was obtained successfully",
+    "create":"{data} created successfully",
+    "update":"{data} updated successfully",
+    "desactivate":"The status of {data} has been changed successfully",
+    "delete":"{data} deleted successfully",
+    "image":"Image stored successfully"
+  },
+  "errors":
+  {
+    "lang": "Language not avaible",
+    "route.notFound": "Route not found",
+    "field":"The {field} field is required",
+    "email":"Incorrect email format",
+    "rule":"The {field} field must be of type {type}",
+    "confirm":"The {field} field is required to confirm",
+    "noLogin":"You don't have logged in",
+    "notFound":"{data} not found",
+    "user":"User doesn't exist",
+    "exist":"User already exists",
+    "login":"Incorrect credentials",
+    "password":"Incorrect password",
+    "noAccess":"You don't have access to this resource",
+    "image":"Invalid file extension, only image and/or video type files are allowed",
+    "image_exist":"The image doesn't exist",
+    "image.path":"Image path does not exist",
+    "maxLength":"The length of the field {field} must be less than {args} characters",
+    "error":"Failed to run service",
+    "noProd": "Available only for api development"
+  },
+  "FAILED": "FAILED",
+  "SUCCESSFUL": "SUCCESSFUL"
+}
