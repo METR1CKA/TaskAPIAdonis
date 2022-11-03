@@ -9,13 +9,11 @@ export default class AuthMiddleware {
     if (!ctx.auth.isAuthenticated && ! isLogged) {
       const obj = new MessagesI18n(ctx.request.header('Accept-language'))
 
-      const message = obj.format(
-        obj.messageA('messages.errors.noLogin'),
-        obj.messageA('messages.FAILED'),
-        null
-      )
-
-      return ctx.response.unauthorized(message)
+      return ctx.response.unauthorized({
+        message: obj.messageA('messages.errors.noLogin'),
+        status: obj.messageA('messages.FAILED'),
+        data: null
+      })
     }
 
     await next()
