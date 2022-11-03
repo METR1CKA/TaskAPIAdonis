@@ -13,13 +13,11 @@ export default class DetectUserLocale {
     if (!language) {
       const obj = new MessagesI18n(I18n.defaultLocale)
 
-      const message = obj.format(
-        obj.messageA('messages.errors.lang'),
-        obj.messageA('messages.FAILED'),
-        null
-      )
-
-      return ctx.response.badRequest(message)
+      return ctx.response.badRequest({
+        message: obj.messageA('messages.errors.lang'),
+        status: obj.messageA('messages.FAILED'),
+        data: null
+      })
     }
 
     ctx.i18n.switchLocale(language)
