@@ -25,6 +25,7 @@ import './Auth/routes'
 import './Files/routes'
 import './Passwords/routes'
 import './Users/routes'
+import User from 'App/Models/Users/User'
 
 Route.get('/', async () => {
   return { SERVER: 'ACTIVE' }
@@ -34,34 +35,36 @@ Route.get('api/v1', async () => {
   return { API: 'V1' }
 })
 
-Route.get('api/v1/user', ({ response, auth, request }) => {
+Route.get('api/v1/user', async ({ response, auth, request }) => {
+
   const obj = new MessagesI18n(request.header('Accept-language'))
+
+  const user = await User.findOrFail(auth.use('api').user?.id)
 
   return Env.get('NODE_ENV') === 'development'
-    ? response.ok(
-      obj.format(
-        obj.messageA('messages.success.authUser'),
-        obj.messageA('messages.SUCCESSFUL'),
-        auth.use('api').user
-      )
-    )
-    : response.badRequest(
-      obj.format(
-        obj.messageA('messages.errors.noProd'),
-        obj.messageA('messages.FAILED'),
-        null
-      )
-    )
-}).middleware(['lang', 'auth'])
+    ? response.ok({
+      message: obj.messageA('messages.success.authUser'),
+      status: obj.messageA('messages.SUCCESSFUL'),
+      data: user
+    })
+    : response.badRequest({
+      message: obj.messageA('messages.errors.noProd'),
+      status: obj.messageA('messages.FAILED'),
+      data: null
+    })
+
+})
+  .middleware(['lang', 'auth'])
 
 Route.any('*', ({ response, request }) => {
+
   const obj = new MessagesI18n(request.header('Accept-language'))
 
-  const message = obj.format(
-    obj.messageA('messages.errors.route.notFound'),
-    obj.messageA('messages.FAILED'),
-    null
-  )
+  return response.notFound({
+    message: obj.messageA('messages.errors.route.notFound'),
+    status: obj.messageA('messages.FAILED'),
+    data: null
+  })
 
-  return response.notFound(message)
-}).middleware('lang')
+})
+  .middleware('lang')
