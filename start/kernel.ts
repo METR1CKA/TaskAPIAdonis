@@ -42,5 +42,6 @@ Server.middleware.register([
 */
 Server.middleware.registerNamed({
   lang: () => import('App/Middleware/DetectUserLocale'),
-  auth: () => import('App/Middleware/Auth')
+  auth: () => import('App/Middleware/Auth'),
+  role_user: () => import('App/Middleware/RoleUser'),
 })
