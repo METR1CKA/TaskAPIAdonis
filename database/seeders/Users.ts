@@ -12,17 +12,17 @@ export default class extends BaseSeeder {
         {
           'name': 'DEV',
           'active': true,
-          'description': ''
+          'description': 'Role with all system privileges'
         },
         {
           'name': 'ADMIN',
           'active': true,
-          'description': ''
+          'description': 'Role with all company privileges'
         },
         {
           'name': 'EDITOR',
           'active': true,
-          'description': ''
+          'description': 'Role with some privileges'
         }
       ]
     )
