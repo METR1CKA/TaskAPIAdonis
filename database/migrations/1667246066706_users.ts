@@ -10,7 +10,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('password', 200).notNullable()
       table.string('remember_me_token').nullable()
       table.boolean('active').notNullable()
-      table.integer('rol_id').references('id')
+      table.integer('role_id').references('id')
         .inTable('roles').unsigned().onDelete('CASCADE')
 
       /**
