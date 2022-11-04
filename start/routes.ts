@@ -21,11 +21,11 @@
 import Route from '@ioc:Adonis/Core/Route'
 import MessagesI18n from 'App/Messages/MessagesI18n'
 import Env from '@ioc:Adonis/Core/Env'
+import User from 'App/Models/Users/User'
 import './Auth/routes'
 import './Files/routes'
 import './Passwords/routes'
 import './Users/routes'
-import User from 'App/Models/Users/User'
 
 Route.get('/', async () => {
   return { SERVER: 'ACTIVE' }
