@@ -14,7 +14,7 @@ export default class RegisterValidator {
     active: schema.boolean([
       rules.required()
     ]),
-    rol_id: schema.number([
+    role_id: schema.number([
       rules.required()
     ]),
     name: schema.string([
@@ -23,9 +23,9 @@ export default class RegisterValidator {
     lastname: schema.string([
       rules.required()
     ]),
-    phone: schema.string.nullableAndOptional([
+    phone: schema.string.optional([
       rules.maxLength(10)
     ]),
-    address: schema.string.nullableAndOptional()
+    address: schema.string.optional()
   })
 }
