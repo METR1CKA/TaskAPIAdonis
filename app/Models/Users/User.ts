@@ -20,12 +20,19 @@ export default class User extends BaseModel {
   public active: boolean
 
   @column()
-  public rol_id: number
+  public role_id: number
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({
+    autoCreate: true,
+    serialize: (value) => value?.toFormat('dd/MM/yyyy  HH:mm:ss')
+  })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({
+    autoCreate: true,
+    autoUpdate: true,
+    serialize: (value) => value?.toFormat('dd/MM/yyyy  HH:mm:ss')
+  })
   public updatedAt: DateTime
 
   // Functions
