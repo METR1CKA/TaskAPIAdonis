@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, hasOne, HasOne, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import Profile from './Profile'
+import Role from './Role'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -52,9 +53,9 @@ export default class User extends BaseModel {
   })
   public profile: HasOne<typeof Profile>
 
-  @belongsTo(() => User, {
+  @belongsTo(() => Role, {
     localKey: 'id',
     foreignKey: 'role_id'
   })
-  public role: BelongsTo<typeof User>
+  public role: BelongsTo<typeof Role>
 }
