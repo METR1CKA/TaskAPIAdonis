@@ -8,10 +8,10 @@ Route.group(() => {
   Route.post('create', 'UsersController.create')
 
   //UPDATE
-  Route.put('update/:id?', 'UsersController.update')
+  Route.put('update/:id', 'UsersController.update')
 
   //DELETE
-  Route.delete('delete/:id?', 'UsersController.delete')
+  Route.delete('delete/:id', 'UsersController.delete')
 })
   .prefix('api/v1/users')
   .namespace('App/Controllers/Http/Users')
