@@ -33,13 +33,13 @@ export default class extends BaseSeeder {
           'email': 'dev@tasks.com',
           'password': 'dev.pass',
           'active': true,
-          'rol_id': roles[0].id
+          'role_id': roles[0].id
         },
         {
           'email': 'admin@tasks.com',
           'password': 'admin.pass',
           'active': true,
-          'rol_id': roles[1].id
+          'role_id': roles[1].id
         }
       ]
     )
