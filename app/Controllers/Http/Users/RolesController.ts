@@ -53,7 +53,7 @@ export default class RolesController {
 
       const role = await Role.create(vali)
 
-      return response.ok({
+      return response.created({
         message: lang.messageC('messages.success.create', 'role'),
         status: lang.messageA('messages.SUCCESSFUL'),
         data: role
