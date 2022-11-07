@@ -10,7 +10,7 @@ export default class UsersController {
 
   public async get({ request, response, params }: HttpContextContract) {
 
-    const obj = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header('Accept-language'))
 
     const users = await User.query()
       .preload('profile')
@@ -21,25 +21,23 @@ export default class UsersController {
 
       const user = users.find(e => e.id == params.id)
 
-      if (!user) {
-        return response.notFound({
-          message: obj.messageC('messages.errors.notFound', 'user'),
-          status: obj.messageA('messages.FAILED'),
+      return user
+        ? response.ok({
+          message: lang.messageC('messages.success.one', 'user'),
+          status: lang.messageA('messages.SUCCESSFUL'),
+          data: user
+        })
+        : response.notFound({
+          message: lang.messageC('messages.errors.notFound', 'user'),
+          status: lang.messageA('messages.FAILED'),
           data: null
         })
-      }
-
-      return response.ok({
-        message: obj.messageC('messages.success.one', 'user'),
-        status: obj.messageA('messages.SUCCESSFUL'),
-        data: user
-      })
 
     }
 
     return response.ok({
-      message: obj.messageC('messages.success.all', 'users'),
-      status: obj.messageA('messages.SUCCESSFUL'),
+      message: lang.messageC('messages.success.all', 'users'),
+      status: lang.messageA('messages.SUCCESSFUL'),
       data: users
     })
 
@@ -47,7 +45,7 @@ export default class UsersController {
 
   public async create({ request, response }: HttpContextContract) {
 
-    const obj = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header('Accept-language'))
 
     try {
 
@@ -61,8 +59,8 @@ export default class UsersController {
 
       if (!role) {
         return response.notFound({
-          message: obj.messageC('messages.errors.notFound', 'role'),
-          status: obj.messageA('messages.FAILED'),
+          message: lang.messageC('messages.errors.notFound', 'role'),
+          status: lang.messageA('messages.FAILED'),
           data: null
         })
       }
@@ -71,8 +69,8 @@ export default class UsersController {
 
       if (existUser) {
         return response.badRequest({
-          messages: obj.messageA('messages.errors.exist'),
-          status: obj.messageA('messages.FAILED'),
+          messages: lang.messageA('messages.errors.exist'),
+          status: lang.messageA('messages.FAILED'),
           data: null
         })
       }
@@ -97,8 +95,8 @@ export default class UsersController {
       )
 
       return response.created({
-        message: obj.messageC('messages.success.create', 'user'),
-        status: obj.messageA('messages.SUCCESSFUL'),
+        message: lang.messageC('messages.success.create', 'user'),
+        status: lang.messageA('messages.SUCCESSFUL'),
         data: {
           user,
           profile
@@ -110,8 +108,8 @@ export default class UsersController {
       console.log(error)
 
       return response.badRequest({
-        message: obj.validationErr(error),
-        status: obj.messageA('messages.FAILED'),
+        message: lang.validationErr(error),
+        status: lang.messageA('messages.FAILED'),
         data: error.messages
       })
 
@@ -121,7 +119,7 @@ export default class UsersController {
 
   public async update({ request, response, params }: HttpContextContract) {
 
-    const obj = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header('Accept-language'))
 
     try {
 
@@ -135,8 +133,8 @@ export default class UsersController {
 
       if (!role) {
         return response.notFound({
-          message: obj.messageC('messages.errors.notFound', 'role'),
-          status: obj.messageA('messages.FAILED'),
+          message: lang.messageC('messages.errors.notFound', 'role'),
+          status: lang.messageA('messages.FAILED'),
           data: null
         })
       }
@@ -145,8 +143,8 @@ export default class UsersController {
 
       if (!user) {
         return response.notFound({
-          message: obj.messageC('messages.errors.notFound', 'user'),
-          status: obj.messageA('messages.FAILED'),
+          message: lang.messageC('messages.errors.notFound', 'user'),
+          status: lang.messageA('messages.FAILED'),
           data: null
         })
       }
@@ -155,8 +153,8 @@ export default class UsersController {
 
       if (!profile) {
         return response.notFound({
-          message: obj.messageC('messages.errors.notFound', 'user'),
-          status: obj.messageA('messages.FAILED'),
+          message: lang.messageC('messages.errors.notFound', 'user'),
+          status: lang.messageA('messages.FAILED'),
           data: null
         })
       }
@@ -180,8 +178,8 @@ export default class UsersController {
       ).save()
 
       return response.ok({
-        message: obj.messageC('messages.success.update', 'user'),
-        status: obj.messageA('messages.SUCCESSFUL'),
+        message: lang.messageC('messages.success.update', 'user'),
+        status: lang.messageA('messages.SUCCESSFUL'),
         data: {
           user,
           profile
@@ -193,8 +191,8 @@ export default class UsersController {
       console.log(error)
 
       return response.badRequest({
-        message: obj.validationErr(error),
-        status: obj.messageA('messages.FAILED'),
+        message: lang.validationErr(error),
+        status: lang.messageA('messages.FAILED'),
         data: error.messages
       })
 
@@ -204,14 +202,14 @@ export default class UsersController {
 
   public async delete({ request, response, params }: HttpContextContract) {
 
-    const obj = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header('Accept-language'))
 
     const user = await User.find(params.id)
 
     if (!user) {
       return response.notFound({
-        message: obj.messageC('messages.errors.notFound', 'user'),
-        status: obj.messageA('messages.FAILED'),
+        message: lang.messageC('messages.errors.notFound', 'user'),
+        status: lang.messageA('messages.FAILED'),
         data: null
       })
     }
@@ -219,8 +217,8 @@ export default class UsersController {
     await user.merge({ active: !user.active }).save()
 
     return response.ok({
-      message: obj.messageC('messages.success.status', 'user'),
-      status: obj.messageA('messages.SUCCESSFUL'),
+      message: lang.messageC('messages.success.status', 'user'),
+      status: lang.messageA('messages.SUCCESSFUL'),
       data: user
     })
 
