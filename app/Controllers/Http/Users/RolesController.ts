@@ -55,7 +55,7 @@ export default class RolesController {
 
       return response.ok({
         message: lang.messageC('messages.success.create', 'role'),
-        status: lang.messageA('messages.FAILED'),
+        status: lang.messageA('messages.SUCCESSFUL'),
         data: role
       })
 
