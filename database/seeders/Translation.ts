@@ -17,6 +17,9 @@ export default class extends BaseSeeder {
 
       { 'locale': 'en', 'key': 'roles', 'message': 'Roles' },
       { 'locale': 'es', 'key': 'roles', 'message': 'Roles' },
+
+      { 'locale': 'en', 'key': 'password', 'message': 'Password' },
+      { 'locale': 'es', 'key': 'password', 'message': 'Contraseña' },
     ])
   }
 }
