@@ -4,7 +4,7 @@
 
 ## REQUISITOS:
 
-1. Usar node o nvm (mas recomendable nvm) con la version que indica el archivo [`./.nvmrc`](./.nvmrc)
+1. Usar node o nvm (mas recomendable nvm) con la version que indica el archivo [`.nvmrc`](./.nvmrc)
 
 2. Por defecto el proyecto usa como base de datos `PostgreSQL`, aunque lo puedes reconfigurar como se indica en la documentación. [Configuración de base de datos](https://docs.adonisjs.com/guides/database/introduction "AdonisJs")
 
@@ -60,7 +60,9 @@ const i18nConfig: I18nConfig = {
 }
 ~~~
 
-5. Inicializar el servidor con el siguiente comando
+5. Configurar un archivo `.env` en base al archivo [`.env.example`](./.env.example)
+
+6. Inicializar el servidor con el siguiente comando
 
 ~~~console
 $ npm run dev
