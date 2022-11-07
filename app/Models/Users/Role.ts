@@ -27,5 +27,5 @@ export default class Role extends BaseModel {
     localKey: 'id',
     foreignKey: 'role_id'
   })
-  public role: HasMany<typeof User>
+  public users: HasMany<typeof User>
 }
