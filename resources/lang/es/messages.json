@@ -8,7 +8,7 @@
     "one":"{data} obtenido(a) correctamente",
     "create":"{data} creado(a) correctamente",
     "update":"{data} actualizado(a) correctamente",
-    "desactivate":"El estado de {data} se ha cambiado correctamente",
+    "status":"El estado de {data} se ha cambiado correctamente",
     "delete":"{data} eliminado(a) correctamente",
     "image":"Imagen almacenada correctamente"
   },

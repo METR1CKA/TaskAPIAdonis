@@ -8,7 +8,7 @@
     "one":"{data} was obtained successfully",
     "create":"{data} created successfully",
     "update":"{data} updated successfully",
-    "desactivate":"The status of {data} has been changed successfully",
+    "status":"The status of {data} has been changed successfully",
     "delete":"{data} deleted successfully",
     "image":"Image stored successfully"
   },
