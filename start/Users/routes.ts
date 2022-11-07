@@ -2,49 +2,57 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
 
-  // USERS
-
   Route.group(() => {
-    //READ
-    Route.get('get/:id?', 'UsersController.get')
 
-    //CREATE
-    Route.post('create', 'UsersController.create')
+    // USERS
 
-    //UPDATE
-    Route.put('update/:id', 'UsersController.update')
+    Route.group(() => {
 
-    //DELETE
-    Route.delete('delete/:id', 'UsersController.delete')
-  }).prefix('users')
+      //READ
+      Route.get('get/:id?', 'UsersController.get')
 
-  // ROLES
+      //CREATE
+      Route.post('create', 'UsersController.create')
 
-  Route.group(() => {
-    //READ
-    Route.get('get/:id?', 'RolesController.get')
+      //UPDATE
+      Route.put('update/:id', 'UsersController.update')
 
-    //CREATE
-    Route.post('create', 'RolesController.create')
+      //DELETE
+      Route.delete('delete/:id', 'UsersController.delete')
 
-    //UPDATE
-    Route.put('update/:id', 'RolesController.update')
+    }).prefix('users')
 
-    //DELETE
-    Route.delete('delete/:id', 'RolesController.delete')
-  }).prefix('roles')
+    // ROLES
+
+    Route.group(() => {
+
+      //READ
+      Route.get('get/:id?', 'RolesController.get')
+
+      //CREATE
+      Route.post('create', 'RolesController.create')
+
+      //UPDATE
+      Route.put('update/:id', 'RolesController.update')
+
+      //DELETE
+      Route.delete('delete/:id', 'RolesController.delete')
+
+    }).prefix('roles')
+
+    // PASSWORDS
+
+    //UPDATE PASSWORD BY ID
+    Route.put('passwords/update/:id', 'PasswordsController.updateId')
+
+  }).middleware('role_user')
 
   // PASSWORDS
 
-  Route.group(() => {
-    //UPDATE PASSWORD AUTH USER
-    Route.get('update', 'PasswordsController.updateAuth')
-
-    //UPDATE PASSWORD BY ID
-    Route.put('update/:id', 'PasswordsController.updateId')
-  }).prefix('passwords')
+  //UPDATE PASSWORD AUTH USER
+  Route.get('passwords/update', 'PasswordsController.updateAuth')
 
 })
   .prefix('api/v1')
   .namespace('App/Controllers/Http/Users')
-  .middleware(['lang', 'auth', 'role_user'])
+  .middleware(['lang', 'auth'])
