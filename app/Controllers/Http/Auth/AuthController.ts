@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import MessagesI18n from 'App/Messages/MessagesI18n'
-import LoginValidator from 'App/Validators/Users/LoginValidator'
+import LoginValidator from 'App/Validators/Auth/LoginValidator'
 import Hash from '@ioc:Adonis/Core/Hash'
 import User from 'App/Models/Users/User'
 import RegisterValidator from 'App/Validators/Users/RegisterValidator'
