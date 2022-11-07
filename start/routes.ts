@@ -24,7 +24,6 @@ import Env from '@ioc:Adonis/Core/Env'
 import User from 'App/Models/Users/User'
 import './Auth/routes'
 import './Files/routes'
-import './Passwords/routes'
 import './Users/routes'
 
 Route.get('/', async () => {
