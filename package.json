@@ -6,9 +6,9 @@
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
     "start": "node server.js",
-    "refresh": "node ace  migration:refresh --seed",
+    "db:refresh": "node ace migration:refresh --seed",
+    "db:run": "node ace migration:run --seed",
     "migration": "node ace migration:run",
-    "migrations": "node ace migration:run --seed",
     "seed": "node ace db:seed -i",
     "seeds": "node ace db:seed"
   },
