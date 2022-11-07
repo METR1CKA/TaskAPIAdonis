@@ -1,6 +1,6 @@
 # TASKAPI
 
-`RESTFUL API` basico de tareas, un proyecto `BACK-END` con funcionalidades basicas de una `API` en [AdonisJS 5](https://docs.adonisjs.com/guides/introduction "AdonisJs") incluyendo librerias propias del proyecto, aunque puede ser escalable e incluir cosas externas
+`RESTFUL API` basico de tareas, un proyecto `BACK-END` con funcionalidades basicas de una `API` en [AdonisJS 5](https://docs.adonisjs.com/guides/introduction "AdonisJs") incluyendo librerias propias del proyecto, aunque puede ser escalable e incluir tambien de terceros
 
 ## REQUISITOS:
 
