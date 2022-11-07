@@ -1,7 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import MessagesI18n from 'App/Messages/MessagesI18n'
 import LoginValidator from 'App/Validators/Auth/LoginValidator'
-import Hash from '@ioc:Adonis/Core/Hash'
 import User from 'App/Models/Users/User'
 import RegisterValidator from 'App/Validators/Users/RegisterValidator'
 import Profile from 'App/Models/Users/Profile'
@@ -112,14 +111,6 @@ export default class AuthController {
           })
         }
 
-        if (!await Hash.verify(user.password, vali.password)) {
-          return response.unauthorized({
-            message: obj.messageA('messages.errors.password'),
-            status: obj.messageA('messages.FAILED'),
-            data: null
-          })
-        }
-
         const token = await auth.use('api').attempt(vali.email, vali.password, {
           expiresIn: '1year'
         })
@@ -143,7 +134,9 @@ export default class AuthController {
         return response.badRequest({
           message: obj.messageA('messages.errors.login'),
           status: obj.messageA('messages.FAILED'),
-          data: error
+          data: {
+            responseText: error.responseText
+          }
         })
 
       }
