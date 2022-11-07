@@ -31,6 +31,16 @@ export default class AuthController {
         })
       }
 
+      const existUser = await User.findBy('email', vali.email)
+
+      if (existUser) {
+        return response.badRequest({
+          messages: obj.messageA('messages.errors.exist'),
+          status: obj.messageA('messages.FAILED'),
+          data: null
+        })
+      }
+
       const user = await User.create(
         {
           'email': vali.email,
