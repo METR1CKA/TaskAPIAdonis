@@ -34,7 +34,10 @@ export default class RolesController {
     return response.ok({
       message: lang.messageC('messages.success.one', 'roles'),
       status: lang.messageA('messages.SUCCESSFUL'),
-      data: roles
+      data: {
+        total: roles.length,
+        roles
+      }
     })
 
   }

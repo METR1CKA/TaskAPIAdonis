@@ -38,7 +38,10 @@ export default class UsersController {
     return response.ok({
       message: lang.messageC('messages.success.all', 'users'),
       status: lang.messageA('messages.SUCCESSFUL'),
-      data: users
+      data: {
+        total: users.length,
+        users
+      }
     })
 
   }

@@ -1,20 +1,11 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
-  // USERS
-  Route.group(() => {
-    //READ
-    Route.get('get/:id?', 'UsersController.get')
-    //CREATE
-    Route.post('create', 'UsersController.create')
-    //UPDATE
-    Route.put('update/:id', 'UsersController.update')
-    //DELETE
-    Route.delete('delete/:id', 'UsersController.delete')
-  }).prefix('users')
 
-  // ROLES
   Route.group(() => {
+
+    // ROLES
+
     //READ
     Route.get('get/:id?', 'RolesController.get')
     //CREATE
@@ -23,10 +14,30 @@ Route.group(() => {
     Route.put('update/:id', 'RolesController.update')
     //DELETE
     Route.delete('delete/:id', 'RolesController.delete')
-  }).prefix('roles')
+
+  })
+    .prefix('roles')
+    .namespace('App/Controllers/Http/Roles')
+
+  Route.group(() => {
+
+    // USERS
+
+    //READ
+    Route.get('get/:id?', 'UsersController.get')
+    //CREATE
+    Route.post('create', 'UsersController.create')
+    //UPDATE
+    Route.put('update/:id', 'UsersController.update')
+    //DELETE
+    Route.delete('delete/:id', 'UsersController.delete')
+
+  })
+    .prefix('users')
+    .namespace('App/Controllers/Http/Users')
+
 })
   .prefix('api/v1')
-  .namespace('App/Controllers/Http/Users')
   .middleware(['lang', 'auth', 'role_user'])
 
 Route.group(() => {
