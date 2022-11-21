@@ -7,8 +7,7 @@
     "build": "node ace build --production",
     "start": "node server.js",
     "db:refresh": "node ace migration:refresh --seed",
-    "db:run": "node ace migration:run --seed",
-    "migration": "node ace migration:run",
+    "db:run": "node ace migration:run",
     "seed": "node ace db:seed -i",
     "seeds": "node ace db:seed"
   },
