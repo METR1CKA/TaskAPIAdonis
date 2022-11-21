@@ -10,7 +10,7 @@ export default class AuthController {
 
   public async register({ response, request }: HttpContextContract) {
 
-    const obj = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header('Accept-language'))
 
     try {
 
@@ -24,8 +24,7 @@ export default class AuthController {
 
       if (!role) {
         return response.notFound({
-          message: obj.messageC('messages.errors.notFound', 'role'),
-          status: obj.messageA('messages.FAILED'),
+          message: lang.messageC('messages.errors.notFound', 'role'),
           data: null
         })
       }
@@ -34,8 +33,7 @@ export default class AuthController {
 
       if (existUser) {
         return response.badRequest({
-          messages: obj.messageA('messages.errors.exist'),
-          status: obj.messageA('messages.FAILED'),
+          messages: lang.messageA('messages.errors.exist'),
           data: null
         })
       }
@@ -60,8 +58,7 @@ export default class AuthController {
       )
 
       return response.created({
-        message: obj.messageC('messages.success.create', 'user'),
-        status: obj.messageA('messages.SUCCESSFUL'),
+        message: lang.messageC('messages.success.create', 'user'),
         data: {
           user,
           profile
@@ -73,8 +70,7 @@ export default class AuthController {
       console.log(error)
 
       return response.badRequest({
-        message: obj.validationErr(error),
-        status: obj.messageA('messages.FAILED'),
+        message: lang.validationErr(error),
         data: error.messages
       })
 
@@ -83,7 +79,7 @@ export default class AuthController {
 
   public async login({ response, request, auth }: HttpContextContract) {
 
-    const obj = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header('Accept-language'))
 
     try {
 
@@ -105,8 +101,7 @@ export default class AuthController {
 
         if (!user) {
           return response.notFound({
-            message: obj.messageC('messages.errors.notFound', 'user'),
-            status: obj.messageA('messages.FAILED'),
+            message: lang.messageC('messages.errors.notFound', 'user'),
             data: null
           })
         }
@@ -116,8 +111,7 @@ export default class AuthController {
         })
 
         return response.ok({
-          message: obj.messageA('messages.success.login'),
-          status: obj.messageA('messages.SUCCESSFUL'),
+          message: lang.messageA('messages.success.login'),
           data: {
             auth: {
               type: token.type,
@@ -132,8 +126,7 @@ export default class AuthController {
         console.log(error)
 
         return response.badRequest({
-          message: obj.messageA('messages.errors.login'),
-          status: obj.messageA('messages.FAILED'),
+          message: lang.messageA('messages.errors.login'),
           data: {
             responseText: error.responseText
           }
@@ -145,8 +138,7 @@ export default class AuthController {
       console.log(error)
 
       return response.badRequest({
-        message: obj.validationErr(error),
-        status: obj.messageA('messages.FAILED'),
+        message: lang.validationErr(error),
         data: error.messages
       })
 
@@ -155,31 +147,36 @@ export default class AuthController {
 
   public async logout({ response, request, auth }: HttpContextContract) {
 
-    const obj = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header('Accept-language'))
 
     await auth.use('api').revoke()
 
     return response.ok({
-      message: obj.messageA('messages.success.logout'),
-      status: obj.messageA('messages.SUCCESSFUL'),
-      data: null
+      message: lang.messageA('messages.success.logout'),
+      data: {
+        revoke: true
+      }
     })
 
   }
 
   public async me({ response, request, auth }: HttpContextContract) {
 
-    const obj = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header('Accept-language'))
 
     const user = await User.query()
-      .where('id', auth.use('api').user?.id)
+      .where(
+        {
+          id: auth.user?.id,
+          email: auth.user?.email
+        }
+      )
       .preload('profile')
       .preload('role')
       .firstOrFail()
 
     return response.ok({
-      message: obj.messageA('messages.success.authUser'),
-      status: obj.messageA('messages.SUCCESSFUL'),
+      message: lang.messageA('messages.success.authUser'),
       data: user
     })
 
