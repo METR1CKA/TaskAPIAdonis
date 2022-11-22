@@ -24,12 +24,10 @@ export default class UsersController {
       return user
         ? response.ok({
           message: lang.messageC('messages.success.one', 'user'),
-          status: lang.messageA('messages.SUCCESSFUL'),
           data: user
         })
         : response.notFound({
           message: lang.messageC('messages.errors.notFound', 'user'),
-          status: lang.messageA('messages.FAILED'),
           data: null
         })
 
@@ -37,7 +35,6 @@ export default class UsersController {
 
     return response.ok({
       message: lang.messageC('messages.success.all', 'users'),
-      status: lang.messageA('messages.SUCCESSFUL'),
       data: {
         total: users.length,
         users
@@ -63,7 +60,6 @@ export default class UsersController {
       if (!role) {
         return response.notFound({
           message: lang.messageC('messages.errors.notFound', 'role'),
-          status: lang.messageA('messages.FAILED'),
           data: null
         })
       }
@@ -73,7 +69,6 @@ export default class UsersController {
       if (existUser) {
         return response.badRequest({
           messages: lang.messageA('messages.errors.exist'),
-          status: lang.messageA('messages.FAILED'),
           data: null
         })
       }
@@ -99,7 +94,6 @@ export default class UsersController {
 
       return response.created({
         message: lang.messageC('messages.success.create', 'user'),
-        status: lang.messageA('messages.SUCCESSFUL'),
         data: {
           user,
           profile
@@ -112,7 +106,6 @@ export default class UsersController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        status: lang.messageA('messages.FAILED'),
         data: error.messages
       })
 
@@ -137,7 +130,6 @@ export default class UsersController {
       if (!role) {
         return response.notFound({
           message: lang.messageC('messages.errors.notFound', 'role'),
-          status: lang.messageA('messages.FAILED'),
           data: null
         })
       }
@@ -147,7 +139,6 @@ export default class UsersController {
       if (!user) {
         return response.notFound({
           message: lang.messageC('messages.errors.notFound', 'user'),
-          status: lang.messageA('messages.FAILED'),
           data: null
         })
       }
@@ -157,7 +148,6 @@ export default class UsersController {
       if (!profile) {
         return response.notFound({
           message: lang.messageC('messages.errors.notFound', 'user'),
-          status: lang.messageA('messages.FAILED'),
           data: null
         })
       }
@@ -182,7 +172,6 @@ export default class UsersController {
 
       return response.ok({
         message: lang.messageC('messages.success.update', 'user'),
-        status: lang.messageA('messages.SUCCESSFUL'),
         data: {
           user,
           profile
@@ -195,7 +184,6 @@ export default class UsersController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        status: lang.messageA('messages.FAILED'),
         data: error.messages
       })
 
@@ -212,7 +200,6 @@ export default class UsersController {
     if (!user) {
       return response.notFound({
         message: lang.messageC('messages.errors.notFound', 'user'),
-        status: lang.messageA('messages.FAILED'),
         data: null
       })
     }
@@ -221,7 +208,6 @@ export default class UsersController {
 
     return response.ok({
       message: lang.messageC('messages.success.status', 'user'),
-      status: lang.messageA('messages.SUCCESSFUL'),
       data: user
     })
 

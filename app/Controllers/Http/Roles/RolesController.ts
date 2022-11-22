@@ -20,12 +20,10 @@ export default class RolesController {
       return role
         ? response.ok({
           message: lang.messageC('messages.success.one', 'role'),
-          status: lang.messageA('messages.SUCCESSFUL'),
           data: role
         })
         : response.notFound({
           message: lang.messageC('messages.errors.notFound', 'role'),
-          status: lang.messageA('messages.FAILED'),
           data: null
         })
 
@@ -33,7 +31,6 @@ export default class RolesController {
 
     return response.ok({
       message: lang.messageC('messages.success.one', 'roles'),
-      status: lang.messageA('messages.SUCCESSFUL'),
       data: {
         total: roles.length,
         roles
@@ -58,7 +55,6 @@ export default class RolesController {
 
       return response.created({
         message: lang.messageC('messages.success.create', 'role'),
-        status: lang.messageA('messages.SUCCESSFUL'),
         data: role
       })
 
@@ -68,7 +64,6 @@ export default class RolesController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        status: lang.messageA('messages.FAILED'),
         data: null
       })
 
@@ -85,7 +80,6 @@ export default class RolesController {
     if (!role) {
       return response.notFound({
         message: lang.messageC('messages.errors.notFound', 'role'),
-        status: lang.messageA('messages.FAILED'),
         data: null
       })
     }
@@ -102,7 +96,6 @@ export default class RolesController {
 
       return response.ok({
         message: lang.messageC('messages.success.update', 'role'),
-        status: lang.messageA('messages.SUCCESSFUL'),
         data: role
       })
 
@@ -112,7 +105,6 @@ export default class RolesController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        status: lang.messageA('messages.FAILED'),
         data: null
       })
 
@@ -129,7 +121,6 @@ export default class RolesController {
     if (!role) {
       return response.notFound({
         message: lang.messageC('messages.errors.notFound', 'role'),
-        status: lang.messageA('messages.FAILED'),
         data: null
       })
     }
@@ -138,7 +129,6 @@ export default class RolesController {
 
     return response.ok({
       message: lang.messageC('messages.success.status', 'role'),
-      status: lang.messageA('messages.SUCCESSFUL'),
       data: role
     })
 

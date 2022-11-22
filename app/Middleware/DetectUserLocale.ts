@@ -15,7 +15,6 @@ export default class DetectUserLocale {
 
       return ctx.response.badRequest({
         message: obj.messageA('messages.errors.lang'),
-        status: obj.messageA('messages.FAILED'),
         data: null
       })
     }

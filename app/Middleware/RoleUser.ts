@@ -14,7 +14,6 @@ export default class RoleUser {
 
       return response.forbidden({
         messages: obj.messageA('messages.errors.noAccess'),
-        status: obj.messageA('messages.FAILED'),
         data: null
       })
 

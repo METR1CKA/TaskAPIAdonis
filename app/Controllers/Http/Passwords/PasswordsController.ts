@@ -16,7 +16,6 @@ export default class PasswordsController {
     if (!user) {
       return response.notFound({
         message: lang.messageC('messages.errors.notFound', 'user'),
-        status: lang.messageA('messages.FAILED'),
         data: null
       })
     }
@@ -29,11 +28,14 @@ export default class PasswordsController {
         return
       }
 
-      if (!await Hash.verify(user.password, vali.currentPassword)) {
+      const verify = await Hash.verify(user.password, vali.currentPassword)
+
+      if (!verify) {
         return response.badRequest({
           message: lang.messageA('messages.errors.password'),
-          status: lang.messageA('messages.FAILED'),
-          data: null
+          data: {
+            verify
+          }
         })
       }
 
@@ -41,7 +43,6 @@ export default class PasswordsController {
 
       return response.ok({
         message: lang.messageC('messages.success.update', 'password'),
-        status: lang.messageA('messages.SUCCESSFUL'),
         data: null
       })
 
@@ -51,7 +52,6 @@ export default class PasswordsController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        status: lang.messageA('messages.FAILED'),
         data: error.messages
       })
 
@@ -68,7 +68,6 @@ export default class PasswordsController {
     if (!user) {
       return response.notFound({
         message: lang.messageC('messages.errors.notFound', 'user'),
-        status: lang.messageA('messages.FAILED'),
         data: null
       })
     }
@@ -85,7 +84,6 @@ export default class PasswordsController {
 
       return response.ok({
         message: lang.messageC('messages.success.update', 'password'),
-        status: lang.messageA('messages.SUCCESSFUL'),
         data: null
       })
 
@@ -95,7 +93,6 @@ export default class PasswordsController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        status: lang.messageA('messages.FAILED'),
         data: error.messages
       })
 
