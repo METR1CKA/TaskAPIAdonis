@@ -156,7 +156,7 @@ export default class UsersController {
         {
           'email': vali.email,
           'active': vali.active,
-          'role_id': vali.role_id
+          'role_id': role.id
         }
       ).save()
 
