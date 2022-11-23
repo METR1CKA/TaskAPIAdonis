@@ -33,7 +33,5 @@
     "maxLength":"La longitud del campo {field} debe tener menos de {args} caracteres",
     "error":"No se pudo ejecutar el servicio",
     "noProd":"Disponible solo para desarrollo api"
-  },
-  "FAILED": "FALLIDO",
-  "SUCCESSFUL": "ÉXITOSO"
+  }
 }

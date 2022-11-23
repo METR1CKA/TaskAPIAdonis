@@ -33,7 +33,5 @@
     "maxLength":"The length of the field {field} must be less than {args} characters",
     "error":"Failed to run service",
     "noProd": "Available only for api development"
-  },
-  "FAILED": "FAILED",
-  "SUCCESSFUL": "SUCCESSFUL"
+  }
 }
