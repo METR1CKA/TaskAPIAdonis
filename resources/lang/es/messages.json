@@ -4,8 +4,8 @@
     "authUser": "Tus datos fueron obtenidos",
     "login":"Inicio de sesión éxitoso",
     "logout":"Sesión cerrada con éxito",
-    "all":"Todos los/las {data} se obtuvieron correctamente",
-    "one":"{data} obtenido(a) correctamente",
+    "all":"Todos los datos de {data} se obtuvieron correctamente",
+    "one":"El dato de {data} se obtuvo correctamente",
     "create":"{data} creado(a) correctamente",
     "update":"{data} actualizado(a) correctamente",
     "status":"El estado de {data} se ha cambiado correctamente",
@@ -32,6 +32,7 @@
     "image.path":"La ruta de la imagen no existe",
     "maxLength":"La longitud del campo {field} debe tener menos de {args} caracteres",
     "error":"No se pudo ejecutar el servicio",
-    "noProd":"Disponible solo para desarrollo api"
+    "noProd":"Disponible solo para desarrollo api",
+    "param": "No se proporciono un valor correcto al parametro {data}"
   }
 }
