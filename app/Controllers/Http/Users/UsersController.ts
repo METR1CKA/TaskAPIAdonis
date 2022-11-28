@@ -8,9 +8,11 @@ import UpdateValidator from 'App/Validators/Users/UpdateValidator'
 
 export default class UsersController {
 
-  public async get({ request, response, params }: HttpContextContract) {
+  public header = 'Accept-Language'
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+  public async read({ request, response, params }: HttpContextContract) {
+
+    const lang = new MessagesI18n(request.header(this.header))
 
     const users = await User.query()
       .preload('profile')
@@ -45,7 +47,7 @@ export default class UsersController {
 
   public async create({ request, response }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     try {
 
@@ -75,20 +77,20 @@ export default class UsersController {
 
       const user = await User.create(
         {
-          'email': vali.email,
-          'password': vali.password,
-          'active': vali.active,
-          'role_id': vali.role_id
+          email: vali.email,
+          password: vali.password,
+          active: vali.active,
+          role_id: vali.role_id
         }
       )
 
       const profile = await Profile.create(
         {
-          'user_id': user.id,
-          'name': vali.name,
-          'lastname': vali.lastname,
-          'phone': vali.phone,
-          'address': vali.address
+          user_id: user.id,
+          name: vali.name,
+          lastname: vali.lastname,
+          phone: vali.phone,
+          address: vali.address
         }
       )
 
@@ -106,7 +108,9 @@ export default class UsersController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        data: error.messages
+        data: {
+          error: error.messages
+        }
       })
 
     }
@@ -115,7 +119,7 @@ export default class UsersController {
 
   public async update({ request, response, params }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     try {
 
@@ -184,7 +188,9 @@ export default class UsersController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        data: error.messages
+        data: {
+          error: error.messages
+        }
       })
 
     }
@@ -193,7 +199,7 @@ export default class UsersController {
 
   public async delete({ request, response, params }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     const user = await User.find(params.id)
 
