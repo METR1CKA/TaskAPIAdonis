@@ -23,7 +23,7 @@ import MessagesI18n from 'App/Messages/MessagesI18n'
 import Env from '@ioc:Adonis/Core/Env'
 import User from 'App/Models/Users/User'
 import './Auth/routes'
-import './Files/routes'
+import './Tasks/routes'
 import './Users/routes'
 
 Route.get('/', async () => {
@@ -43,12 +43,10 @@ Route.get('api/v1/user', async ({ response, auth, request }) => {
   return Env.get('NODE_ENV') === 'development'
     ? response.ok({
       message: lang.messageA('messages.success.authUser'),
-      status: lang.messageA('messages.SUCCESSFUL'),
       data: user
     })
     : response.badRequest({
       message: lang.messageA('messages.errors.noProd'),
-      status: lang.messageA('messages.FAILED'),
       data: null
     })
 
@@ -60,7 +58,6 @@ Route.any('*', ({ response, request }) => {
 
   return response.notFound({
     message: lang.messageA('messages.errors.route.notFound'),
-    status: lang.messageA('messages.FAILED'),
     data: null
   })
 
