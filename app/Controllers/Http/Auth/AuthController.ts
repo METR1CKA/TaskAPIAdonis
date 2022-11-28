@@ -73,7 +73,9 @@ export default class AuthController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        data: error.messages
+        data: {
+          error: error.messages
+        }
       })
 
     }
@@ -181,7 +183,9 @@ export default class AuthController {
 
     return response.ok({
       message: lang.messageA('messages.success.authUser'),
-      data: user
+      data: {
+        user
+      }
     })
 
   }
