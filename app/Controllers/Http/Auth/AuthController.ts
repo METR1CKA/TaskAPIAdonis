@@ -8,9 +8,11 @@ import Role from 'App/Models/Users/Role'
 
 export default class AuthController {
 
+  public header = 'Accept-Language'
+
   public async register({ response, request }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     try {
 
@@ -40,20 +42,20 @@ export default class AuthController {
 
       const user = await User.create(
         {
-          'email': vali.email,
-          'password': vali.password,
-          'active': vali.active,
-          'role_id': vali.role_id
+          email: vali.email,
+          password: vali.password,
+          active: vali.active,
+          role_id: vali.role_id
         }
       )
 
       const profile = await Profile.create(
         {
-          'user_id': user.id,
-          'name': vali.name,
-          'lastname': vali.lastname,
-          'phone': vali.phone,
-          'address': vali.address
+          user_id: user.id,
+          name: vali.name,
+          lastname: vali.lastname,
+          phone: vali.phone,
+          address: vali.address
         }
       )
 
@@ -79,7 +81,7 @@ export default class AuthController {
 
   public async login({ response, request, auth }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     try {
 
@@ -139,7 +141,9 @@ export default class AuthController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        data: error.messages
+        data: {
+          error: error.messages
+        }
       })
 
     }
@@ -147,7 +151,7 @@ export default class AuthController {
 
   public async logout({ response, request, auth }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     await auth.use('api').revoke()
 
@@ -162,7 +166,7 @@ export default class AuthController {
 
   public async me({ response, request, auth }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     const user = await User.query()
       .where(
