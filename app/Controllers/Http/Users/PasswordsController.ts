@@ -7,9 +7,11 @@ import PasswordIdValidator from 'App/Validators/Passwords/PasswordIdValidator'
 
 export default class PasswordsController {
 
+  public header = 'Accept-Language'
+
   public async updateAuth({ request, response, auth }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     const user = await User.find(auth.user?.id)
 
@@ -52,7 +54,9 @@ export default class PasswordsController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        data: error.messages
+        data: {
+          error: error.messages
+        }
       })
 
     }
@@ -61,7 +65,7 @@ export default class PasswordsController {
 
   public async updateId({ request, response, params }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     const user = await User.find(params.id)
 
@@ -93,7 +97,9 @@ export default class PasswordsController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        data: error.messages
+        data: {
+          error: error.messages
+        }
       })
 
     }

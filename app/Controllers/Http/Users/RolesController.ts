@@ -5,9 +5,11 @@ import RoleValidator from 'App/Validators/Roles/RoleValidator'
 
 export default class RolesController {
 
-  public async get({ request, response, params }: HttpContextContract) {
+  public header = 'Accept-Language'
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+  public async read({ request, response, params }: HttpContextContract) {
+
+    const lang = new MessagesI18n(request.header(this.header))
 
     const roles = await Role.query()
       .preload('users')
@@ -41,7 +43,7 @@ export default class RolesController {
 
   public async create({ request, response }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     try {
 
@@ -64,7 +66,9 @@ export default class RolesController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        data: null
+        data: {
+          error: error.messages
+        }
       })
 
     }
@@ -73,7 +77,7 @@ export default class RolesController {
 
   public async update({ request, response, params }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     const role = await Role.find(params.id)
 
@@ -105,7 +109,9 @@ export default class RolesController {
 
       return response.badRequest({
         message: lang.validationErr(error),
-        data: null
+        data: {
+          error: error.messages
+        }
       })
 
     }
@@ -114,7 +120,7 @@ export default class RolesController {
 
   public async delete({ request, response, params }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header('Accept-language'))
+    const lang = new MessagesI18n(request.header(this.header))
 
     const role = await Role.find(params.id)
 
