@@ -21,6 +21,15 @@ export default class extends BaseSeeder {
       { locale: 'en', key: 'password', message: 'Password' },
       { locale: 'es', key: 'password', message: 'Contraseña' },
 
+      { locale: 'en', key: 'task', message: 'Task' },
+      { locale: 'es', key: 'task', message: 'Tarea' },
+
+      { locale: 'en', key: 'tasks', message: 'Tasks' },
+      { locale: 'es', key: 'tasks', message: 'Tareas' },
+
+      { locale: 'en', key: 'type', message: 'Type' },
+      { locale: 'es', key: 'type', message: 'Tipo' },
+
     ])
   }
 }
