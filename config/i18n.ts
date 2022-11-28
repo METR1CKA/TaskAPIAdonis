@@ -7,6 +7,7 @@
 
 import Application from '@ioc:Adonis/Core/Application'
 import { I18nConfig } from '@ioc:Adonis/Addons/I18n'
+import Env from '@ioc:Adonis/Core/Env'
 
 const i18nConfig: I18nConfig = {
   /*
@@ -96,7 +97,7 @@ const i18nConfig: I18nConfig = {
       location: Application.resourcesPath('lang'),
     },
     db: {
-      enabled: true,
+      enabled: Env.get('DB_MIGRATIONS'),
       table: 'translations'
     }
   },
