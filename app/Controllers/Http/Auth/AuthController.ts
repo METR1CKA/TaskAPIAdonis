@@ -74,7 +74,7 @@ export default class AuthController {
       return response.badRequest({
         message: lang.validationErr(error),
         data: {
-          error: error.messages
+          error: error?.messages
         }
       })
 

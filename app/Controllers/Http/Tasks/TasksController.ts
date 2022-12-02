@@ -83,7 +83,7 @@ export default class TasksController {
       return response.badRequest({
         message: lang.validationErr(error),
         data: {
-          error: error.messages
+          error: error?.messages
         }
       })
 
@@ -127,7 +127,7 @@ export default class TasksController {
       return response.badRequest({
         message: lang.validationErr(error),
         data: {
-          error: error.messages
+          error: error?.messages
         }
       })
 
@@ -156,7 +156,7 @@ export default class TasksController {
       })
     }
 
-    if (request.input('type') == 'completed') {
+    if (request.input('type') == 'complete') {
       await task.merge({ completed: !task.completed }).save()
 
       return response.ok({

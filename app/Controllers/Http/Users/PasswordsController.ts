@@ -55,7 +55,7 @@ export default class PasswordsController {
       return response.badRequest({
         message: lang.validationErr(error),
         data: {
-          error: error.messages
+          error: error?.messages
         }
       })
 
@@ -98,7 +98,7 @@ export default class PasswordsController {
       return response.badRequest({
         message: lang.validationErr(error),
         data: {
-          error: error.messages
+          error: error?.messages
         }
       })
 

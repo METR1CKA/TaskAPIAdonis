@@ -109,7 +109,7 @@ export default class UsersController {
       return response.badRequest({
         message: lang.validationErr(error),
         data: {
-          error: error.messages
+          error: error?.messages
         }
       })
 
@@ -189,7 +189,7 @@ export default class UsersController {
       return response.badRequest({
         message: lang.validationErr(error),
         data: {
-          error: error.messages
+          error: error?.messages
         }
       })
 
