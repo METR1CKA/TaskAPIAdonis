@@ -16,51 +16,25 @@
 $ npm install
 ~~~
 
-2. Poner en `false` el `loader` de `db` antes de correr las `migraciones` y los `seeders`, en el archivo de configuración de [`I18n`](./config/i18n.ts)
+2. Configurar un archivo `.env` en base al archivo [`.env.example`](./.env.example)
+
+3. Poner en `false` el `loader` de `db` antes de correr las `migraciones` y los `seeders`, en el archivo `Env`
 
 ~~~typescript
-import { I18nConfig } from '@ioc:Adonis/Addons/I18n'
-
-const i18nConfig: I18nConfig = {
-  loaders: {
-    fs: {
-      enabled: true,
-      location: Application.resourcesPath('lang'),
-    },
-    db: {
-      enabled: false,
-      table: 'translations'
-    }
-  }
-}
+DB_I18n=false
 ~~~
 
-3. Correr las `migraciones` con el siguiente comando
+4. Correr las `migraciones` con el siguiente comando
 
 ~~~console
 $ npm run db:run
 ~~~
 
-4. Poner en `true` el `loader` de `db` despues de correr las `migraciones` y los `seeders`, en el archivo de configuración de [`I18n`](./config/i18n.ts)
+5. Poner en `true` el `loader` de `db` antes de correr las `migraciones` y los `seeders`, en el archivo `Env`
 
 ~~~typescript
-import { I18nConfig } from '@ioc:Adonis/Addons/I18n'
-
-const i18nConfig: I18nConfig = {
-  loaders: {
-    fs: {
-      enabled: true,
-      location: Application.resourcesPath('lang'),
-    },
-    db: {
-      enabled: true,
-      table: 'translations'
-    }
-  }
-}
+DB_I18n=true
 ~~~
-
-5. Configurar un archivo `.env` en base al archivo [`.env.example`](./.env.example)
 
 6. Inicializar el servidor con el siguiente comando
 

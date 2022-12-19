@@ -97,7 +97,7 @@ const i18nConfig: I18nConfig = {
       location: Application.resourcesPath('lang'),
     },
     db: {
-      enabled: Env.get('DB_MIGRATIONS'),
+      enabled: Env.get('DB_I18n'),
       table: 'translations'
     }
   },

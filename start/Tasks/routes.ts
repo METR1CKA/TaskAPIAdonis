@@ -4,20 +4,17 @@ Route.group(() => {
 
   Route.group(() => {
 
-    //
+    Route.get('get/:filename', '')
+    Route.post('upload', '')
 
   }).prefix('files')
 
   Route.group(() => {
 
     Route.get('get', 'TasksController.read')
-
     Route.get('get/:id', 'TasksController.read')
-
     Route.post('create', 'TasksController.create')
-
     Route.put('update/:id', 'TasksController.update')
-
     Route.delete('delete/:id', 'TasksController.delete')
 
   }).prefix('tasks')

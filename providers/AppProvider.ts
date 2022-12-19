@@ -13,14 +13,12 @@ export default class AppProvider {
     // IoC container is ready
 
     const I18n = this.app.container.resolveBinding('Adonis/Addons/I18n')
-
     const Db = this.app.container.resolveBinding('Adonis/Lucid/Database')
 
     I18n.extend('db', 'loader', (_, config) => {
-
       return new DbLoader(Db, config)
-
     })
+
   }
 
   public async ready () {
