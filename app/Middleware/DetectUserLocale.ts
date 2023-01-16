@@ -3,6 +3,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import MessagesI18n from 'App/Messages/MessagesI18n'
 
 export default class DetectUserLocale {
+
   protected getUserLanguage({ request }: HttpContextContract) {
     return request.language(I18n.supportedLocales()) || request.input('lang')
   }
@@ -11,10 +12,10 @@ export default class DetectUserLocale {
     const language = this.getUserLanguage(ctx)
 
     if (!language) {
-      const obj = new MessagesI18n(I18n.defaultLocale)
+      const lang = new MessagesI18n(I18n.defaultLocale)
 
       return ctx.response.badRequest({
-        message: obj.messageA('messages.errors.lang'),
+        message: lang.getMessage('lang.error'),
         data: null
       })
     }
