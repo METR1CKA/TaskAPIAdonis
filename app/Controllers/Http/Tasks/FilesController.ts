@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Messages/MessagesI18n'
+import MessagesI18n from 'App/Services/MessagesI18n'
 import Application from '@ioc:Adonis/Core/Application'
 import { DateTime } from 'luxon'
 
@@ -32,7 +32,7 @@ export default class FilesController {
 
     if (!file.isValid) {
       return response.badRequest({
-        message: lang.messageC('', ''),
+        message: lang.getMessage('', ''),
         data: {
           errors: file.errors
         }
@@ -49,7 +49,7 @@ export default class FilesController {
     return
   }
 
-  public async getFile({}: HttpContextContract) {
+  public async getFile({ }: HttpContextContract) {
     //
   }
 

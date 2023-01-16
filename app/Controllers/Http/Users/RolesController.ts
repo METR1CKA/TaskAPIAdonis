@@ -1,11 +1,13 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Messages/MessagesI18n'
+import MessagesI18n from 'App/Services/MessagesI18n'
 import Role from 'App/Models/Users/Role'
 import RoleValidator from 'App/Validators/Roles/RoleValidator'
+import ExceptionHandler from 'App/Exceptions/Handler'
 
 export default class RolesController {
 
   public header = 'Accept-Language'
+  public exception = new ExceptionHandler()
 
   public async read({ request, response, params }: HttpContextContract) {
 
@@ -21,18 +23,18 @@ export default class RolesController {
 
       return role
         ? response.ok({
-          message: lang.messageC('messages.success.one', 'role'),
+          message: lang.getMessage('data'),
           data: role
         })
         : response.notFound({
-          message: lang.messageC('messages.errors.notFound', 'role'),
+          message: lang.getMessage('notFound'),
           data: null
         })
 
     }
 
     return response.ok({
-      message: lang.messageC('messages.success.one', 'roles'),
+      message: lang.getMessage('data'),
       data: {
         total: roles.length,
         roles
@@ -56,13 +58,13 @@ export default class RolesController {
       const role = await Role.create(vali)
 
       return response.created({
-        message: lang.messageC('messages.success.create', 'role'),
+        message: lang.getMessage('created'),
         data: role
       })
 
     } catch (error) {
 
-      console.log(error)
+      this.exception.devLogs(error)
 
       return response.badRequest({
         message: lang.validationErr(error),
@@ -83,7 +85,7 @@ export default class RolesController {
 
     if (!role) {
       return response.notFound({
-        message: lang.messageC('messages.errors.notFound', 'role'),
+        message: lang.getMessage('notFound'),
         data: null
       })
     }
@@ -99,13 +101,13 @@ export default class RolesController {
       await role.merge(vali).save()
 
       return response.ok({
-        message: lang.messageC('messages.success.update', 'role'),
+        message: lang.getMessage('updated'),
         data: role
       })
 
     } catch (error) {
 
-      console.log(error)
+      this.exception.devLogs(error)
 
       return response.badRequest({
         message: lang.validationErr(error),
@@ -126,7 +128,7 @@ export default class RolesController {
 
     if (!role) {
       return response.notFound({
-        message: lang.messageC('messages.errors.notFound', 'role'),
+        message: lang.getMessage('notFound'),
         data: null
       })
     }
@@ -134,7 +136,7 @@ export default class RolesController {
     await role.merge({ active: !role.active }).save()
 
     return response.ok({
-      message: lang.messageC('messages.success.status', 'role'),
+      message: lang.getMessage(role.active ? 'status.activated' : 'status.desactivated'),
       data: role
     })
 

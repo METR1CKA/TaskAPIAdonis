@@ -1,14 +1,16 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Messages/MessagesI18n'
+import MessagesI18n from 'App/Services/MessagesI18n'
 import Profile from 'App/Models/Users/Profile'
 import Role from 'App/Models/Users/Role'
 import User from 'App/Models/Users/User'
 import RegisterValidator from 'App/Validators/Users/RegisterValidator'
 import UpdateValidator from 'App/Validators/Users/UpdateValidator'
+import ExceptionHandler from 'App/Exceptions/Handler'
 
 export default class UsersController {
 
   public header = 'Accept-Language'
+  public exception = new ExceptionHandler()
 
   public async read({ request, response, params }: HttpContextContract) {
 
@@ -21,22 +23,18 @@ export default class UsersController {
 
     if (params.id) {
 
-      const user = users.find(e => e.id == params.id)
+      const data = users.find(e => e.id == params.id)
 
-      return user
-        ? response.ok({
-          message: lang.messageC('messages.success.one', 'user'),
-          data: user
-        })
-        : response.notFound({
-          message: lang.messageC('messages.errors.notFound', 'user'),
-          data: null
-        })
+      const status = data ? 200 : 404
+
+      const message = lang.getMessage(status === 200 ? 'data' : 'notFound')
+
+      return response.status(status).json({ message, data })
 
     }
 
     return response.ok({
-      message: lang.messageC('messages.success.all', 'users'),
+      message: lang.getMessage('data'),
       data: {
         total: users.length,
         users
@@ -61,7 +59,7 @@ export default class UsersController {
 
       if (!role) {
         return response.notFound({
-          message: lang.messageC('messages.errors.notFound', 'role'),
+          message: lang.getMessage('notFound'),
           data: null
         })
       }
@@ -70,7 +68,7 @@ export default class UsersController {
 
       if (existUser) {
         return response.badRequest({
-          messages: lang.messageA('messages.errors.exist'),
+          messages: lang.getMessage('user.exist'),
           data: null
         })
       }
@@ -84,7 +82,7 @@ export default class UsersController {
         }
       )
 
-      const profile = await Profile.create(
+      await Profile.create(
         {
           user_id: user.id,
           name: vali.name,
@@ -95,16 +93,13 @@ export default class UsersController {
       )
 
       return response.created({
-        message: lang.messageC('messages.success.create', 'user'),
-        data: {
-          user,
-          profile
-        }
+        message: lang.getMessage('created'),
+        data: null
       })
 
     } catch (error) {
 
-      console.log(error)
+      this.exception.devLogs(error)
 
       return response.badRequest({
         message: lang.validationErr(error),
@@ -133,7 +128,7 @@ export default class UsersController {
 
       if (!role) {
         return response.notFound({
-          message: lang.messageC('messages.errors.notFound', 'role'),
+          message: lang.getMessage('notFound'),
           data: null
         })
       }
@@ -142,7 +137,7 @@ export default class UsersController {
 
       if (!user) {
         return response.notFound({
-          message: lang.messageC('messages.errors.notFound', 'user'),
+          message: lang.getMessage('notFound'),
           data: null
         })
       }
@@ -151,7 +146,7 @@ export default class UsersController {
 
       if (!profile) {
         return response.notFound({
-          message: lang.messageC('messages.errors.notFound', 'user'),
+          message: lang.getMessage('notFound'),
           data: null
         })
       }
@@ -175,16 +170,13 @@ export default class UsersController {
       ).save()
 
       return response.ok({
-        message: lang.messageC('messages.success.update', 'user'),
-        data: {
-          user,
-          profile
-        }
+        message: lang.getMessage('updated'),
+        data: null
       })
 
     } catch (error) {
 
-      console.log(error)
+      this.exception.devLogs(error)
 
       return response.badRequest({
         message: lang.validationErr(error),
@@ -205,7 +197,7 @@ export default class UsersController {
 
     if (!user) {
       return response.notFound({
-        message: lang.messageC('messages.errors.notFound', 'user'),
+        message: lang.getMessage('notFound'),
         data: null
       })
     }
@@ -213,8 +205,8 @@ export default class UsersController {
     await user.merge({ active: !user.active }).save()
 
     return response.ok({
-      message: lang.messageC('messages.success.status', 'user'),
-      data: user
+      message: lang.getMessage(user.active ? 'status.activated' : 'status.desactivated'),
+      data: null
     })
 
   }

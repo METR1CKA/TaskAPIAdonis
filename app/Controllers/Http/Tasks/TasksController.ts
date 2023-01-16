@@ -1,12 +1,14 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Messages/MessagesI18n'
+import MessagesI18n from 'App/Services/MessagesI18n'
 import Task from 'App/Models/Tasks/Task'
 import TasksUpdateValidator from 'App/Validators/Tasks/TasksUpdateValidator'
 import TaskValidator from 'App/Validators/Tasks/TaskValidator'
+import ExceptionHandler from 'App/Exceptions/Handler'
 
 export default class TasksController {
 
   public header = 'Accept-Language'
+  public exception = new ExceptionHandler()
 
   public async read(ctx: HttpContextContract) {
 
@@ -24,7 +26,7 @@ export default class TasksController {
     }
 
     return ctx.response.ok({
-      message: lang.messageC('messages.success.all', 'tasks'),
+      message: lang.getMessage('data'),
       data: {
         total: tasks.length,
         tasks
@@ -39,13 +41,13 @@ export default class TasksController {
 
     return task
       ? ctx.response.ok({
-        message: lang.messageC('messages.success.one', 'task'),
+        message: lang.getMessage('data'),
         data: {
           task
         }
       })
       : ctx.response.notFound({
-        message: lang.messageC('messages.errors.notFound', 'task'),
+        message: lang.getMessage('notFound'),
         data: null
       })
   }
@@ -70,7 +72,7 @@ export default class TasksController {
       })
 
       return response.created({
-        message: lang.messageC('messages.success.create', 'user'),
+        message: lang.getMessage('created'),
         data: {
           task
         }
@@ -78,7 +80,7 @@ export default class TasksController {
 
     } catch (error) {
 
-      console.log(error)
+      this.exception.devLogs(error)
 
       return response.badRequest({
         message: lang.validationErr(error),
@@ -98,7 +100,7 @@ export default class TasksController {
 
     if (!task) {
       return response.notFound({
-        message: lang.messageC('messages.errors.notFound', 'task'),
+        message: lang.getMessage('notFound'),
         data: null
       })
     }
@@ -114,7 +116,7 @@ export default class TasksController {
       await task.merge(vali).save()
 
       return response.ok({
-        message: lang.messageC('messages.success.update', 'task'),
+        message: lang.getMessage('updated'),
         data: {
           task
         }
@@ -142,7 +144,7 @@ export default class TasksController {
 
     if (!task) {
       return response.notFound({
-        message: lang.messageC('messages.errors.notFound', 'task'),
+        message: lang.getMessage('notFound'),
         data: null
       })
     }
@@ -151,7 +153,7 @@ export default class TasksController {
       await task.delete()
 
       return response.ok({
-        message: lang.messageC('messages.success.delete', 'task'),
+        message: lang.getMessage('deleted'),
         data: null
       })
     }
@@ -160,13 +162,13 @@ export default class TasksController {
       await task.merge({ completed: !task.completed }).save()
 
       return response.ok({
-        message: lang.messageC('messages.success.status', 'task'),
+        message: lang.getMessage(task.completed ? 'status.activated' : 'status.desactivated'),
         data: null
       })
     }
 
     return response.badRequest({
-      message: lang.messageC('messages.errors.param', 'type'),
+      message: lang.getMessage('param', 'type'),
       data: null
     })
 

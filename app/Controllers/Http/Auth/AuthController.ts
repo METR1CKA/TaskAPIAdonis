@@ -1,14 +1,17 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Messages/MessagesI18n'
+import MessagesI18n from 'App/Services/MessagesI18n'
 import LoginValidator from 'App/Validators/Auth/LoginValidator'
 import User from 'App/Models/Users/User'
 import RegisterValidator from 'App/Validators/Users/RegisterValidator'
 import Profile from 'App/Models/Users/Profile'
 import Role from 'App/Models/Users/Role'
+import ExceptionHandler from 'App/Exceptions/Handler'
+import ApiToken from 'App/Models/Users/ApiToken'
 
 export default class AuthController {
 
   public header = 'Accept-Language'
+  public exception = new ExceptionHandler()
 
   public async register({ response, request }: HttpContextContract) {
 
@@ -26,7 +29,7 @@ export default class AuthController {
 
       if (!role) {
         return response.notFound({
-          message: lang.messageC('messages.errors.notFound', 'role'),
+          message: lang.getMessage('notFound'),
           data: null
         })
       }
@@ -35,7 +38,7 @@ export default class AuthController {
 
       if (existUser) {
         return response.badRequest({
-          messages: lang.messageA('messages.errors.exist'),
+          messages: lang.getMessage('user.exists'),
           data: null
         })
       }
@@ -60,7 +63,7 @@ export default class AuthController {
       )
 
       return response.created({
-        message: lang.messageC('messages.success.create', 'user'),
+        message: lang.getMessage('created'),
         data: {
           user,
           profile
@@ -69,7 +72,7 @@ export default class AuthController {
 
     } catch (error) {
 
-      console.log(error)
+      this.exception.devLogs(error)
 
       return response.badRequest({
         message: lang.validationErr(error),
@@ -105,7 +108,7 @@ export default class AuthController {
 
         if (!user) {
           return response.notFound({
-            message: lang.messageC('messages.errors.notFound', 'user'),
+            message: lang.getMessage('notFound'),
             data: null
           })
         }
@@ -115,7 +118,7 @@ export default class AuthController {
         })
 
         return response.ok({
-          message: lang.messageA('messages.success.login'),
+          message: lang.getMessage('login'),
           data: {
             auth: {
               type: token.type,
@@ -127,10 +130,10 @@ export default class AuthController {
 
       } catch (error) {
 
-        console.log(error)
+        this.exception.devLogs(error)
 
         return response.badRequest({
-          message: lang.messageA('messages.errors.login'),
+          message: lang.getMessage('login.error'),
           data: {
             responseText: error?.responseText
           }
@@ -139,7 +142,7 @@ export default class AuthController {
       }
     } catch (error) {
 
-      console.log(error)
+      this.exception.devLogs(error)
 
       return response.badRequest({
         message: lang.validationErr(error),
@@ -155,10 +158,14 @@ export default class AuthController {
 
     const lang = new MessagesI18n(request.header(this.header))
 
+    const user = await User.findOrFail(auth.user?.id)
+
     await auth.use('api').revoke()
 
+    await ApiToken.query().where('user_id', user.id).delete()
+
     return response.ok({
-      message: lang.messageA('messages.success.logout'),
+      message: lang.getMessage('logout'),
       data: {
         revoke: true
       }
@@ -182,7 +189,7 @@ export default class AuthController {
       .firstOrFail()
 
     return response.ok({
-      message: lang.messageA('messages.success.authUser'),
+      message: lang.getMessage('auth.user'),
       data: {
         user
       }

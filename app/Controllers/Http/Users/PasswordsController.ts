@@ -1,13 +1,15 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Messages/MessagesI18n'
+import MessagesI18n from 'App/Services/MessagesI18n'
 import User from 'App/Models/Users/User'
 import Hash from '@ioc:Adonis/Core/Hash'
 import PasswordAuthValidator from 'App/Validators/Passwords/PasswordAuthValidator'
 import PasswordIdValidator from 'App/Validators/Passwords/PasswordIdValidator'
+import ExceptionHandler from 'App/Exceptions/Handler'
 
 export default class PasswordsController {
 
   public header = 'Accept-Language'
+  public exception = new ExceptionHandler()
 
   public async updateAuth({ request, response, auth }: HttpContextContract) {
 
@@ -17,7 +19,7 @@ export default class PasswordsController {
 
     if (!user) {
       return response.notFound({
-        message: lang.messageC('messages.errors.notFound', 'user'),
+        message: lang.getMessage('notFound'),
         data: null
       })
     }
@@ -34,7 +36,7 @@ export default class PasswordsController {
 
       if (!verify) {
         return response.badRequest({
-          message: lang.messageA('messages.errors.password'),
+          message: lang.getMessage('password.error'),
           data: {
             verify
           }
@@ -44,13 +46,13 @@ export default class PasswordsController {
       await user.merge({ password: vali.newPassword }).save()
 
       return response.ok({
-        message: lang.messageC('messages.success.update', 'password'),
+        message: lang.getMessage('updated'),
         data: null
       })
 
     } catch (error) {
 
-      console.log(error)
+      this.exception.devLogs(error)
 
       return response.badRequest({
         message: lang.validationErr(error),
@@ -71,7 +73,7 @@ export default class PasswordsController {
 
     if (!user) {
       return response.notFound({
-        message: lang.messageC('messages.errors.notFound', 'user'),
+        message: lang.getMessage('notFound'),
         data: null
       })
     }
@@ -87,13 +89,13 @@ export default class PasswordsController {
       await user.merge({ password: vali.newPassword }).save()
 
       return response.ok({
-        message: lang.messageC('messages.success.update', 'password'),
+        message: lang.getMessage('updated'),
         data: null
       })
 
     } catch (error) {
 
-      console.log(error)
+      this.exception.devLogs(error)
 
       return response.badRequest({
         message: lang.validationErr(error),
