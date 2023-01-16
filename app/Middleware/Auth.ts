@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Messages/MessagesI18n'
+import MessagesI18n from 'App/Services/MessagesI18n'
 
 export default class AuthMiddleware {
   public header = 'Accept-language'

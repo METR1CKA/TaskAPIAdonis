@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Messages/MessagesI18n'
+import MessagesI18n from 'App/Services/MessagesI18n'
 import Role from 'App/Models/Users/Role'
 
 export default class RoleUser {
