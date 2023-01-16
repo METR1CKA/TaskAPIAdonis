@@ -1,0 +1,372 @@
+[
+  {
+    "locale": "en",
+    "key": "user",
+    "message": "User"
+  },
+  {
+    "locale": "es",
+    "key": "user",
+    "message": "Usuario"
+  },
+  {
+    "locale": "en",
+    "key": "users",
+    "message": "Users"
+  },
+  {
+    "locale": "es",
+    "key": "users",
+    "message": "Usuarios"
+  },
+  {
+    "locale": "en",
+    "key": "role",
+    "message": "Role"
+  },
+  {
+    "locale": "es",
+    "key": "role",
+    "message": "Rol"
+  },
+  {
+    "locale": "en",
+    "key": "roles",
+    "message": "Roles"
+  },
+  {
+    "locale": "es",
+    "key": "roles",
+    "message": "Roles"
+  },
+  {
+    "locale": "en",
+    "key": "password",
+    "message": "Password"
+  },
+  {
+    "locale": "es",
+    "key": "password",
+    "message": "Contraseña"
+  },
+  {
+    "locale": "en",
+    "key": "task",
+    "message": "Task"
+  },
+  {
+    "locale": "es",
+    "key": "task",
+    "message": "Tarea"
+  },
+  {
+    "locale": "en",
+    "key": "tasks",
+    "message": "Tasks"
+  },
+  {
+    "locale": "es",
+    "key": "tasks",
+    "message": "Tareas"
+  },
+  {
+    "locale": "en",
+    "key": "type",
+    "message": "Type"
+  },
+  {
+    "locale": "es",
+    "key": "type",
+    "message": "Tipo"
+  },
+  {
+    "locale": "es",
+    "key": "login",
+    "message": "Inicio de sesión éxitoso"
+  },
+  {
+    "locale": "en",
+    "key": "login",
+    "message": "Successful login"
+  },
+  {
+    "locale": "es",
+    "key": "logout",
+    "message": "Sesión cerrada con éxito"
+  },
+  {
+    "locale": "en",
+    "key": "logout",
+    "message": "Session closed successfully"
+  },
+  {
+    "locale": "es",
+    "key": "data",
+    "message": "Datos obtenidos correctamente"
+  },
+  {
+    "locale": "en",
+    "key": "data",
+    "message": "Data obtained correctly"
+  },
+  {
+    "locale": "es",
+    "key": "created",
+    "message": "Datos creados correctamente"
+  },
+  {
+    "locale": "en",
+    "key": "created",
+    "message": "Data created correctly"
+  },
+  {
+    "locale": "es",
+    "key": "update",
+    "message": "Datos actualizados correctamente"
+  },
+  {
+    "locale": "en",
+    "key": "update",
+    "message": "Data updated correctly"
+  },
+  {
+    "locale": "es",
+    "key": "delete",
+    "message": "Datos eliminados correctamente"
+  },
+  {
+    "locale": "en",
+    "key": "delete",
+    "message": "Data deleted correctly"
+  },
+  {
+    "locale": "es",
+    "key": "status.activated",
+    "message": "Dato activado correctamente"
+  },
+  {
+    "locale": "en",
+    "key": "status.activated",
+    "message": "Data activated correctly"
+  },
+  {
+    "locale": "es",
+    "key": "status.desactivated",
+    "message": "Dato desactivado correctamente"
+  },
+  {
+    "locale": "en",
+    "key": "status.desactivated",
+    "message": "Data desactivated correctly"
+  },
+  {
+    "locale": "es",
+    "key": "file",
+    "message": "Imagen almacenada correctamente"
+  },
+  {
+    "locale": "en",
+    "key": "file",
+    "message": "Image stored successfully"
+  },
+  {
+    "locale": "es",
+    "key": "lang.error",
+    "message": "Lenguaje no disponible"
+  },
+  {
+    "locale": "en",
+    "key": "lang.error",
+    "message": "Language not avaible"
+  },
+  {
+    "locale": "es",
+    "key": "notFound.route",
+    "message": "Ruta no encontrada"
+  },
+  {
+    "locale": "en",
+    "key": "notFound.route",
+    "message": "Route not found"
+  },
+  {
+    "locale": "es",
+    "key": "field",
+    "message": "El campo {field} es requerido"
+  },
+  {
+    "locale": "en",
+    "key": "field",
+    "message": "The {field} field is required"
+  },
+  {
+    "locale": "es",
+    "key": "email",
+    "message": "Formato de email incorrecto"
+  },
+  {
+    "locale": "en",
+    "key": "email",
+    "message": "Incorrect email format"
+  },
+  {
+    "locale": "es",
+    "key": "field.type",
+    "message": "El campo {field} debe de ser de tipo {type}"
+  },
+  {
+    "locale": "en",
+    "key": "field.type",
+    "message": "The {field} field must be of type {type}"
+  },
+  {
+    "locale": "es",
+    "key": "field.confirm",
+    "message": "El campo {field} debe de ser confirmado"
+  },
+  {
+    "locale": "en",
+    "key": "field.confirm",
+    "message": "The {field} field is required to confirm"
+  },
+  {
+    "locale": "es",
+    "key": "isNotLogin",
+    "message": "Aun no has iniciado sesión"
+  },
+  {
+    "locale": "en",
+    "key": "isNotLogin",
+    "message": "You don't have logged in"
+  },
+  {
+    "locale": "es",
+    "key": "notFound",
+    "message": "Dato no encontrado"
+  },
+  {
+    "locale": "en",
+    "key": "notFound",
+    "message": "Data not found"
+  },
+  {
+    "locale": "es",
+    "key": "user.notExists",
+    "message": "El usuario no existe"
+  },
+  {
+    "locale": "en",
+    "key": "user.notExists",
+    "message": "The user don't exists"
+  },
+  {
+    "locale": "es",
+    "key": "user.exists",
+    "message": "El usuario ya existe"
+  },
+  {
+    "locale": "en",
+    "key": "user.exists",
+    "message": "The user already exists"
+  },
+  {
+    "locale": "es",
+    "key": "login.error",
+    "message": "Credenciales incorrectas"
+  },
+  {
+    "locale": "en",
+    "key": "login.error",
+    "message": "Incorrect credentials"
+  },
+  {
+    "locale": "es",
+    "key": "password.error",
+    "message": "Contraseña incorrecta"
+  },
+  {
+    "locale": "en",
+    "key": "password.error",
+    "message": "Incorrect password"
+  },
+  {
+    "locale": "es",
+    "key": "forbidden",
+    "message": "No tienes accesso a este recurso"
+  },
+  {
+    "locale": "en",
+    "key": "forbidden",
+    "message": "You don't have access to this resource"
+  },
+  {
+    "locale": "es",
+    "key": "file.extnames",
+    "message": "Extension de archivo no valida"
+  },
+  {
+    "locale": "en",
+    "key": "file.extnames",
+    "message": "Invalid file extension"
+  },
+  {
+    "locale": "es",
+    "key": "file.notExists",
+    "message": "La imagen "
+  },
+  {
+    "locale": "en",
+    "key": "file.notExists",
+    "message": ""
+  },
+  {
+    "locale": "es",
+    "key": "file.path",
+    "message": "La ruta del archivo no existe"
+  },
+  {
+    "locale": "en",
+    "key": "file.path",
+    "message": "File path doesn't exists"
+  },
+  {
+    "locale": "es",
+    "key": "maxLength",
+    "message": "La longitud del campo {field} debe tener maximo {args} caracteres"
+  },
+  {
+    "locale": "en",
+    "key": "maxLength",
+    "message": "The length of the field {field} must be max {args} characters"
+  },
+  {
+    "locale": "es",
+    "key": "error",
+    "message": "No se pudo ejecutar correctamente el servicio"
+  },
+  {
+    "locale": "en",
+    "key": "error",
+    "message": "Failed to run service"
+  },
+  {
+    "locale": "es",
+    "key": "only.prod",
+    "message": "No disponible para producción"
+  },
+  {
+    "locale": "en",
+    "key": "only.prod",
+    "message": "Not avaible to prod"
+  },
+  {
+    "locale": "es",
+    "key": "param",
+    "message": "No se proporciono un valor correcto para el parametro {param}"
+  },
+  {
+    "locale": "en",
+    "key": "param",
+    "message": "A correct value was not supplied to the parameter {param}"
+  }
+]
