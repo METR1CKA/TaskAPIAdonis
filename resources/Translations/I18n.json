@@ -121,22 +121,22 @@
   },
   {
     "locale": "es",
-    "key": "update",
+    "key": "updated",
     "message": "Datos actualizados correctamente"
   },
   {
     "locale": "en",
-    "key": "update",
+    "key": "updated",
     "message": "Data updated correctly"
   },
   {
     "locale": "es",
-    "key": "delete",
+    "key": "deleted",
     "message": "Datos eliminados correctamente"
   },
   {
     "locale": "en",
-    "key": "delete",
+    "key": "deleted",
     "message": "Data deleted correctly"
   },
   {
@@ -351,13 +351,13 @@
   },
   {
     "locale": "es",
-    "key": "only.prod",
-    "message": "No disponible para producción"
+    "key": "only.dev",
+    "message": "Disponible solo para desarrolladores"
   },
   {
     "locale": "en",
-    "key": "only.prod",
-    "message": "Not avaible to prod"
+    "key": "only.dev",
+    "message": "Avaible only developers"
   },
   {
     "locale": "es",
@@ -368,5 +368,15 @@
     "locale": "en",
     "key": "param",
     "message": "A correct value was not supplied to the parameter {data}"
+  },
+  {
+    "locale": "es",
+    "key": "auth.user",
+    "message": "Datos de usuario autenticado"
+  },
+  {
+    "locale": "en",
+    "key": "auth.user",
+    "message": "Authenticated user data"
   }
 ]
