@@ -362,11 +362,11 @@
   {
     "locale": "es",
     "key": "param",
-    "message": "No se proporciono un valor correcto para el parametro {param}"
+    "message": "No se proporciono un valor correcto para el parametro {data}"
   },
   {
     "locale": "en",
     "key": "param",
-    "message": "A correct value was not supplied to the parameter {param}"
+    "message": "A correct value was not supplied to the parameter {data}"
   }
 ]
