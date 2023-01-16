@@ -15,9 +15,14 @@
 
 import Logger from '@ioc:Adonis/Core/Logger'
 import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
+import Env from '@ioc:Adonis/Core/Env'
 
 export default class ExceptionHandler extends HttpExceptionHandler {
-  constructor () {
+  constructor() {
     super(Logger)
+  }
+
+  public devLogs(Err: any) {
+    Env.get('NODE_ENV') === 'development' ? console.log(Err) : null
   }
 }
