@@ -52,7 +52,7 @@ export default class AuthController {
         }
       )
 
-      const profile = await Profile.create(
+      await Profile.create(
         {
           user_id: user.id,
           name: vali.name,
@@ -64,10 +64,7 @@ export default class AuthController {
 
       return response.created({
         message: lang.getMessage('created'),
-        data: {
-          user,
-          profile
-        }
+        data: null
       })
 
     } catch (error) {
@@ -158,11 +155,7 @@ export default class AuthController {
 
     const lang = new MessagesI18n(request.header(this.header))
 
-    const user = await User.findOrFail(auth.user?.id)
-
-    await auth.use('api').revoke()
-
-    await ApiToken.query().where('user_id', user.id).delete()
+    await ApiToken.query().where('user_id', auth.user?.id).delete()
 
     return response.ok({
       message: lang.getMessage('logout'),
@@ -178,21 +171,14 @@ export default class AuthController {
     const lang = new MessagesI18n(request.header(this.header))
 
     const user = await User.query()
-      .where(
-        {
-          id: auth.user?.id,
-          email: auth.user?.email
-        }
-      )
+      .where({ id: auth.user?.id, email: auth.user?.email })
       .preload('profile')
       .preload('role')
       .firstOrFail()
 
     return response.ok({
       message: lang.getMessage('auth.user'),
-      data: {
-        user
-      }
+      data: user
     })
 
   }
