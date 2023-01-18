@@ -10,22 +10,34 @@ export default class TasksController {
   public header = 'Accept-Language'
   public exception = new ExceptionHandler()
 
-  public async read(ctx: HttpContextContract) {
+  public async read({ request, response, params }: HttpContextContract) {
 
-    const lang = new MessagesI18n(ctx.request.header(this.header))
+    const lang = new MessagesI18n(request.header(this.header))
 
     const tasks = await Task.query()
       .preload('user')
       .preload('files')
       .orderBy('id', 'desc')
 
-    if (ctx.params.id) {
+    if (params.id) {
 
-      return await this.get(ctx, tasks, lang)
+      const task = tasks.find(element => element.id == params.id)
+
+      if (!task) {
+        return response.notFound({
+          message: lang.getMessage('notFound'),
+          data: null
+        })
+      }
+
+      return response.ok({
+        message: lang.getMessage('data'),
+        data: task
+      })
 
     }
 
-    return ctx.response.ok({
+    return response.ok({
       message: lang.getMessage('data'),
       data: {
         total: tasks.length,
@@ -33,23 +45,6 @@ export default class TasksController {
       }
     })
 
-  }
-
-  public async get(ctx: HttpContextContract, tasks: Task[], lang: MessagesI18n) {
-
-    const task = tasks.find(element => element.id == ctx.params.id)
-
-    return task
-      ? ctx.response.ok({
-        message: lang.getMessage('data'),
-        data: {
-          task
-        }
-      })
-      : ctx.response.notFound({
-        message: lang.getMessage('notFound'),
-        data: null
-      })
   }
 
   public async create({ request, response }: HttpContextContract) {
@@ -64,7 +59,7 @@ export default class TasksController {
         return
       }
 
-      const task = await Task.create({
+      await Task.create({
         user_id: vali.user_id,
         title: vali.title,
         description: vali.description,
@@ -73,9 +68,7 @@ export default class TasksController {
 
       return response.created({
         message: lang.getMessage('created'),
-        data: {
-          task
-        }
+        data: null
       })
 
     } catch (error) {
@@ -117,9 +110,7 @@ export default class TasksController {
 
       return response.ok({
         message: lang.getMessage('updated'),
-        data: {
-          task
-        }
+        data: null
       })
 
     } catch (error) {
