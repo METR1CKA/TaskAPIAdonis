@@ -40,6 +40,9 @@ Route.get('api/v1/user', async ({ response, auth, request }) => {
 
   const user = await User.findOrFail(auth.use('api').user?.id)
 
+  await user.load('profile')
+  await user.load('role')
+
   const status = Env.get('NODE_ENV') === 'development' ? 200 : 400
 
   const message = lang.getMessage(status === 200 ? 'auth.user' : 'only.dev')
