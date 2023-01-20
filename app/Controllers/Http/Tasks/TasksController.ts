@@ -1,18 +1,16 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Services/MessagesI18n'
 import Task from 'App/Models/Tasks/Task'
 import TasksUpdateValidator from 'App/Validators/Tasks/TasksUpdateValidator'
 import TaskValidator from 'App/Validators/Tasks/TaskValidator'
-import ExceptionHandler from 'App/Exceptions/Handler'
+import Service from '@ioc:Adonis/Providers/Services'
 
 export default class TasksController {
 
   public header = 'Accept-Language'
-  public exception = new ExceptionHandler()
 
   public async read({ request, response, params }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header(this.header))
+    Service.locale = request.header(this.header)
 
     const tasks = await Task.query()
       .preload('user')
@@ -25,20 +23,20 @@ export default class TasksController {
 
       if (!task) {
         return response.notFound({
-          message: lang.getMessage('notFound'),
+          message: Service.getMessage('notFound'),
           data: null
         })
       }
 
       return response.ok({
-        message: lang.getMessage('data'),
+        message: Service.getMessage('data'),
         data: task
       })
 
     }
 
     return response.ok({
-      message: lang.getMessage('data'),
+      message: Service.getMessage('data'),
       data: {
         total: tasks.length,
         tasks
@@ -49,7 +47,7 @@ export default class TasksController {
 
   public async create({ request, response }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header(this.header))
+    Service.locale = request.header(this.header)
 
     try {
 
@@ -67,16 +65,16 @@ export default class TasksController {
       })
 
       return response.created({
-        message: lang.getMessage('created'),
+        message: Service.getMessage('created'),
         data: null
       })
 
     } catch (error) {
 
-      this.exception.devLogs(error)
+      Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: lang.validationErr(error),
+        message: Service.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -87,13 +85,13 @@ export default class TasksController {
 
   public async update({ request, response, params }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header(this.header))
+    Service.locale = request.header(this.header)
 
     const task = await Task.find(params.id)
 
     if (!task) {
       return response.notFound({
-        message: lang.getMessage('notFound'),
+        message: Service.getMessage('notFound'),
         data: null
       })
     }
@@ -109,7 +107,7 @@ export default class TasksController {
       await task.merge(vali).save()
 
       return response.ok({
-        message: lang.getMessage('updated'),
+        message: Service.getMessage('updated'),
         data: null
       })
 
@@ -118,7 +116,7 @@ export default class TasksController {
       console.log(error)
 
       return response.badRequest({
-        message: lang.validationErr(error),
+        message: Service.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -129,13 +127,13 @@ export default class TasksController {
 
   public async delete({ request, response, params }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header(this.header))
+    Service.locale = request.header(this.header)
 
     const task = await Task.find(params.id)
 
     if (!task) {
       return response.notFound({
-        message: lang.getMessage('notFound'),
+        message: Service.getMessage('notFound'),
         data: null
       })
     }
@@ -144,7 +142,7 @@ export default class TasksController {
       await task.delete()
 
       return response.ok({
-        message: lang.getMessage('deleted'),
+        message: Service.getMessage('deleted'),
         data: null
       })
     }
@@ -153,13 +151,13 @@ export default class TasksController {
       await task.merge({ completed: !task.completed }).save()
 
       return response.ok({
-        message: lang.getMessage(task.completed ? 'status.activated' : 'status.desactivated'),
+        message: Service.getMessage(task.completed ? 'status.activated' : 'status.desactivated'),
         data: null
       })
     }
 
     return response.badRequest({
-      message: lang.getMessage('param', 'type'),
+      message: Service.getMessage('param', 'type'),
       data: null
     })
 
