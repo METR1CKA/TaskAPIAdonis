@@ -36,7 +36,7 @@ export default class FilesController {
     ],
   }
 
-  public async uploadFiles({ request, response }: HttpContextContract) {
+  public async uploadFile({ request, response }: HttpContextContract) {
     Service.locale = request.header(this.header)
 
     const file = request.file('file', this.validations)
