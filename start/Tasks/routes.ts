@@ -4,8 +4,9 @@ Route.group(() => {
 
   Route.group(() => {
 
-    Route.get('get/:filename', '')
-    Route.post('upload', '')
+    Route.get('get/:filename', 'FilesController.getFile')
+    Route.post('upload', 'FilesController.uploadFile')
+    Route.delete('delete/:filename', 'FilesController.deleteFile')
 
   }).prefix('files')
 
