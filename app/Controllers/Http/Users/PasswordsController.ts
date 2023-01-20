@@ -4,20 +4,19 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import PasswordAuthValidator from 'App/Validators/Passwords/PasswordAuthValidator'
 import PasswordIdValidator from 'App/Validators/Passwords/PasswordIdValidator'
 import Service from '@ioc:Adonis/Providers/Services'
+import MessagesI18n from 'App/Services/MessagesI18n'
 
-export default class PasswordsController {
-
-  public header = 'Accept-Language'
+export default class PasswordsController extends MessagesI18n {
 
   public async updateAuth({ request, response, auth }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     const user = await User.find(auth.user?.id)
 
     if (!user) {
       return response.notFound({
-        message: Service.getMessage('notFound'),
+        message: this.getMessage('notFound'),
         data: null
       })
     }
@@ -34,7 +33,7 @@ export default class PasswordsController {
 
       if (!verify) {
         return response.badRequest({
-          message: Service.getMessage('password.error'),
+          message: this.getMessage('password.error'),
           data: {
             verify
           }
@@ -44,7 +43,7 @@ export default class PasswordsController {
       await user.merge({ password: vali.newPassword }).save()
 
       return response.ok({
-        message: Service.getMessage('updated'),
+        message: this.getMessage('updated'),
         data: null
       })
 
@@ -53,7 +52,7 @@ export default class PasswordsController {
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: Service.validationErr(error),
+        message: this.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -65,13 +64,13 @@ export default class PasswordsController {
 
   public async updateId({ request, response, params }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     const user = await User.find(params.id)
 
     if (!user) {
       return response.notFound({
-        message: Service.getMessage('notFound'),
+        message: this.getMessage('notFound'),
         data: null
       })
     }
@@ -87,7 +86,7 @@ export default class PasswordsController {
       await user.merge({ password: vali.newPassword }).save()
 
       return response.ok({
-        message: Service.getMessage('updated'),
+        message: this.getMessage('updated'),
         data: null
       })
 
@@ -96,7 +95,7 @@ export default class PasswordsController {
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: Service.validationErr(error),
+        message: this.validationErr(error),
         data: {
           error: error?.messages
         }

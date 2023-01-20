@@ -6,14 +6,13 @@ import Profile from 'App/Models/Users/Profile'
 import Role from 'App/Models/Users/Role'
 import ApiToken from 'App/Models/Users/ApiToken'
 import Service from '@ioc:Adonis/Providers/Services'
+import MessagesI18n from 'App/Services/MessagesI18n'
 
-export default class AuthController {
-
-  public header = 'Accept-Language'
+export default class AuthController extends MessagesI18n {
 
   public async register({ response, request }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     try {
 
@@ -27,7 +26,7 @@ export default class AuthController {
 
       if (!role) {
         return response.notFound({
-          message: Service.getMessage('notFound'),
+          message: this.getMessage('notFound'),
           data: null
         })
       }
@@ -36,7 +35,7 @@ export default class AuthController {
 
       if (existUser) {
         return response.badRequest({
-          messages: Service.getMessage('user.exists'),
+          messages: this.getMessage('user.exists'),
           data: null
         })
       }
@@ -61,7 +60,7 @@ export default class AuthController {
       )
 
       return response.created({
-        message: Service.getMessage('created'),
+        message: this.getMessage('created'),
         data: null
       })
 
@@ -70,7 +69,7 @@ export default class AuthController {
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: Service.validationErr(error),
+        message: this.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -81,7 +80,7 @@ export default class AuthController {
 
   public async login({ response, request, auth }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     try {
 
@@ -103,7 +102,7 @@ export default class AuthController {
 
         if (!user) {
           return response.notFound({
-            message: Service.getMessage('notFound'),
+            message: this.getMessage('notFound'),
             data: null
           })
         }
@@ -113,7 +112,7 @@ export default class AuthController {
         })
 
         return response.ok({
-          message: Service.getMessage('login'),
+          message: this.getMessage('login'),
           data: {
             auth: {
               type: token.type,
@@ -128,7 +127,7 @@ export default class AuthController {
         Service.logsOfDeveloper(error)
 
         return response.badRequest({
-          message: Service.getMessage('login.error'),
+          message: this.getMessage('login.error'),
           data: {
             responseText: error?.responseText
           }
@@ -140,7 +139,7 @@ export default class AuthController {
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: Service.validationErr(error),
+        message: this.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -151,12 +150,12 @@ export default class AuthController {
 
   public async logout({ response, request, auth }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     await ApiToken.query().where('user_id', auth.user?.id).delete()
 
     return response.ok({
-      message: Service.getMessage('logout'),
+      message: this.getMessage('logout'),
       data: {
         revoke: true
       }
@@ -166,7 +165,7 @@ export default class AuthController {
 
   public async me({ response, request, auth }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     const user = await User.query()
       .where({ id: auth.user?.id, email: auth.user?.email })
@@ -175,7 +174,7 @@ export default class AuthController {
       .firstOrFail()
 
     return response.ok({
-      message: Service.getMessage('auth.user'),
+      message: this.getMessage('auth.user'),
       data: user
     })
 

@@ -3,14 +3,13 @@ import Task from 'App/Models/Tasks/Task'
 import TasksUpdateValidator from 'App/Validators/Tasks/TasksUpdateValidator'
 import TaskValidator from 'App/Validators/Tasks/TaskValidator'
 import Service from '@ioc:Adonis/Providers/Services'
+import MessagesI18n from 'App/Services/MessagesI18n'
 
-export default class TasksController {
-
-  public header = 'Accept-Language'
+export default class TasksController extends MessagesI18n {
 
   public async read({ request, response, params }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     const tasks = await Task.query()
       .preload('user')
@@ -23,20 +22,20 @@ export default class TasksController {
 
       if (!task) {
         return response.notFound({
-          message: Service.getMessage('notFound'),
+          message: this.getMessage('notFound'),
           data: null
         })
       }
 
       return response.ok({
-        message: Service.getMessage('data'),
+        message: this.getMessage('data'),
         data: task
       })
 
     }
 
     return response.ok({
-      message: Service.getMessage('data'),
+      message: this.getMessage('data'),
       data: {
         total: tasks.length,
         tasks
@@ -47,7 +46,7 @@ export default class TasksController {
 
   public async create({ request, response }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     try {
 
@@ -65,7 +64,7 @@ export default class TasksController {
       })
 
       return response.created({
-        message: Service.getMessage('created'),
+        message: this.getMessage('created'),
         data: null
       })
 
@@ -74,7 +73,7 @@ export default class TasksController {
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: Service.validationErr(error),
+        message: this.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -85,13 +84,13 @@ export default class TasksController {
 
   public async update({ request, response, params }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     const task = await Task.find(params.id)
 
     if (!task) {
       return response.notFound({
-        message: Service.getMessage('notFound'),
+        message: this.getMessage('notFound'),
         data: null
       })
     }
@@ -107,7 +106,7 @@ export default class TasksController {
       await task.merge(vali).save()
 
       return response.ok({
-        message: Service.getMessage('updated'),
+        message: this.getMessage('updated'),
         data: null
       })
 
@@ -116,7 +115,7 @@ export default class TasksController {
       console.log(error)
 
       return response.badRequest({
-        message: Service.validationErr(error),
+        message: this.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -127,13 +126,13 @@ export default class TasksController {
 
   public async delete({ request, response, params }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     const task = await Task.find(params.id)
 
     if (!task) {
       return response.notFound({
-        message: Service.getMessage('notFound'),
+        message: this.getMessage('notFound'),
         data: null
       })
     }
@@ -142,7 +141,7 @@ export default class TasksController {
       await task.delete()
 
       return response.ok({
-        message: Service.getMessage('deleted'),
+        message: this.getMessage('deleted'),
         data: null
       })
     }
@@ -151,13 +150,13 @@ export default class TasksController {
       await task.merge({ completed: !task.completed }).save()
 
       return response.ok({
-        message: Service.getMessage(task.completed ? 'status.activated' : 'status.desactivated'),
+        message: this.getMessage(task.completed ? 'status.activated' : 'status.desactivated'),
         data: null
       })
     }
 
     return response.badRequest({
-      message: Service.getMessage('param', 'type'),
+      message: this.getMessage('param', 'type'),
       data: null
     })
 

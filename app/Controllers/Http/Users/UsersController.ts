@@ -5,14 +5,13 @@ import User from 'App/Models/Users/User'
 import RegisterValidator from 'App/Validators/Users/RegisterValidator'
 import UpdateValidator from 'App/Validators/Users/UpdateValidator'
 import Service from '@ioc:Adonis/Providers/Services'
+import MessagesI18n from 'App/Services/MessagesI18n'
 
-export default class UsersController {
-
-  public header = 'Accept-Language'
+export default class UsersController extends MessagesI18n {
 
   public async read({ request, response, params }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     const users = await User.query()
       .preload('profile')
@@ -25,20 +24,20 @@ export default class UsersController {
 
       if (!data) {
         return response.notFound({
-          message: Service.getMessage('notFound'),
+          message: this.getMessage('notFound'),
           data
         })
       }
 
       return response.ok({
-        message: Service.getMessage('data'),
+        message: this.getMessage('data'),
         data
       })
 
     }
 
     return response.ok({
-      message: Service.getMessage('data'),
+      message: this.getMessage('data'),
       data: {
         total: users.length,
         users
@@ -49,7 +48,7 @@ export default class UsersController {
 
   public async create({ request, response }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     try {
 
@@ -63,7 +62,7 @@ export default class UsersController {
 
       if (!role) {
         return response.notFound({
-          message: Service.getMessage('notFound'),
+          message: this.getMessage('notFound'),
           data: null
         })
       }
@@ -72,7 +71,7 @@ export default class UsersController {
 
       if (existUser) {
         return response.badRequest({
-          messages: Service.getMessage('user.exist'),
+          messages: this.getMessage('user.exist'),
           data: null
         })
       }
@@ -97,7 +96,7 @@ export default class UsersController {
       )
 
       return response.created({
-        message: Service.getMessage('created'),
+        message: this.getMessage('created'),
         data: null
       })
 
@@ -106,7 +105,7 @@ export default class UsersController {
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: Service.validationErr(error),
+        message: this.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -118,7 +117,7 @@ export default class UsersController {
 
   public async update({ request, response, params }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     try {
 
@@ -132,7 +131,7 @@ export default class UsersController {
 
       if (!role) {
         return response.notFound({
-          message: Service.getMessage('notFound'),
+          message: this.getMessage('notFound'),
           data: null
         })
       }
@@ -141,7 +140,7 @@ export default class UsersController {
 
       if (!user) {
         return response.notFound({
-          message: Service.getMessage('notFound'),
+          message: this.getMessage('notFound'),
           data: null
         })
       }
@@ -150,7 +149,7 @@ export default class UsersController {
 
       if (!profile) {
         return response.notFound({
-          message: Service.getMessage('notFound'),
+          message: this.getMessage('notFound'),
           data: null
         })
       }
@@ -174,7 +173,7 @@ export default class UsersController {
       ).save()
 
       return response.ok({
-        message: Service.getMessage('updated'),
+        message: this.getMessage('updated'),
         data: null
       })
 
@@ -183,7 +182,7 @@ export default class UsersController {
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: Service.validationErr(error),
+        message: this.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -195,13 +194,13 @@ export default class UsersController {
 
   public async delete({ request, response, params }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     const user = await User.find(params.id)
 
     if (!user) {
       return response.notFound({
-        message: Service.getMessage('notFound'),
+        message: this.getMessage('notFound'),
         data: null
       })
     }
@@ -209,7 +208,7 @@ export default class UsersController {
     await user.merge({ active: !user.active }).save()
 
     return response.ok({
-      message: Service.getMessage(user.active ? 'status.activated' : 'status.desactivated'),
+      message: this.getMessage(user.active ? 'status.activated' : 'status.desactivated'),
       data: null
     })
 

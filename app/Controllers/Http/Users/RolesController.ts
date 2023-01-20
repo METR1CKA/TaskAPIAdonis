@@ -2,14 +2,13 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Role from 'App/Models/Users/Role'
 import RoleValidator from 'App/Validators/Roles/RoleValidator'
 import Service from '@ioc:Adonis/Providers/Services'
+import MessagesI18n from 'App/Services/MessagesI18n'
 
-export default class RolesController {
-
-  public header = 'Accept-Language'
+export default class RolesController extends MessagesI18n {
 
   public async read({ request, response, params }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     const roles = await Role.query()
       .preload('users')
@@ -21,18 +20,18 @@ export default class RolesController {
 
       return role
         ? response.ok({
-          message: Service.getMessage('data'),
+          message: this.getMessage('data'),
           data: role
         })
         : response.notFound({
-          message: Service.getMessage('notFound'),
+          message: this.getMessage('notFound'),
           data: null
         })
 
     }
 
     return response.ok({
-      message: Service.getMessage('data'),
+      message: this.getMessage('data'),
       data: {
         total: roles.length,
         roles
@@ -43,7 +42,7 @@ export default class RolesController {
 
   public async create({ request, response }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     try {
 
@@ -56,7 +55,7 @@ export default class RolesController {
       const role = await Role.create(vali)
 
       return response.created({
-        message: Service.getMessage('created'),
+        message: this.getMessage('created'),
         data: role
       })
 
@@ -65,7 +64,7 @@ export default class RolesController {
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: Service.validationErr(error),
+        message: this.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -77,13 +76,13 @@ export default class RolesController {
 
   public async update({ request, response, params }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     const role = await Role.find(params.id)
 
     if (!role) {
       return response.notFound({
-        message: Service.getMessage('notFound'),
+        message: this.getMessage('notFound'),
         data: null
       })
     }
@@ -99,7 +98,7 @@ export default class RolesController {
       await role.merge(vali).save()
 
       return response.ok({
-        message: Service.getMessage('updated'),
+        message: this.getMessage('updated'),
         data: role
       })
 
@@ -108,7 +107,7 @@ export default class RolesController {
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: Service.validationErr(error),
+        message: this.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -120,13 +119,13 @@ export default class RolesController {
 
   public async delete({ request, response, params }: HttpContextContract) {
 
-    Service.locale = request.header(this.header)
+    this.locale = request.header(this.header)
 
     const role = await Role.find(params.id)
 
     if (!role) {
       return response.notFound({
-        message: Service.getMessage('notFound'),
+        message: this.getMessage('notFound'),
         data: null
       })
     }
@@ -134,7 +133,7 @@ export default class RolesController {
     await role.merge({ active: !role.active }).save()
 
     return response.ok({
-      message: Service.getMessage(role.active ? 'status.activated' : 'status.desactivated'),
+      message: this.getMessage(role.active ? 'status.activated' : 'status.desactivated'),
       data: role
     })
 
