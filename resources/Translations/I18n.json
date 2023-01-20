@@ -162,12 +162,12 @@
   {
     "locale": "es",
     "key": "file",
-    "message": "Imagen almacenada correctamente"
+    "message": "Archivo almacenado correctamente"
   },
   {
     "locale": "en",
     "key": "file",
-    "message": "Image stored successfully"
+    "message": "File stored successfully"
   },
   {
     "locale": "es",
@@ -312,12 +312,12 @@
   {
     "locale": "es",
     "key": "file.notExists",
-    "message": "La imagen "
+    "message": "El archivo no existe"
   },
   {
     "locale": "en",
     "key": "file.notExists",
-    "message": ""
+    "message": "File doesn't exists"
   },
   {
     "locale": "es",
@@ -378,5 +378,15 @@
     "locale": "en",
     "key": "auth.user",
     "message": "Authenticated user data"
+  },
+  {
+    "locale": "es",
+    "key": "file.deleted",
+    "message": "Archivo eliminado correctamente"
+  },
+  {
+    "locale": "en",
+    "key": "file.deleted",
+    "message": "File deleted successfully"
   }
 ]
