@@ -1,10 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Service from '@ioc:Adonis/Providers/Services'
 import Role from 'App/Models/Users/Role'
+import MessagesI18n from 'App/Services/MessagesI18n'
 
-export default class RoleUser {
-
-  public header = 'Accept-language'
+export default class RoleUser extends MessagesI18n {
 
   public async handle({ auth, response, request }: HttpContextContract, next: () => Promise<void>) {
 
@@ -12,10 +10,10 @@ export default class RoleUser {
 
     if (role_id >= Role.ROLES.EDITOR) {
 
-      Service.locale = request.header(this.header)
+      this.locale = request.header(this.header)
 
       return response.forbidden({
-        messages: Service.getMessage('forbidden'),
+        messages: this.getMessage('forbidden'),
         data: null
       })
 
