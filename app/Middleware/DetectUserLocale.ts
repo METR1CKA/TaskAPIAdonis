@@ -1,6 +1,6 @@
 import I18n from '@ioc:Adonis/Addons/I18n'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Services/MessagesI18n'
+import Service from '@ioc:Adonis/Providers/Services'
 
 export default class DetectUserLocale {
 
@@ -12,10 +12,10 @@ export default class DetectUserLocale {
     const language = this.getUserLanguage(ctx)
 
     if (!language) {
-      const lang = new MessagesI18n(I18n.defaultLocale)
+      Service.locale = I18n.defaultLocale
 
       return ctx.response.badRequest({
-        message: lang.getMessage('lang.error'),
+        message: Service.getMessage('lang.error'),
         data: null
       })
     }

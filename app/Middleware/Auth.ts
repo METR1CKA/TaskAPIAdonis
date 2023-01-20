@@ -1,18 +1,18 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Services/MessagesI18n'
+import Service from '@ioc:Adonis/Providers/Services'
 
 export default class AuthMiddleware {
   public header = 'Accept-language'
 
   public async handle({ auth, request, response }: HttpContextContract, next: () => Promise<void>) {
 
-    const lang = new MessagesI18n(request.header(this.header))
+    Service.locale = request.header(this.header)
 
     const isAuth = await auth.use('api').check()
 
     if (!isAuth) {
       return response.unauthorized({
-        message: lang.getMessage('isNotLogin'),
+        message: Service.getMessage('isNotLogin'),
         data: null
       })
     }
