@@ -1,29 +1,29 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, HasOne, belongsTo, column, hasOne } from '@ioc:Adonis/Lucid/Orm'
-import User from './User'
-import File from '../File'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import Task from './Tasks/Task'
+import User from './Users/User'
 
-export default class Profile extends BaseModel {
+export default class File extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public task_id: number
 
   @column()
   public user_id: number
 
   @column()
-  public name: string
+  public filename: string
 
   @column()
-  public lastname: string
+  public extname: string
 
   @column()
-  public phone?: string
+  public mime: string
 
   @column()
-  public address?: string
-
-  @column()
-  public image?: string
+  public fullpath: string
 
   @column.dateTime({
     autoCreate: true,
@@ -38,17 +38,15 @@ export default class Profile extends BaseModel {
   })
   public updatedAt: DateTime
 
-  // Relations
-
-  @hasOne(() => File, {
-    localKey: 'id',
-    foreignKey: 'user_id'
-  })
-  public img: HasOne<typeof File>
-
   @belongsTo(() => User, {
     localKey: 'id',
     foreignKey: 'user_id'
   })
   public user: BelongsTo<typeof User>
+
+  @belongsTo(() => Task, {
+    localKey: 'id',
+    foreignKey: 'task_id'
+  })
+  public task: BelongsTo<typeof Task>
 }

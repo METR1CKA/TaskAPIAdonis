@@ -66,7 +66,7 @@ export default class RolesController extends MessagesI18n {
       return response.badRequest({
         message: this.validationErr(error),
         data: {
-          error: error?.messages
+          errors: error?.messages?.errors
         }
       })
 
@@ -109,7 +109,7 @@ export default class RolesController extends MessagesI18n {
       return response.badRequest({
         message: this.validationErr(error),
         data: {
-          error: error?.messages
+          errors: error?.messages?.errors
         }
       })
 
@@ -133,7 +133,7 @@ export default class RolesController extends MessagesI18n {
     await role.merge({ active: !role.active }).save()
 
     return response.ok({
-      message: this.getMessage(role.active ? 'status.activated' : 'status.desactivated'),
+      message: this.getMessage(`status.${role.active ? 'activated' : 'desactivated'}`),
       data: role
     })
 

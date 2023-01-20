@@ -3,11 +3,11 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class extends BaseSchema {
   protected tableName = 'files'
 
-  public async up () {
+  public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table.integer('task_id').references('id')
-        .inTable('tasks').unsigned().onDelete('CASCADE')
+      table.integer('task_id').references('id').inTable('tasks').unsigned().onDelete('CASCADE').notNullable()
+      table.integer('profile_id').references('id').inTable('profiles').unsigned().onDelete('CASCADE').nullable()
       table.string('filename', 200).notNullable()
       table.string('extname', 10).notNullable()
       table.string('mime', 100).notNullable()
@@ -21,7 +21,7 @@ export default class extends BaseSchema {
     })
   }
 
-  public async down () {
+  public async down() {
     this.schema.dropTable(this.tableName)
   }
 }

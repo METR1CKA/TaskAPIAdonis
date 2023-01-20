@@ -71,7 +71,7 @@ export default class AuthController extends MessagesI18n {
       return response.badRequest({
         message: this.validationErr(error),
         data: {
-          error: error?.messages
+          errors: error?.messages?.errors
         }
       })
 
@@ -129,7 +129,7 @@ export default class AuthController extends MessagesI18n {
         return response.badRequest({
           message: this.getMessage('login.error'),
           data: {
-            responseText: error?.responseText
+            error: error?.responseText
           }
         })
 
@@ -141,7 +141,7 @@ export default class AuthController extends MessagesI18n {
       return response.badRequest({
         message: this.validationErr(error),
         data: {
-          error: error?.messages
+          errors: error?.messages?.errors
         }
       })
 

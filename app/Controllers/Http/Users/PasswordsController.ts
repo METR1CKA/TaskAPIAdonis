@@ -54,7 +54,7 @@ export default class PasswordsController extends MessagesI18n {
       return response.badRequest({
         message: this.validationErr(error),
         data: {
-          error: error?.messages
+          errors: error?.messages?.errors
         }
       })
 
@@ -97,7 +97,7 @@ export default class PasswordsController extends MessagesI18n {
       return response.badRequest({
         message: this.validationErr(error),
         data: {
-          error: error?.messages
+          errors: error?.messages?.errors
         }
       })
 

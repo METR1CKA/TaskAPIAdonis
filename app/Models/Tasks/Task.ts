@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, BelongsTo, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import User from '../Users/User'
-import File from './File'
+import File from '../File'
 
 export default class Task extends BaseModel {
   @column({ isPrimary: true })
