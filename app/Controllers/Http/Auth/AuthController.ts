@@ -1,21 +1,19 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Services/MessagesI18n'
 import LoginValidator from 'App/Validators/Auth/LoginValidator'
 import User from 'App/Models/Users/User'
 import RegisterValidator from 'App/Validators/Users/RegisterValidator'
 import Profile from 'App/Models/Users/Profile'
 import Role from 'App/Models/Users/Role'
-import ExceptionHandler from 'App/Exceptions/Handler'
 import ApiToken from 'App/Models/Users/ApiToken'
+import Service from '@ioc:Adonis/Providers/Services'
 
 export default class AuthController {
 
   public header = 'Accept-Language'
-  public exception = new ExceptionHandler()
 
   public async register({ response, request }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header(this.header))
+    Service.locale = request.header(this.header)
 
     try {
 
@@ -29,7 +27,7 @@ export default class AuthController {
 
       if (!role) {
         return response.notFound({
-          message: lang.getMessage('notFound'),
+          message: Service.getMessage('notFound'),
           data: null
         })
       }
@@ -38,7 +36,7 @@ export default class AuthController {
 
       if (existUser) {
         return response.badRequest({
-          messages: lang.getMessage('user.exists'),
+          messages: Service.getMessage('user.exists'),
           data: null
         })
       }
@@ -63,16 +61,16 @@ export default class AuthController {
       )
 
       return response.created({
-        message: lang.getMessage('created'),
+        message: Service.getMessage('created'),
         data: null
       })
 
     } catch (error) {
 
-      this.exception.devLogs(error)
+      Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: lang.validationErr(error),
+        message: Service.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -83,7 +81,7 @@ export default class AuthController {
 
   public async login({ response, request, auth }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header(this.header))
+    Service.locale = request.header(this.header)
 
     try {
 
@@ -105,7 +103,7 @@ export default class AuthController {
 
         if (!user) {
           return response.notFound({
-            message: lang.getMessage('notFound'),
+            message: Service.getMessage('notFound'),
             data: null
           })
         }
@@ -115,7 +113,7 @@ export default class AuthController {
         })
 
         return response.ok({
-          message: lang.getMessage('login'),
+          message: Service.getMessage('login'),
           data: {
             auth: {
               type: token.type,
@@ -127,10 +125,10 @@ export default class AuthController {
 
       } catch (error) {
 
-        this.exception.devLogs(error)
+        Service.logsOfDeveloper(error)
 
         return response.badRequest({
-          message: lang.getMessage('login.error'),
+          message: Service.getMessage('login.error'),
           data: {
             responseText: error?.responseText
           }
@@ -139,10 +137,10 @@ export default class AuthController {
       }
     } catch (error) {
 
-      this.exception.devLogs(error)
+      Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: lang.validationErr(error),
+        message: Service.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -153,12 +151,12 @@ export default class AuthController {
 
   public async logout({ response, request, auth }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header(this.header))
+    Service.locale = request.header(this.header)
 
     await ApiToken.query().where('user_id', auth.user?.id).delete()
 
     return response.ok({
-      message: lang.getMessage('logout'),
+      message: Service.getMessage('logout'),
       data: {
         revoke: true
       }
@@ -168,7 +166,7 @@ export default class AuthController {
 
   public async me({ response, request, auth }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header(this.header))
+    Service.locale = request.header(this.header)
 
     const user = await User.query()
       .where({ id: auth.user?.id, email: auth.user?.email })
@@ -177,7 +175,7 @@ export default class AuthController {
       .firstOrFail()
 
     return response.ok({
-      message: lang.getMessage('auth.user'),
+      message: Service.getMessage('auth.user'),
       data: user
     })
 
