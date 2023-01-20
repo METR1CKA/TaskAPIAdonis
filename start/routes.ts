@@ -36,7 +36,9 @@ Route.get('api/v1', async () => {
 
 Route.get('api/v1/user', async ({ response, auth, request }) => {
 
-  const lang = new MessagesI18n(request.header('Accept-language'))
+  const lang = new MessagesI18n()
+
+  lang.locale = request.header('Accept-language')
 
   const user = await User.findOrFail(auth.use('api').user?.id)
 
@@ -55,7 +57,9 @@ Route.get('api/v1/user', async ({ response, auth, request }) => {
 
 Route.any('*', ({ response, request }) => {
 
-  const lang = new MessagesI18n(request.header('Accept-language'))
+  const lang = new MessagesI18n()
+
+  lang.locale = request.header('Accept-language')
 
   return response.notFound({
     message: lang.getMessage('notFound.route'),
