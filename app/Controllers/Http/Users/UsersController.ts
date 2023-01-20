@@ -157,19 +157,19 @@ export default class UsersController {
 
       await user.merge(
         {
-          'email': vali.email,
-          'active': vali.active,
-          'role_id': role.id
+          email: vali.email,
+          active: vali.active,
+          role_id: role.id
         }
       ).save()
 
       await profile.merge(
         {
-          'user_id': user.id,
-          'name': vali.name,
-          'lastname': vali.lastname,
-          'phone': vali.phone,
-          'address': vali.address
+          user_id: user.id,
+          name: vali.name,
+          lastname: vali.lastname,
+          phone: vali.phone,
+          address: vali.address
         }
       ).save()
 
