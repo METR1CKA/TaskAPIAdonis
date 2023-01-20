@@ -45,7 +45,7 @@ export default class Services {
    * @param {MultipartFileContract} file - MultipartFileContract - This is the file that you want to
    * store.
    * @param {string[]} extnames - string[] = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx',
-   * 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'tif', 'txt', 'csv',
+   * 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'tif', 'txt', 'csv', ...]
    * @returns The newfilename is being returned.
    */
   public async storeFile(file: MultipartFileContract, extnames: string[]) {
@@ -76,7 +76,7 @@ export default class Services {
  * the key formatted
  * @param {string} key - The key of the message you want to translate
  * @param {string} [context] - The context of the message.
- * @param {any} [data] - {
+ * @param {any} [data] - The data of the message
  * @returns The return value is a string.
  */
   public getMessage(key: string, context?: string, data?: any) {
