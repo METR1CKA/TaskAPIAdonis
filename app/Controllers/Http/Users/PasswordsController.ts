@@ -1,25 +1,23 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesI18n from 'App/Services/MessagesI18n'
 import User from 'App/Models/Users/User'
 import Hash from '@ioc:Adonis/Core/Hash'
 import PasswordAuthValidator from 'App/Validators/Passwords/PasswordAuthValidator'
 import PasswordIdValidator from 'App/Validators/Passwords/PasswordIdValidator'
-import ExceptionHandler from 'App/Exceptions/Handler'
+import Service from '@ioc:Adonis/Providers/Services'
 
 export default class PasswordsController {
 
   public header = 'Accept-Language'
-  public exception = new ExceptionHandler()
 
   public async updateAuth({ request, response, auth }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header(this.header))
+    Service.locale = request.header(this.header)
 
     const user = await User.find(auth.user?.id)
 
     if (!user) {
       return response.notFound({
-        message: lang.getMessage('notFound'),
+        message: Service.getMessage('notFound'),
         data: null
       })
     }
@@ -36,7 +34,7 @@ export default class PasswordsController {
 
       if (!verify) {
         return response.badRequest({
-          message: lang.getMessage('password.error'),
+          message: Service.getMessage('password.error'),
           data: {
             verify
           }
@@ -46,16 +44,16 @@ export default class PasswordsController {
       await user.merge({ password: vali.newPassword }).save()
 
       return response.ok({
-        message: lang.getMessage('updated'),
+        message: Service.getMessage('updated'),
         data: null
       })
 
     } catch (error) {
 
-      this.exception.devLogs(error)
+      Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: lang.validationErr(error),
+        message: Service.validationErr(error),
         data: {
           error: error?.messages
         }
@@ -67,13 +65,13 @@ export default class PasswordsController {
 
   public async updateId({ request, response, params }: HttpContextContract) {
 
-    const lang = new MessagesI18n(request.header(this.header))
+    Service.locale = request.header(this.header)
 
     const user = await User.find(params.id)
 
     if (!user) {
       return response.notFound({
-        message: lang.getMessage('notFound'),
+        message: Service.getMessage('notFound'),
         data: null
       })
     }
@@ -89,16 +87,16 @@ export default class PasswordsController {
       await user.merge({ password: vali.newPassword }).save()
 
       return response.ok({
-        message: lang.getMessage('updated'),
+        message: Service.getMessage('updated'),
         data: null
       })
 
     } catch (error) {
 
-      this.exception.devLogs(error)
+      Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: lang.validationErr(error),
+        message: Service.validationErr(error),
         data: {
           error: error?.messages
         }
