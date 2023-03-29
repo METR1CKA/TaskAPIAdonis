@@ -1,15 +1,13 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'tasks'
+  protected tableName = 'roles_views'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table.integer('user_id').references('id').inTable('users').unsigned().onDelete('CASCADE')
-      table.string('title', 200).notNullable()
-      table.text('description', 'longtext').notNullable()
-      table.boolean('completed').notNullable()
+      table.integer('view_id').references('id').inTable('views').unsigned().onDelete('CASCADE')
+      table.integer('role_id').references('id').inTable('roles').unsigned().onDelete('CASCADE')
       table.boolean('active').notNullable()
 
       /**

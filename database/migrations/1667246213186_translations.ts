@@ -6,7 +6,7 @@ export default class Translations extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table.string('locale', 8).notNullable()
+      table.string('locale', 10).notNullable()
       table.string('key').notNullable()
       table.text('message', 'longtext').notNullable()
 

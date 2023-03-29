@@ -10,8 +10,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('password', 200).notNullable()
       table.string('remember_me_token').nullable()
       table.boolean('active').notNullable()
-      table.integer('role_id').references('id')
-        .inTable('roles').unsigned().onDelete('CASCADE')
+      table.integer('role_id').references('id').inTable('roles').unsigned().onDelete('CASCADE')
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
