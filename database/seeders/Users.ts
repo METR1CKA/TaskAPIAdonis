@@ -62,7 +62,7 @@ export default class extends BaseSeeder {
           user_id: admin.id,
           name: 'Administrator',
           lastname: 'Tasks',
-          phone: '8711293580',
+          phone: '8721223489',
           address: 'GitHub'
         },
       ]
