@@ -25,19 +25,18 @@ export default class User extends BaseModel {
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value) => value?.toFormat('dd/MM/yyyy  HH:mm:ss')
+    serialize: (value) => value?.toFormat('dd-MM-yyyy  HH:mm:ss')
   })
-  public createdAt: DateTime
+  public createdAt?: DateTime
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value) => value?.toFormat('dd/MM/yyyy  HH:mm:ss')
+    serialize: (value) => value?.toFormat('dd-MM-yyyy  HH:mm:ss')
   })
-  public updatedAt: DateTime
+  public updatedAt?: DateTime
 
   // Functions
-
   @beforeSave()
   public static async hashPassword(User: User) {
     if (User.$dirty.password) {
@@ -46,7 +45,6 @@ export default class User extends BaseModel {
   }
 
   // Relations
-
   @hasOne(() => Profile, {
     localKey: 'id',
     foreignKey: 'user_id'

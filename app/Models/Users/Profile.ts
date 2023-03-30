@@ -1,7 +1,6 @@
-import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, HasOne, belongsTo, column, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
-import File from '../File'
+import Lang from './Lang'
 
 export default class Profile extends BaseModel {
   @column({ isPrimary: true })
@@ -9,6 +8,9 @@ export default class Profile extends BaseModel {
 
   @column()
   public user_id: number
+
+  @column()
+  public lang_id: number
 
   @column()
   public name: string
@@ -25,30 +27,16 @@ export default class Profile extends BaseModel {
   @column()
   public image?: string
 
-  @column.dateTime({
-    autoCreate: true,
-    serialize: (value) => value?.toFormat('dd/MM/yyyy  HH:mm:ss')
-  })
-  public createdAt: DateTime
-
-  @column.dateTime({
-    autoCreate: true,
-    autoUpdate: true,
-    serialize: (value) => value?.toFormat('dd/MM/yyyy  HH:mm:ss')
-  })
-  public updatedAt: DateTime
-
   // Relations
-
-  @hasOne(() => File, {
-    localKey: 'id',
-    foreignKey: 'user_id'
-  })
-  public img: HasOne<typeof File>
-
   @belongsTo(() => User, {
     localKey: 'id',
     foreignKey: 'user_id'
   })
   public user: BelongsTo<typeof User>
+
+  @belongsTo(() => Lang, {
+    localKey: 'id',
+    foreignKey: 'lang_id',
+  })
+  public lang: BelongsTo<typeof Lang>
 }
