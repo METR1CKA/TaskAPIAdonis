@@ -9,13 +9,10 @@ import Service from '@ioc:Adonis/Providers/Services'
 import MessagesI18n from 'App/Services/MessagesI18n'
 
 export default class AuthController extends MessagesI18n {
-
   public async register({ response, request }: HttpContextContract) {
-
-    this.locale = request.header(this.header)
+    this.setLocaleRequest(request)
 
     try {
-
       const vali = await request.validate(RegisterValidator)
 
       if (!vali) {
@@ -26,8 +23,11 @@ export default class AuthController extends MessagesI18n {
 
       if (!role) {
         return response.notFound({
-          message: this.getMessage('notFound'),
-          data: null
+          statusResponse: 'Error',
+          data: {
+            message: this.getMessage('notFound'),
+            dataNotFound: 'Role'
+          }
         })
       }
 
@@ -35,8 +35,11 @@ export default class AuthController extends MessagesI18n {
 
       if (existUser) {
         return response.badRequest({
-          messages: this.getMessage('user.exists'),
-          data: null
+          statusResponse: 'Error',
+          data: {
+            message: this.getMessage('user.exists'),
+            existUser: !!existUser
+          }
         })
       }
 
@@ -60,30 +63,28 @@ export default class AuthController extends MessagesI18n {
       )
 
       return response.created({
-        message: this.getMessage('created'),
-        data: null
+        statusResponse: 'Success',
+        data: {
+          message: this.getMessage('created')
+        }
       })
-
     } catch (error) {
-
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: this.validationErr(error),
+        statusResponse: 'Error',
         data: {
-          errors: error?.messages?.errors
+          message: this.validationErr(error),
+          errors: error?.messages?.errors[0]
         }
       })
-
     }
   }
 
   public async login({ response, request, auth }: HttpContextContract) {
-
-    this.locale = request.header(this.header)
+    this.setLocaleRequest(request)
 
     try {
-
       const vali = await request.validate(LoginValidator)
 
       if (!vali) {
@@ -91,7 +92,6 @@ export default class AuthController extends MessagesI18n {
       }
 
       try {
-
         const verify = await auth.use('api').verifyCredentials(vali.email, vali.password)
 
         if (!verify) {
@@ -102,81 +102,98 @@ export default class AuthController extends MessagesI18n {
 
         if (!user) {
           return response.notFound({
-            message: this.getMessage('notFound'),
-            data: null
+            statusResponse: 'Error',
+            data: {
+              message: this.getMessage('notFound'),
+              dataNotFound: 'User'
+            }
           })
         }
 
-        const token = await auth.use('api').attempt(vali.email, vali.password, {
-          expiresIn: '1year'
-        })
+        const token = await auth.use('api').attempt(vali.email, vali.password, { expiresIn: '1year' })
+
+        if (vali.remember_me_token) {
+          await user.merge({ rememberMeToken: token.token }).save()
+        }
 
         return response.ok({
-          message: this.getMessage('login'),
+          statusResponse: 'Success',
           data: {
+            message: this.getMessage('login'),
             auth: {
               type: token.type,
               token: token.token,
-              expires_at: token.expiresAt?.toFormat('dd/MM/yyyy  HH:mm:ss')
+              expires_at: token.expiresAt?.toFormat('dd-MM-yyyy  HH:mm:ss')
             }
           }
         })
-
       } catch (error) {
-
         Service.logsOfDeveloper(error)
 
         return response.badRequest({
-          message: this.getMessage('login.error'),
+          statusResponse: 'Error',
           data: {
-            error: error?.responseText
+            message: this.getMessage('login.error'),
+            errors: error?.responseText,
           }
         })
-
       }
     } catch (error) {
-
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: this.validationErr(error),
+        statusResponse: 'Error',
         data: {
-          errors: error?.messages?.errors
+          message: this.validationErr(error),
+          errors: error?.messages?.errors[0]
         }
       })
-
     }
   }
 
   public async logout({ response, request, auth }: HttpContextContract) {
+    this.setLocaleRequest(request)
 
-    this.locale = request.header(this.header)
+    const user = await User.find(auth.use('api').user?.id)
 
-    await ApiToken.query().where('user_id', auth.user?.id).delete()
+    if (!user) {
+      return response.notFound({
+        statusResponse: 'Error',
+        data: {
+          message: this.getMessage('notFound'),
+          dataNotFound: 'User'
+        }
+      })
+    }
+
+    await user.merge({ rememberMeToken: null }).save()
+
+    await ApiToken.query().where('user_id', user.id).delete()
 
     return response.ok({
-      message: this.getMessage('logout'),
+      statusResponse: 'Success',
       data: {
-        revoke: true
+        message: this.getMessage('logout'),
+        tokensRevoked: true,
       }
     })
-
   }
 
   public async me({ response, request, auth }: HttpContextContract) {
-
-    this.locale = request.header(this.header)
+    this.setLocaleRequest(request)
 
     const user = await User.query()
       .where({ id: auth.user?.id, email: auth.user?.email })
       .preload('profile')
       .preload('role')
-      .firstOrFail()
+      .first()
 
     return response.ok({
-      message: this.getMessage('auth.user'),
-      data: user
+      statusResponse: 'Success',
+      data: {
+        message: this.getMessage('auth.user'),
+        user
+      }
     })
-
   }
 }

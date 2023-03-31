@@ -8,10 +8,8 @@ import Service from '@ioc:Adonis/Providers/Services'
 import MessagesI18n from 'App/Services/MessagesI18n'
 
 export default class UsersController extends MessagesI18n {
-
   public async read({ request, response, params }: HttpContextContract) {
-
-    this.locale = request.header(this.header)
+    this.setLocaleRequest(request)
 
     const users = await User.query()
       .preload('profile')
@@ -19,39 +17,41 @@ export default class UsersController extends MessagesI18n {
       .orderBy('id', 'desc')
 
     if (params.id) {
+      const user = users.find(user => user.id == params.id)
 
-      const data = users.find(element => element.id == params.id)
-
-      if (!data) {
+      if (!user) {
         return response.notFound({
-          message: this.getMessage('notFound'),
-          data
+          statusResponse: 'Error',
+          data: {
+            message: this.getMessage('notFound'),
+            dataNotFound: 'User'
+          }
         })
       }
 
       return response.ok({
-        message: this.getMessage('data'),
-        data
+        statusResponse: 'Success',
+        data: {
+          message: this.getMessage('data'),
+          user
+        }
       })
-
     }
 
     return response.ok({
-      message: this.getMessage('data'),
+      statusResponse: 'Success',
       data: {
+        message: this.getMessage('data'),
         total: users.length,
         users
       }
     })
-
   }
 
   public async create({ request, response }: HttpContextContract) {
-
-    this.locale = request.header(this.header)
+    this.setLocaleRequest(request)
 
     try {
-
       const vali = await request.validate(RegisterValidator)
 
       if (!vali) {
@@ -62,8 +62,11 @@ export default class UsersController extends MessagesI18n {
 
       if (!role) {
         return response.notFound({
-          message: this.getMessage('notFound'),
-          data: null
+          statusResponse: 'Error',
+          data: {
+            message: this.getMessage('notFound'),
+            dataNotFound: 'Role'
+          }
         })
       }
 
@@ -71,8 +74,11 @@ export default class UsersController extends MessagesI18n {
 
       if (existUser) {
         return response.badRequest({
-          messages: this.getMessage('user.exist'),
-          data: null
+          statusResponse: 'Error',
+          data: {
+            messages: this.getMessage('user.exist'),
+            existUser: !!existUser
+          }
         })
       }
 
@@ -96,31 +102,28 @@ export default class UsersController extends MessagesI18n {
       )
 
       return response.created({
-        message: this.getMessage('created'),
-        data: null
+        statusResponse: 'Success',
+        data: {
+          message: this.getMessage('created'),
+        }
       })
-
     } catch (error) {
-
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: this.validationErr(error),
+        statusResponse: 'Error',
         data: {
-          errors: error?.messages?.errors
+          message: this.validationErr(error),
+          errors: error?.messages?.errors[0]
         }
       })
-
     }
-
   }
 
   public async update({ request, response, params }: HttpContextContract) {
-
-    this.locale = request.header(this.header)
+    this.setLocaleRequest(request)
 
     try {
-
       const vali = await request.validate(UpdateValidator)
 
       if (!vali) {
@@ -131,8 +134,11 @@ export default class UsersController extends MessagesI18n {
 
       if (!role) {
         return response.notFound({
-          message: this.getMessage('notFound'),
-          data: null
+          statusResponse: 'Error',
+          data: {
+            message: this.getMessage('notFound'),
+            dataNotFound: 'Role'
+          }
         })
       }
 
@@ -140,8 +146,11 @@ export default class UsersController extends MessagesI18n {
 
       if (!user) {
         return response.notFound({
-          message: this.getMessage('notFound'),
-          data: null
+          statusResponse: 'Error',
+          data: {
+            message: this.getMessage('notFound'),
+            dataNotFound: 'User'
+          }
         })
       }
 
@@ -149,8 +158,11 @@ export default class UsersController extends MessagesI18n {
 
       if (!profile) {
         return response.notFound({
-          message: this.getMessage('notFound'),
-          data: null
+          statusResponse: 'Error',
+          data: {
+            message: this.getMessage('notFound'),
+            dataNotFound: 'Profile'
+          }
         })
       }
 
@@ -173,44 +185,46 @@ export default class UsersController extends MessagesI18n {
       ).save()
 
       return response.ok({
-        message: this.getMessage('updated'),
-        data: null
+        statusResponse: 'Success',
+        data: {
+          message: this.getMessage('updated'),
+        }
       })
-
     } catch (error) {
-
       Service.logsOfDeveloper(error)
 
       return response.badRequest({
-        message: this.validationErr(error),
+        statusResponse: 'Error',
         data: {
-          errors: error?.messages?.errors
+          message: this.validationErr(error),
+          errors: error?.messages?.errors[0]
         }
       })
-
     }
-
   }
 
   public async delete({ request, response, params }: HttpContextContract) {
-
-    this.locale = request.header(this.header)
+    this.setLocaleRequest(request)
 
     const user = await User.find(params.id)
 
     if (!user) {
       return response.notFound({
-        message: this.getMessage('notFound'),
-        data: null
+        statusResponse: 'Error',
+        data: {
+          message: this.getMessage('notFound'),
+          dataNotFound: 'User'
+        }
       })
     }
 
     await user.merge({ active: !user.active }).save()
 
     return response.ok({
-      message: this.getMessage(user.active ? 'status.activated' : 'status.desactivated'),
-      data: null
+      statusResponse: 'Success',
+      data: {
+        message: this.getMessage(`status.${user.active ? 'activated' : 'desactivated'}`),
+      }
     })
-
   }
 }
