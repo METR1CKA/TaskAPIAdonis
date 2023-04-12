@@ -23,7 +23,9 @@ export default class AuthController extends MessagesI18n {
       })
     }
 
-    const { email, password, active, role_id, name, lastname, phone, address } = dataRegister
+    const {
+      email, password, active, role_id, name, lastname, phone, address, lang_id
+    } = dataRegister
 
     const role = await Role.find(role_id)
 
@@ -56,7 +58,8 @@ export default class AuthController extends MessagesI18n {
         name,
         lastname,
         phone,
-        address
+        address,
+        lang_id
       }
     )
 

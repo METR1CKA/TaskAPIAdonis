@@ -10,12 +10,20 @@ export default class RoleViewsController extends MessagesI18n {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)
 
-    const roles = await Role.query()
+    let roles: any = await Role.query()
       .preload('views', viewQuery => {
         viewQuery.preload('role_views')
-        // .where('roles_views.active', true)
+          .where('role_views.active', true)
       })
       .orderBy('id', 'desc')
+
+    roles = roles.map((role: any) => {
+      role.views = role.views.map((view: any) => {
+        view.role_views = view.role_views.filter((rv: any) => rv.role_id == role.id)
+        return view
+      })
+      return role
+    })
 
     if (params.id) {
       const role = roles.find(role => role.id == params.id)
@@ -51,7 +59,7 @@ export default class RoleViewsController extends MessagesI18n {
       })
     }
 
-    const { views, active } = rvData
+    const { views } = rvData
 
     const role = await Role.find(params.id)
 
@@ -83,7 +91,7 @@ export default class RoleViewsController extends MessagesI18n {
       return {
         role_id: role.id,
         view_id,
-        active,
+        active: true,
       }
     })
 

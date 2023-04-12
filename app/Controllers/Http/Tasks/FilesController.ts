@@ -2,10 +2,9 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Service from '@ioc:Adonis/Providers/Services'
 import MessagesI18n from 'App/Services/MessagesI18n'
-import File from 'App/Models/File'
+import Profile from 'App/Models/Users/Profile'
 
 export default class FilesController extends MessagesI18n {
-
   public validations = {
     size: '50mb',
     extnames: [
@@ -37,78 +36,43 @@ export default class FilesController extends MessagesI18n {
     ],
   }
 
-  public async uploadFile({ request, response, params }: HttpContextContract) {
-    this.locale = request.header(this.header)
-
-    if (!request.input('type')) {
-      return response.badRequest({
-        message: this.getMessage('param', 'type'),
-        data: null
-      })
-    }
+  public async uploadFile({ request, response }: HttpContextContract) {
+    this.setLocaleRequest(request)
+    Service.setResponseObject(response)
 
     const file = request.file('file', this.validations)
 
     if (!file) {
-      return
+      return Service.httpResponse(204, this.getMessage('nocontent'))
     }
 
     if (!file.isValid) {
-      return response.badRequest({
-        message: this.getMessage('file.extnames'),
-        data: {
-          errors: file.errors
-        }
+      return Service.httpResponse(400, this.getMessage('file.extnames'), {
+        errors: file.errors,
+        validations: this.validations
       })
     }
 
     const filename = await Service.storeFile(file, this.validations.extnames)
 
-    const idOrNull = request.input('type') == 'task' || request.input('type') == 'user'
-      ? params.id
-      : null
-
-    await File.create({
-      task_id: idOrNull,
-      user_id: idOrNull,
-      filename,
-      extname: file.extname,
-      mime: file.headers['content-type'],
-      fullpath: `uploads/${filename}`
-    })
-
-    return response.created({
-      message: this.getMessage('file'),
-      data: null
+    return Service.httpResponse(201, this.getMessage('file'), {
+      filename
     })
   }
 
   public async getFile({ request, response, params }: HttpContextContract) {
-    this.locale = request.header(this.header)
+    this.setLocaleRequest(request)
+    Service.setResponseObject(response)
 
-    const filename: string = params.filename
+    const { filename } = params
 
-    if (!await Drive.exists(filename)) {
-      return response.notFound({
-        message: this.getMessage('file.notExists'),
-        data: null
+    const existsFile = await Drive.exists(filename)
+
+    if (!existsFile) {
+      return Service.httpResponse(404, this.getMessage('file.notExists'), {
+        existsFile
       })
     }
-
-    const _file = await File.findBy('filename', filename)
-
-    if (!_file) {
-      return response.notFound({
-        message: this.getMessage('file.notExists'),
-        data: null
-      })
-    }
-
-    if (request.input('download')) {
-      return response.attachment(`resources/uploads/${filename}`)
-    }
-
-    response.header('content-type', _file.mime)
 
     const file = await Drive.getStream(filename)
 
@@ -116,33 +80,23 @@ export default class FilesController extends MessagesI18n {
   }
 
   public async deleteFile({ request, response, params }: HttpContextContract) {
-    this.locale = request.header(this.header)
+    this.setLocaleRequest(request)
+    Service.setResponseObject(response)
 
-    const filename: string = params.filename
+    const { filename } = params
 
-    if (!await Drive.exists(filename)) {
-      return response.notFound({
-        message: this.getMessage('file.notExists'),
-        data: null
+    const existsFile = await Drive.exists(filename)
+
+    if (!existsFile) {
+      return Service.httpResponse(404, this.getMessage('file.notExists'), {
+        existsFile
       })
     }
 
-    const _file = await File.findBy('filename', filename)
-
-    if (!_file) {
-      return response.notFound({
-        message: this.getMessage('file.notExists'),
-        data: null
-      })
-    }
-
-    await _file.delete()
+    await Profile.query().where({ image: filename }).update({ image: null })
 
     await Drive.delete(filename)
 
-    return response.ok({
-      message: this.getMessage('file.deleted'),
-      data: null
-    })
+    return Service.httpResponse(200, this.getMessage('file.deleted'))
   }
 }

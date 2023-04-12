@@ -51,7 +51,9 @@ export default class UsersController extends MessagesI18n {
       })
     }
 
-    const { email, password, active, role_id, name, lastname, phone, address } = dataUser
+    const {
+      email, password, active, role_id, name, lastname, phone, address, lang_id
+    } = dataUser
 
     const role = await Role.find(role_id)
 
@@ -84,7 +86,8 @@ export default class UsersController extends MessagesI18n {
         name,
         lastname,
         phone,
-        address
+        address,
+        lang_id
       }
     )
 
@@ -105,7 +108,7 @@ export default class UsersController extends MessagesI18n {
       })
     }
 
-    const { email, active, role_id, name, lastname, phone, address } = dataUpdate
+    const { email, active, role_id, name, lastname, phone, address, lang_id } = dataUpdate
 
     const role = await Role.find(role_id)
 
@@ -145,7 +148,8 @@ export default class UsersController extends MessagesI18n {
         name,
         lastname,
         phone,
-        address
+        address,
+        lang_id
       }
     ).save()
 
