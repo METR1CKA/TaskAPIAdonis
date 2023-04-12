@@ -23,7 +23,8 @@
     "@adonisjs/lucid",
     "@adonisjs/auth",
     "@adonisjs/i18n",
-    "./providers/ServiceProvider"
+    "./providers/ServiceProvider",
+    "@adonisjs/lucid-slugify"
   ],
   "aceProviders": [
     "@adonisjs/repl"
