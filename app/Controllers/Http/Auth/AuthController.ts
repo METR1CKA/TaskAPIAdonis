@@ -136,20 +136,16 @@ export default class AuthController extends MessagesI18n {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)
 
-    const user = await User.find(auth.use('api').user?.id)
+    const user = await User.find(auth.use('api').user!.id)
 
-    if (!user) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'User'
-      })
-    }
+    await user!.merge({ rememberMeToken: null }).save()
 
-    await user.merge({ rememberMeToken: null }).save()
+    await ApiToken.query().where({ user_id: user!.id }).delete()
 
-    await ApiToken.query().where('user_id', user.id).delete()
+    const revoked = await ApiToken.query().where({ user_id: user!.id })
 
     return Service.httpResponse(200, this.getMessage('logout'), {
-      tokensRevoked: true,
+      tokensRevoked: revoked.length == 0,
     })
   }
 
