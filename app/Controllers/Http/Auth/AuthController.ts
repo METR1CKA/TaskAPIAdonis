@@ -111,23 +111,23 @@ export default class AuthController extends MessagesI18n {
       })
     }
 
-    const token = await auth.use('api').attempt(email, password, {
+    const newToken = await auth.use('api').attempt(email, password, {
       expiresIn: '1year',
     })
 
     await ApiToken.query()
-      .where({ user_id: user.id, token: token.tokenHash })
-      .update({ token_no_hash: token.token })
+      .where({ user_id: user.id, token: newToken.tokenHash })
+      .update({ token_no_hash: newToken.token })
 
     if (remember_me_token) {
-      await user.merge({ rememberMeToken: token.tokenHash }).save()
+      await user.merge({ rememberMeToken: newToken.tokenHash }).save()
     }
 
     return Service.httpResponse(200, this.getMessage('login'), {
       auth: {
-        type: token.type,
-        token: token.token,
-        expires_at: token.expiresAt!.toFormat('dd-MM-yyyy  HH:mm:ss')
+        type: newToken.type,
+        token: newToken.token,
+        expires_at: newToken.expiresAt!.toFormat('dd-MM-yyyy  HH:mm:ss')
       }
     })
   }
