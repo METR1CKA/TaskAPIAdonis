@@ -10,6 +10,7 @@ import MessagesI18n from 'App/Services/MessagesI18n'
 export default class UsersController extends MessagesI18n {
   public async read({ request, response, params }: HttpContextContract) {
     this.setLocaleRequest(request)
+    Service.setResponseObject(response)
 
     const users = await User.query()
       .preload('profile')
@@ -20,211 +21,149 @@ export default class UsersController extends MessagesI18n {
       const user = users.find(user => user.id == params.id)
 
       if (!user) {
-        return response.notFound({
-          statusResponse: 'Error',
-          data: {
-            message: this.getMessage('notFound'),
-            dataNotFound: 'User'
-          }
+        return Service.httpResponse(404, this.getMessage('notFound'), {
+          dataNotFound: 'User'
         })
       }
 
-      return response.ok({
-        statusResponse: 'Success',
-        data: {
-          message: this.getMessage('data'),
-          user
-        }
+      return Service.httpResponse(200, this.getMessage('data'), {
+        user
       })
     }
 
-    return response.ok({
-      statusResponse: 'Success',
-      data: {
-        message: this.getMessage('data'),
-        total: users.length,
-        users
-      }
+    return Service.httpResponse(200, this.getMessage('data'), {
+      total: users.length,
+      users
     })
   }
 
   public async create({ request, response }: HttpContextContract) {
     this.setLocaleRequest(request)
+    Service.setResponseObject(response)
 
     try {
-      const vali = await request.validate(RegisterValidator)
-
-      if (!vali) {
-        return
-      }
-
-      const role = await Role.find(vali.role_id)
-
-      if (!role) {
-        return response.notFound({
-          statusResponse: 'Error',
-          data: {
-            message: this.getMessage('notFound'),
-            dataNotFound: 'Role'
-          }
-        })
-      }
-
-      const existUser = await User.findBy('email', vali.email)
-
-      if (existUser) {
-        return response.badRequest({
-          statusResponse: 'Error',
-          data: {
-            messages: this.getMessage('user.exist'),
-            existUser: !!existUser
-          }
-        })
-      }
-
-      const user = await User.create(
-        {
-          email: vali.email,
-          password: vali.password,
-          active: vali.active,
-          role_id: vali.role_id
-        }
-      )
-
-      await Profile.create(
-        {
-          user_id: user.id,
-          name: vali.name,
-          lastname: vali.lastname,
-          phone: vali.phone,
-          address: vali.address
-        }
-      )
-
-      return response.created({
-        statusResponse: 'Success',
-        data: {
-          message: this.getMessage('created'),
-        }
-      })
+      var dataUser = await request.validate(RegisterValidator)
     } catch (error) {
       Service.logsOfDeveloper(error)
 
-      return response.badRequest({
-        statusResponse: 'Error',
-        data: {
-          message: this.validationErr(error),
-          errors: error?.messages?.errors[0]
-        }
+      return Service.httpResponse(400, this.validationErr(error), {
+        errors: error?.messages?.errors[0]
       })
     }
+
+    const { email, password, active, role_id, name, lastname, phone, address } = dataUser
+
+    const role = await Role.find(role_id)
+
+    if (!role) {
+      return Service.httpResponse(404, this.getMessage('notFound'), {
+        dataNotFound: 'Role'
+      })
+    }
+
+    const existUser = await User.findBy('email', email)
+
+    if (existUser) {
+      return Service.httpResponse(400, this.getMessage('user.exist'), {
+        existUser: !!existUser
+      })
+    }
+
+    const user = await User.create(
+      {
+        email,
+        password,
+        active,
+        role_id
+      }
+    )
+
+    await Profile.create(
+      {
+        user_id: user.id,
+        name,
+        lastname,
+        phone,
+        address
+      }
+    )
+
+    return Service.httpResponse(201, this.getMessage('created'))
   }
 
   public async update({ request, response, params }: HttpContextContract) {
     this.setLocaleRequest(request)
+    Service.setResponseObject(response)
 
     try {
-      const vali = await request.validate(UpdateValidator)
-
-      if (!vali) {
-        return
-      }
-
-      const role = await Role.find(vali.role_id)
-
-      if (!role) {
-        return response.notFound({
-          statusResponse: 'Error',
-          data: {
-            message: this.getMessage('notFound'),
-            dataNotFound: 'Role'
-          }
-        })
-      }
-
-      const user = await User.find(params.id)
-
-      if (!user) {
-        return response.notFound({
-          statusResponse: 'Error',
-          data: {
-            message: this.getMessage('notFound'),
-            dataNotFound: 'User'
-          }
-        })
-      }
-
-      const profile = await Profile.findBy('user_id', user.id)
-
-      if (!profile) {
-        return response.notFound({
-          statusResponse: 'Error',
-          data: {
-            message: this.getMessage('notFound'),
-            dataNotFound: 'Profile'
-          }
-        })
-      }
-
-      await user.merge(
-        {
-          email: vali.email,
-          active: vali.active,
-          role_id: role.id
-        }
-      ).save()
-
-      await profile.merge(
-        {
-          user_id: user.id,
-          name: vali.name,
-          lastname: vali.lastname,
-          phone: vali.phone,
-          address: vali.address
-        }
-      ).save()
-
-      return response.ok({
-        statusResponse: 'Success',
-        data: {
-          message: this.getMessage('updated'),
-        }
-      })
+      var dataUpdate = await request.validate(UpdateValidator)
     } catch (error) {
       Service.logsOfDeveloper(error)
 
-      return response.badRequest({
-        statusResponse: 'Error',
-        data: {
-          message: this.validationErr(error),
-          errors: error?.messages?.errors[0]
-        }
+      return Service.httpResponse(400, this.validationErr(error), {
+        errors: error?.messages?.errors[0]
       })
     }
-  }
 
-  public async delete({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
+    const { email, active, role_id, name, lastname, phone, address } = dataUpdate
+
+    const role = await Role.find(role_id)
+
+    if (!role) {
+      return Service.httpResponse(404, this.getMessage('notFound'), {
+        dataNotFound: 'Role'
+      })
+    }
 
     const user = await User.find(params.id)
 
     if (!user) {
-      return response.notFound({
-        statusResponse: 'Error',
-        data: {
-          message: this.getMessage('notFound'),
-          dataNotFound: 'User'
-        }
+      return Service.httpResponse(404, this.getMessage('notFound'), {
+        dataNotFound: 'User'
       })
+    }
+
+    const profile = await Profile.findBy('user_id', user.id)
+
+    if (!profile) {
+      return Service.httpResponse(404, this.getMessage('notFound'), {
+        dataNotFound: 'Profile'
+      })
+    }
+
+    await user.merge(
+      {
+        email,
+        active,
+        role_id: role.id
+      }
+    ).save()
+
+    await profile.merge(
+      {
+        user_id: user.id,
+        name,
+        lastname,
+        phone,
+        address
+      }
+    ).save()
+
+    return Service.httpResponse(200, this.getMessage('updated'))
+  }
+
+  public async delete({ request, response, params }: HttpContextContract) {
+    this.setLocaleRequest(request)
+    Service.setResponseObject(response)
+
+    const user = await User.find(params.id)
+
+    if (!user) {
+      return Service.httpResponse(404, this.getMessage('notFound'))
     }
 
     await user.merge({ active: !user.active }).save()
 
-    return response.ok({
-      statusResponse: 'Success',
-      data: {
-        message: this.getMessage(`status.${user.active ? 'activated' : 'desactivated'}`),
-      }
-    })
+    return Service.httpResponse(200, this.getMessage(`status.${user.active ? 'activated' : 'desactivated'}`))
   }
 }

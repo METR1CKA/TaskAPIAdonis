@@ -1,35 +1,39 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Role from 'App/Models/Users/Role'
-import RoleValidator from 'App/Validators/Roles/RoleValidator'
 import Service from '@ioc:Adonis/Providers/Services'
+import View from 'App/Models/Users/View'
 import MessagesI18n from 'App/Services/MessagesI18n'
+import ViewValidator from 'App/Validators/View/ViewValidator'
 
-export default class RolesController extends MessagesI18n {
-  public async read({ request, response, params }: HttpContextContract) {
+export default class ViewsController extends MessagesI18n {
+  public async get({ request, response, params }: HttpContextContract) {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)
 
-    const roles = await Role.query()
-      .preload('users')
-      .orderBy('id', 'asc')
+    const views = (
+      await View.all()
+    ).map(view => {
+      view.name = this.getMessage(view.key)
+      view.description = this.getMessage(view.keyd)
+      return view
+    })
 
     if (params.id) {
-      const role = roles.find(e => e.id == params.id)
+      const view = views.find(cat => cat.id == params.id)
 
-      if (!role) {
+      if (!view) {
         return Service.httpResponse(404, this.getMessage('notFound'), {
-          dataNotFound: 'Role'
+          dataNotFound: 'View'
         })
       }
 
       return Service.httpResponse(200, this.getMessage('data'), {
-        role
+        view
       })
     }
 
     return Service.httpResponse(200, this.getMessage('data'), {
-      total: roles.length,
-      roles
+      total: views.length,
+      views
     })
   }
 
@@ -38,7 +42,7 @@ export default class RolesController extends MessagesI18n {
     Service.setResponseObject(response)
 
     try {
-      var dataRole = await request.validate(RoleValidator)
+      var viewCreate = await request.validate(ViewValidator)
     } catch (error) {
       Service.logsOfDeveloper(error)
 
@@ -47,7 +51,9 @@ export default class RolesController extends MessagesI18n {
       })
     }
 
-    await Role.create(dataRole)
+    const view = await View.create(viewCreate)
+
+    await this.dbTranslations(view, 'create')
 
     return Service.httpResponse(201, this.getMessage('created'))
   }
@@ -56,16 +62,8 @@ export default class RolesController extends MessagesI18n {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)
 
-    const role = await Role.find(params.id)
-
-    if (!role) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'Role'
-      })
-    }
-
     try {
-      var dataUpdate = await request.validate(RoleValidator)
+      var viewUpdate = await request.validate(ViewValidator)
     } catch (error) {
       Service.logsOfDeveloper(error)
 
@@ -74,7 +72,17 @@ export default class RolesController extends MessagesI18n {
       })
     }
 
-    await role.merge(dataUpdate).save()
+    const view = await View.find(params.id)
+
+    if (!view) {
+      return Service.httpResponse(404, this.getMessage('notFound'), {
+        dataNotFound: 'View'
+      })
+    }
+
+    await view.merge(viewUpdate).save()
+
+    await this.dbTranslations(view, 'update')
 
     return Service.httpResponse(200, this.getMessage('updated'))
   }
@@ -83,16 +91,16 @@ export default class RolesController extends MessagesI18n {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)
 
-    const role = await Role.find(params.id)
+    const view = await View.find(params.id)
 
-    if (!role) {
+    if (!view) {
       return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'Role'
+        dataNotFound: 'View'
       })
     }
 
-    await role.merge({ active: !role.active }).save()
+    await view.merge({ active: !view.active }).save()
 
-    return Service.httpResponse(200, this.getMessage(`status.${role.active ? 'activated' : 'desactivated'}`))
+    return Service.httpResponse(200, this.getMessage(`status.${view.active ? 'activated' : 'desactivated'}`))
   }
 }
