@@ -2,7 +2,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class UpdateValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
     email: schema.string([
@@ -13,6 +13,9 @@ export default class UpdateValidator {
       rules.required()
     ]),
     role_id: schema.number([
+      rules.required()
+    ]),
+    lang_id: schema.number([
       rules.required()
     ]),
     name: schema.string([

@@ -8,8 +8,5 @@ export default class RolesViewValidator {
     views: schema.array().members(schema.number([
       rules.required(),
     ])),
-    active: schema.boolean([
-      rules.required(),
-    ]),
   })
 }
