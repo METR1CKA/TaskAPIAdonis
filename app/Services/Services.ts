@@ -1,5 +1,4 @@
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
-import { DateTime } from 'luxon'
 import Application from '@ioc:Adonis/Core/Application'
 import Env from '@ioc:Adonis/Core/Env'
 
@@ -16,10 +15,10 @@ export default class Services {
    * @param {string} value - string - The string you want to convert to a slug
    * @returns A string with all the special characters removed and replaced with a space.
    */
-  public generateSlug(value: string) {
+  public generateSlug(value: string, separator: string) {
     value = value.replace(/[`~!@#$%^&*()_\-+=\[\]{};:'"\\|\/,.<>?\s]/g, ' ').toLowerCase()
     value = value.replace(/^\s+|\s+$/gm, '')
-    value = value.replace(/\s+/g, '_')
+    value = value.replace(/\s+/g, separator)
     return value
   }
 
@@ -41,17 +40,15 @@ export default class Services {
    * @returns The newfilename is being returned.
    */
   public async storeFile(file: MultipartFileContract, extnames: string[]) {
-    let newfilename: string = ''
+    let newfilename = 'Filename'
 
-    const now = DateTime.now()
-
-    const currentname = this.generateSlug(file.clientName)
+    const currentname = file.clientName
 
     extnames.forEach(extn => {
       const extname = `.${extn}`
 
       if (currentname.includes(extname)) {
-        newfilename = `File_` + now + `_${currentname}${extname}`
+        newfilename = `File_${this.generateSlug(currentname, '_')}${extname}`
       }
     })
 
@@ -83,7 +80,7 @@ export default class Services {
 
     json.data = Object.assign(json.data, data)
 
-    return this.res?.status(status)?.json(json)
+    return this.res.status(status).json(json)
   }
 
   private messageResponse(code: number): string {
