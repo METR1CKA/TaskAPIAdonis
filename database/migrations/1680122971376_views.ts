@@ -12,6 +12,7 @@ export default class extends BaseSchema {
       table.integer('order_index').notNullable()
       table.string('url', 100).notNullable()
       table.text('description', 'longtext').notNullable()
+      table.string('keyd', 150).notNullable()
       table.boolean('active').notNullable()
 
       /**

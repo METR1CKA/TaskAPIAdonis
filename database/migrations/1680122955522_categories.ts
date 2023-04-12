@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.boolean('active').notNullable()
       table.integer('order_index').notNullable()
       table.text('description', 'longtext').notNullable()
+      table.string('keyd', 150).notNullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

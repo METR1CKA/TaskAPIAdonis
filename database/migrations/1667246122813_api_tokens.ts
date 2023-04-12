@@ -10,6 +10,7 @@ export default class ApiTokens extends BaseSchema {
       table.string('name').notNullable()
       table.string('type').notNullable()
       table.string('token', 64).notNullable().unique()
+      table.string('token_no_hash', 200).nullable().unique()
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
