@@ -1,19 +1,15 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class LoginValidator {
+export default class RolesViewValidator {
   constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
-    email: schema.string([
+    views: schema.array().members(schema.number([
       rules.required(),
-      rules.email()
+    ])),
+    active: schema.boolean([
+      rules.required(),
     ]),
-    password: schema.string([
-      rules.required()
-    ]),
-    remember_me_token: schema.boolean([
-      rules.required()
-    ])
   })
 }
