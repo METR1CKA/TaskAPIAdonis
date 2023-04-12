@@ -20,50 +20,25 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 import MessagesI18n from 'App/Services/MessagesI18n'
-import Env from '@ioc:Adonis/Core/Env'
-import User from 'App/Models/Users/User'
+import Service from '@ioc:Adonis/Providers/Services'
 import './Auth/routes'
 import './Tasks/routes'
 import './Users/routes'
 
-Route.get('/', async () => {
-  return { SERVER: 'ACTIVE' }
+Route.get('/', ({ response }) => {
+  Service.setResponseObject(response)
+  return Service.httpResponse(200, 'API TASKS')
 })
-
-Route.get('api/v1', async () => {
-  return { API: 'V1' }
-})
-
-Route.get('api/v1/user', async ({ response, auth, request }) => {
-
-  const lang = new MessagesI18n()
-
-  lang.locale = request.header('Accept-language')
-
-  const user = await User.findOrFail(auth.use('api').user?.id)
-
-  await user.load('profile')
-  await user.load('role')
-
-  const status = Env.get('NODE_ENV') === 'development' ? 200 : 400
-
-  const message = lang.getMessage(status === 200 ? 'auth.user' : 'only.dev')
-
-  const data = !user ? null : user
-
-  return response.status(status).json({ message, data })
-
-}).middleware(['lang', 'auth'])
 
 Route.any('*', ({ response, request }) => {
-
   const lang = new MessagesI18n()
 
-  lang.locale = request.header('Accept-language')
+  lang.setLocaleRequest(request)
+  Service.setResponseObject(response)
 
-  return response.notFound({
-    message: lang.getMessage('notFound.route'),
-    data: null
+  return Service.httpResponse(404, lang.getMessage('notFound.route'), {
+    method: request.method(),
+    routeNotFound: request.url()
   })
-
-}).middleware('lang')
+})
+  .middleware('lang')
