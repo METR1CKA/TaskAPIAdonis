@@ -3,6 +3,8 @@ import Role from './Role'
 import View from './View'
 
 export default class RoleView extends BaseModel {
+  // public static table = 'roles_views'
+
   @column({ isPrimary: true })
   public id: number
 

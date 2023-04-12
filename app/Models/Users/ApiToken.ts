@@ -16,7 +16,16 @@ export default class ApiToken extends BaseModel {
   public type: string
 
   @column()
+  public tokenNoHash: string
+
+  @column()
   public token: string
+
+  @column.dateTime({
+    autoCreate: true,
+    serialize: (value) => value?.toFormat('dd-MM-yyyy  HH:mm:ss')
+  })
+  public expires_at?: DateTime
 
   @column.dateTime({
     autoCreate: true,

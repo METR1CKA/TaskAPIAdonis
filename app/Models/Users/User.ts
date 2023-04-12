@@ -14,8 +14,8 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public password: string
 
-  @column()
-  public rememberMeToken?: string
+  @column({ serializeAs: null })
+  public rememberMeToken?: string | null
 
   @column()
   public active: boolean

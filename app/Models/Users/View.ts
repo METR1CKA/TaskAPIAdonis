@@ -1,6 +1,7 @@
 import { BaseModel, BelongsTo, HasMany, ManyToMany, belongsTo, column, hasMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import RoleView from './RoleView'
 import Role from './Role'
+import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 
 export default class View extends BaseModel {
   @column({ isPrimary: true })
@@ -13,6 +14,11 @@ export default class View extends BaseModel {
   public active: boolean
 
   @column()
+  @slugify({
+    strategy: 'shortId',
+    maxLength: 100,
+    fields: ['name']
+  })
   public key: string
 
   @column()
@@ -25,7 +31,15 @@ export default class View extends BaseModel {
   public url: string
 
   @column()
-  public description?: string
+  @slugify({
+    strategy: 'shortId',
+    maxLength: 100,
+    fields: ['description']
+  })
+  public keyd: string
+
+  @column()
+  public description: string
 
   // Relation
   @belongsTo(() => View, {
@@ -38,7 +52,7 @@ export default class View extends BaseModel {
     localKey: 'id',
     foreignKey: 'view_id'
   })
-  public views: HasMany<typeof RoleView>
+  public role_views: HasMany<typeof RoleView>
 
   @manyToMany(() => Role, {
     localKey: 'id',
