@@ -4,12 +4,8 @@ import Application from '@ioc:Adonis/Core/Application'
 import Env from '@ioc:Adonis/Core/Env'
 
 export default class Services {
+  public res: any
 
-  /**
-   * The constructor function is a special function that is called when a new instance of the class is
-   * created.
-   * @returns The object itself.
-   */
   constructor() {
     return this
   }
@@ -21,7 +17,7 @@ export default class Services {
    * @returns A string with all the special characters removed and replaced with a space.
    */
   public generateSlug(value: string) {
-    value = value.replace(/[`~!@#$%^&*()_\-+=\[\]{};:'"\\|\/,<>.?\s]/g, ' ').toLowerCase()
+    value = value.replace(/[`~!@#$%^&*()_\-+=\[\]{};:'"\\|\/,.<>?\s]/g, ' ').toLowerCase()
     value = value.replace(/^\s+|\s+$/gm, '')
     value = value.replace(/\s+/g, '_')
     return value
@@ -32,7 +28,7 @@ export default class Services {
    * @param {any} Err - The error that you want to log.
    */
   public logsOfDeveloper(Err: any) {
-    Env.get('NODE_ENV') === 'development' ? console.log(Err) : null
+    if (Env.get('NODE_ENV') == 'development') { console.log(Err) }
   }
 
   /**
@@ -47,22 +43,55 @@ export default class Services {
   public async storeFile(file: MultipartFileContract, extnames: string[]) {
     let newfilename: string = ''
 
-    const currentname = file.clientName
+    const now = DateTime.now()
 
-    extnames.forEach(element => {
-      const extname = `.${element}`
+    const currentname = this.generateSlug(file.clientName)
+
+    extnames.forEach(extn => {
+      const extname = `.${extn}`
 
       if (currentname.includes(extname)) {
-        const now = DateTime.now()
-
-        const name = this.generateSlug(currentname)
-
-        newfilename = `File_` + now + `_${name}${extname}`
+        newfilename = `File_` + now + `_${currentname}${extname}`
       }
     })
 
     await file.move(Application.resourcesPath('uploads'), { name: newfilename, overwrite: true })
 
     return newfilename
+  }
+
+  /**
+   * This function sets the response object to the response object passed in.
+   * @param {any} res - The response object from the server.
+   */
+  public setResponseObject(res: any): void {
+    this.res = res
+  }
+
+  /**
+   * It returns a JSON response with a status code and a message
+   * @param {number} status - The HTTP status code
+   * @param {string} message - string - The message you want to send to the client.
+   * @param {any} [data] - any object = {}
+   * @returns The response object is being returned.
+   */
+  public httpResponse(status: number, message: string, data?: any) {
+    const json = {
+      statusResponse: this.messageResponse(status),
+      data: { message }
+    }
+
+    json.data = Object.assign(json.data, data)
+
+    return this.res?.status(status)?.json(json)
+  }
+
+  private messageResponse(code: number): string {
+    if (code >= 100 && code < 200) { return 'Info' }
+    if (code >= 200 && code < 300) { return 'Success' }
+    if (code >= 300 && code < 400) { return 'Redirect' }
+    if (code >= 400 && code < 500) { return 'Client Error' }
+    if (code >= 500 && code < 600) { return 'Server Error' }
+    return 'Default'
   }
 }

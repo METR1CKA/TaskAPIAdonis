@@ -27,11 +27,8 @@ export default class ServiceProvider {
     // Register your own bindings
 
     this.app.container.bind('Adonis/Providers/Services', () => {
-
       return new Services()
-
     })
-
   }
 
   public async boot() {
