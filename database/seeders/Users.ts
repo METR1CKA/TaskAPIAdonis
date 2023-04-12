@@ -59,14 +59,16 @@ export default class extends BaseSeeder {
           name: 'Developer',
           lastname: 'Tasks',
           phone: '8711293580',
-          address: 'GitHub'
+          address: 'GitHub',
+          lang_id: 1
         },
         {
           user_id: admin.id,
           name: 'Administrator',
           lastname: 'Tasks',
           phone: '8721223489',
-          address: 'GitHub'
+          address: 'GitHub',
+          lang_id: 1
         },
       ]
     )
@@ -99,6 +101,7 @@ export default class extends BaseSeeder {
     ])
 
     await View.createMany([
+      // Users
       {
         category_id: 1,
         active: true,
@@ -150,6 +153,7 @@ export default class extends BaseSeeder {
         keyd: 'view.roles.desc'
       },
 
+      // Tasks
       {
         category_id: 2,
         active: true,
@@ -161,6 +165,7 @@ export default class extends BaseSeeder {
         keyd: 'view.task.desc'
       },
 
+      // Settings
       {
         category_id: 3,
         active: true,
@@ -179,30 +184,30 @@ export default class extends BaseSeeder {
       { role_id: rol_admin.id, view_id: 1, active: true },
 
       // Categories
-      { role_id: rol_dev.id, view_id: 1, active: true },
-      { role_id: rol_admin.id, view_id: 1, active: true },
+      { role_id: rol_dev.id, view_id: 2, active: true },
+      { role_id: rol_admin.id, view_id: 2, active: true },
 
       // Roles
-      { role_id: rol_dev.id, view_id: 1, active: true },
-      { role_id: rol_admin.id, view_id: 1, active: true },
+      { role_id: rol_dev.id, view_id: 3, active: true },
+      { role_id: rol_admin.id, view_id: 3, active: true },
 
       // Views
-      { role_id: rol_dev.id, view_id: 1, active: true },
-      { role_id: rol_admin.id, view_id: 1, active: true },
+      { role_id: rol_dev.id, view_id: 4, active: true },
+      { role_id: rol_admin.id, view_id: 4, active: true },
 
       // Roles Views
-      { role_id: rol_dev.id, view_id: 1, active: true },
-      { role_id: rol_admin.id, view_id: 1, active: true },
+      { role_id: rol_dev.id, view_id: 5, active: true },
+      { role_id: rol_admin.id, view_id: 5, active: true },
 
       // Tasks
-      { role_id: rol_dev.id, view_id: 1, active: true },
-      { role_id: rol_admin.id, view_id: 1, active: true },
-      { role_id: rol_editor.id, view_id: 1, active: true },
+      { role_id: rol_dev.id, view_id: 6, active: true },
+      { role_id: rol_admin.id, view_id: 6, active: true },
+      { role_id: rol_editor.id, view_id: 6, active: true },
 
       // Settings
-      { role_id: rol_dev.id, view_id: 1, active: true },
-      { role_id: rol_admin.id, view_id: 1, active: true },
-      { role_id: rol_editor.id, view_id: 1, active: true },
+      { role_id: rol_dev.id, view_id: 7, active: true },
+      { role_id: rol_admin.id, view_id: 7, active: true },
+      { role_id: rol_editor.id, view_id: 7, active: true },
     ])
   }
 }
