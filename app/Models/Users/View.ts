@@ -59,7 +59,7 @@ export default class View extends BaseModel {
     pivotForeignKey: 'view_id',
     relatedKey: 'id',
     pivotRelatedForeignKey: 'role_id',
-    pivotTable: 'roles_views',
+    pivotTable: 'role_views',
   })
   public role: ManyToMany<typeof Role>
 }
