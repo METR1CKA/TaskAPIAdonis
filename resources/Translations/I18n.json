@@ -388,5 +388,15 @@
     "locale": "en",
     "key": "file.deleted",
     "message": "File deleted successfully"
+  },
+  {
+    "locale": "en",
+    "key": "remember_me_token",
+    "message": "You had already logged in before"
+  },
+  {
+    "locale": "es",
+    "key": "remember_me_token",
+    "message": "Ya habías iniciado sesión antes"
   }
 ]

@@ -1,7 +1,10 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+import Category from 'App/Models/Users/Category'
 import Profile from 'App/Models/Users/Profile'
 import Role from 'App/Models/Users/Role'
+import RoleView from 'App/Models/Users/RoleView'
 import User from 'App/Models/Users/User'
+import View from 'App/Models/Users/View'
 
 export default class extends BaseSeeder {
   public async run() {
@@ -23,7 +26,7 @@ export default class extends BaseSeeder {
       }
     )
 
-    await Role.create(
+    const rol_editor = await Role.create(
       {
         name: 'EDITOR',
         active: true,
@@ -67,5 +70,139 @@ export default class extends BaseSeeder {
         },
       ]
     )
+
+    await Category.createMany([
+      {
+        active: true,
+        order_index: 1,
+        name: 'Administration',
+        description: 'Administration section',
+        key: 'category.admin.name',
+        keyd: 'category.admin.desc'
+      },
+      {
+        active: true,
+        order_index: 2,
+        name: 'Tasks',
+        description: 'Tasks section',
+        key: 'category.task.name',
+        keyd: 'category.task.desc'
+      },
+      {
+        active: true,
+        order_index: 3,
+        name: 'Settings',
+        description: 'Settings section',
+        key: 'category.settings.name',
+        keyd: 'category.settings.desc'
+      },
+    ])
+
+    await View.createMany([
+      {
+        category_id: 1,
+        active: true,
+        key: 'view.users.name',
+        name: 'Users',
+        order_index: 1,
+        url: 'admin/users',
+        description: 'Users',
+        keyd: 'view.users.desc'
+      },
+      {
+        category_id: 1,
+        active: true,
+        key: 'view.categories.name',
+        name: 'Categories',
+        order_index: 2,
+        url: 'admin/categories',
+        description: 'Categories',
+        keyd: 'view.categories.desc'
+      },
+      {
+        category_id: 1,
+        active: true,
+        key: 'view.roles.name',
+        name: 'Roles',
+        order_index: 3,
+        url: 'admin/roles',
+        description: 'Roles',
+        keyd: 'view.roles.desc'
+      },
+      {
+        category_id: 1,
+        active: true,
+        key: 'view.views.name',
+        name: 'Views',
+        order_index: 4,
+        url: 'admin/views',
+        description: 'Views',
+        keyd: 'view.views.desc'
+      },
+      {
+        category_id: 1,
+        active: true,
+        key: 'view.roles_views.name',
+        name: 'Roles Views',
+        order_index: 5,
+        url: 'admin/roles_views',
+        description: 'Roles Views',
+        keyd: 'view.roles.desc'
+      },
+
+      {
+        category_id: 2,
+        active: true,
+        key: 'view.tasks.name',
+        name: 'Tasks',
+        order_index: 1,
+        url: 'tasks',
+        description: 'Tasks',
+        keyd: 'view.task.desc'
+      },
+
+      {
+        category_id: 3,
+        active: true,
+        key: 'view.settings.name',
+        name: 'Settings',
+        order_index: 1,
+        url: 'settings',
+        description: 'Settings',
+        keyd: 'view.settings.desc'
+      },
+    ])
+
+    await RoleView.createMany([
+      // Users
+      { role_id: rol_dev.id, view_id: 1, active: true },
+      { role_id: rol_admin.id, view_id: 1, active: true },
+
+      // Categories
+      { role_id: rol_dev.id, view_id: 1, active: true },
+      { role_id: rol_admin.id, view_id: 1, active: true },
+
+      // Roles
+      { role_id: rol_dev.id, view_id: 1, active: true },
+      { role_id: rol_admin.id, view_id: 1, active: true },
+
+      // Views
+      { role_id: rol_dev.id, view_id: 1, active: true },
+      { role_id: rol_admin.id, view_id: 1, active: true },
+
+      // Roles Views
+      { role_id: rol_dev.id, view_id: 1, active: true },
+      { role_id: rol_admin.id, view_id: 1, active: true },
+
+      // Tasks
+      { role_id: rol_dev.id, view_id: 1, active: true },
+      { role_id: rol_admin.id, view_id: 1, active: true },
+      { role_id: rol_editor.id, view_id: 1, active: true },
+
+      // Settings
+      { role_id: rol_dev.id, view_id: 1, active: true },
+      { role_id: rol_admin.id, view_id: 1, active: true },
+      { role_id: rol_editor.id, view_id: 1, active: true },
+    ])
   }
 }
