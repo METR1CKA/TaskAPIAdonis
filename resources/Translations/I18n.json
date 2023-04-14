@@ -438,5 +438,25 @@
     "locale": "es",
     "key": "and",
     "message": " y "
+  },
+  {
+    "locale": "es",
+    "key": "task.complete",
+    "message": "La tarea ha sido completada con exito"
+  },
+  {
+    "locale": "en",
+    "key": "task.complete",
+    "message": "The task has been completed successfully"
+  },
+  {
+    "locale": "es",
+    "key": "task.noComplete",
+    "message": "La tarea no ha sido completada con exito"
+  },
+  {
+    "locale": "en",
+    "key": "task.noComplete",
+    "message": "The task has not been completed successfully"
   }
 ]

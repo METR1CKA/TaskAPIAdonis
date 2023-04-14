@@ -1,165 +1,120 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Task from 'App/Models/Tasks/Task'
-import TasksUpdateValidator from 'App/Validators/Tasks/TasksUpdateValidator'
 import TaskValidator from 'App/Validators/Tasks/TaskValidator'
 import Service from '@ioc:Adonis/Providers/Services'
 import MessagesI18n from 'App/Services/MessagesI18n'
 
 export default class TasksController extends MessagesI18n {
-
-  public async read({ request, response, params }: HttpContextContract) {
-
-    this.locale = request.header(this.header)
+  public async get({ request, response, params, auth }: HttpContextContract) {
+    this.setLocaleRequest(request)
+    Service.setResponseObject(response)
 
     const tasks = await Task.query()
-      .preload('user')
-      .preload('files')
+      .whereHas('user', query => {
+        query.where('users.id', auth.use('api').user!.id)
+      })
+      .where({ active: true })
       .orderBy('id', 'desc')
 
     if (params.id) {
-
       const task = tasks.find(element => element.id == params.id)
 
       if (!task) {
-        return response.notFound({
-          message: this.getMessage('notFound'),
-          data: null
+        return Service.httpResponse(404, this.getMessage('notFound'), {
+          dataNotFound: 'Task'
         })
       }
 
-      return response.ok({
-        message: this.getMessage('data'),
-        data: task
+      return Service.httpResponse(200, this.getMessage('data'), {
+        task
       })
-
     }
 
-    return response.ok({
-      message: this.getMessage('data'),
-      data: {
-        total: tasks.length,
-        tasks
-      }
+    return Service.httpResponse(200, this.getMessage('data'), {
+      total: tasks.length,
+      tasks
     })
-
   }
 
-  public async create({ request, response }: HttpContextContract) {
-
-    this.locale = request.header(this.header)
+  public async create({ request, response, auth }: HttpContextContract) {
+    this.setLocaleRequest(request)
+    Service.setResponseObject(response)
 
     try {
-
-      const vali = await request.validate(TaskValidator)
-
-      if (!vali) {
-        return
-      }
-
-      await Task.create({
-        user_id: vali.user_id,
-        title: vali.title,
-        description: vali.description,
-        completed: false
-      })
-
-      return response.created({
-        message: this.getMessage('created'),
-        data: null
-      })
-
+      var create_task = await request.validate(TaskValidator)
     } catch (error) {
-
       Service.logsOfDeveloper(error)
 
-      return response.badRequest({
-        message: this.validationErr(error),
-        data: {
-          errors: error?.messages?.errors
-        }
+      return Service.httpResponse(400, this.validationErr(error), {
+        errors: error?.messages?.errors[0]
       })
-
     }
+
+    const { title, description } = create_task
+
+    await Task.create({
+      user_id: auth.use('api').user!.id,
+      title,
+      description,
+      active: true,
+      completed: false
+    })
+
+    return Service.httpResponse(201, this.getMessage('created'))
   }
 
   public async update({ request, response, params }: HttpContextContract) {
-
-    this.locale = request.header(this.header)
-
-    const task = await Task.find(params.id)
-
-    if (!task) {
-      return response.notFound({
-        message: this.getMessage('notFound'),
-        data: null
-      })
-    }
+    this.setLocaleRequest(request)
+    Service.setResponseObject(response)
 
     try {
-
-      const vali = await request.validate(TasksUpdateValidator)
-
-      if (!vali) {
-        return
-      }
-
-      await task.merge(vali).save()
-
-      return response.ok({
-        message: this.getMessage('updated'),
-        data: null
-      })
-
+      var update_task = await request.validate(TaskValidator)
     } catch (error) {
+      Service.logsOfDeveloper(error)
 
-      console.log(error)
-
-      return response.badRequest({
-        message: this.validationErr(error),
-        data: {
-          errors: error?.messages?.errors
-        }
+      return Service.httpResponse(400, this.validationErr(error), {
+        errors: error?.messages?.errors[0]
       })
-
     }
-  }
-
-  public async delete({ request, response, params }: HttpContextContract) {
-
-    this.locale = request.header(this.header)
 
     const task = await Task.find(params.id)
 
     if (!task) {
-      return response.notFound({
-        message: this.getMessage('notFound'),
-        data: null
+      return Service.httpResponse(404, this.getMessage('notFound'), {
+        dataNotFound: 'Task'
       })
     }
 
-    if (request.input('type') == 'delete') {
-      await task.delete()
+    await task.merge(update_task).save()
 
-      return response.ok({
-        message: this.getMessage('deleted'),
-        data: null
+    return Service.httpResponse(200, this.getMessage('updated'))
+  }
+
+  public async taskStatus({ request, response, params }: HttpContextContract) {
+    this.setLocaleRequest(request)
+    Service.setResponseObject(response)
+
+    const task = await Task.find(params.id)
+
+    if (!task) {
+      return Service.httpResponse(404, this.getMessage('notFound'), {
+        dataNotFound: 'Task'
       })
     }
 
-    if (request.input('type') == 'complete') {
+    if (request.method() == 'PATCH') {
       await task.merge({ completed: !task.completed }).save()
 
-      return response.ok({
-        message: this.getMessage(task.completed ? 'status.activated' : 'status.desactivated'),
-        data: null
-      })
+      return Service.httpResponse(200, this.getMessage(
+        `task.${task.completed ? 'complete' : 'noComplete'}`
+      ))
     }
 
-    return response.badRequest({
-      message: this.getMessage('param', 'type'),
-      data: null
-    })
+    await task.merge({ active: !task.active }).save()
 
+    return Service.httpResponse(200, this.getMessage(
+      `status.${task.active ? 'activated' : 'desactivated'}`
+    ))
   }
 
 }
