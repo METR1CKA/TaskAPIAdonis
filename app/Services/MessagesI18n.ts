@@ -1,5 +1,7 @@
 import I18n from '@ioc:Adonis/Addons/I18n'
 import Translation from 'App/Models/Translation'
+import { string } from '@ioc:Adonis/Core/Helpers'
+
 
 export default class MessagesI18n {
   public locale = I18n.defaultLocale
@@ -86,6 +88,33 @@ export default class MessagesI18n {
     }
 
     return valid[rule] ?? lenOrType('field.type')
+  }
+
+  /**
+   * This function returns a validation error message based on the type of error and the specified file
+   * size and extension names.
+   * @param {string} type - a string indicating which type of validation error message to return
+   * (either "size", "extname", or "fatal")
+   * @param validations - An object containing two properties: { size: string, extnames: string[] }
+   * @returns a specific validation message based on the type parameter passed in. The possible values
+   * for type are "size", "extname", and "fatal". The function retrieves the corresponding message from
+   * the getMessage function and replaces any placeholders with the values provided in the validations
+   * parameter.
+   */
+  public validationErrFile(type: string, validations: { size: string, extnames: string[] }): string {
+    const { size } = validations
+
+    const extnames = string.toSentence(validations.extnames, {
+      lastSeparator: this.getMessage('and')
+    })
+
+    const valid = {
+      size: this.getMessage('file.size', false, { size }),
+      extname: this.getMessage('file.extnames', false, { extnames }),
+      fatal: this.getMessage('file.fatal')
+    }
+
+    return valid[type]
   }
 
   /**

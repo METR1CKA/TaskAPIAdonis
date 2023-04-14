@@ -302,12 +302,32 @@
   {
     "locale": "es",
     "key": "file.extnames",
-    "message": "Extension de archivo no valida"
+    "message": "Extension de archivo no valida, solo extensiones de tipo imagen como {extnames}."
   },
   {
     "locale": "en",
     "key": "file.extnames",
-    "message": "Invalid file extension"
+    "message": "Invalid file extension, only extensions type image like {extnames}."
+  },
+  {
+    "locale": "es",
+    "key": "file.size",
+    "message": "El tamaño del archivo no debe de ser mayor a {size}."
+  },
+  {
+    "locale": "en",
+    "key": "file.size",
+    "message": "The file size must not be larger than {size}."
+  },
+  {
+    "locale": "es",
+    "key": "file.fatal",
+    "message": "Ocurrio un error con el archivo..."
+  },
+  {
+    "locale": "en",
+    "key": "file.fatal",
+    "message": "An error occurred with the file..."
   },
   {
     "locale": "es",
@@ -398,5 +418,25 @@
     "locale": "es",
     "key": "remember_me_token",
     "message": "Ya habías iniciado sesión antes"
+  },
+  {
+    "locale": "en",
+    "key": "nocontent",
+    "message": "No content has be sent"
+  },
+  {
+    "locale": "es",
+    "key": "nocontent",
+    "message": "No se ha enviado ningún contenido"
+  },
+  {
+    "locale": "en",
+    "key": "and",
+    "message": " and "
+  },
+  {
+    "locale": "es",
+    "key": "and",
+    "message": " y "
   }
 ]

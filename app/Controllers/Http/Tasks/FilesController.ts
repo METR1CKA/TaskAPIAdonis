@@ -13,26 +13,7 @@ export default class FilesController extends MessagesI18n {
       'jpeg',
       'gif',
       'svg',
-      'mp4',
       'jfif',
-      'pdf',
-      'bin',
-      'txt',
-      'doc',
-      'docx',
-      'avi',
-      'mp3',
-      'wav',
-      'zip',
-      'rar',
-      'tar',
-      'ico',
-      'xsl',
-      'xlsx',
-      'pptx',
-      'ppt',
-      'csv',
-      'rtf',
     ],
   }
 
@@ -47,10 +28,9 @@ export default class FilesController extends MessagesI18n {
     }
 
     if (!file.isValid) {
-      return Service.httpResponse(400, this.getMessage('file.extnames'), {
-        errors: file.errors,
-        validations: this.validations
-      })
+      const errMessage = this.validationErrFile(file.errors[0].type, this.validations)
+
+      return Service.httpResponse(400, errMessage)
     }
 
     const filename = await Service.storeFile(file, this.validations.extnames)
@@ -60,7 +40,7 @@ export default class FilesController extends MessagesI18n {
     })
   }
 
-  public async getFile({ request, response, params }: HttpContextContract) {
+  public async files({ request, response, params }: HttpContextContract) {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)
 
@@ -72,31 +52,18 @@ export default class FilesController extends MessagesI18n {
       return Service.httpResponse(404, this.getMessage('file.notExists'), {
         existsFile
       })
+    }
+
+    if (request.method() == 'DELETE') {
+      await Profile.query().where({ image: filename }).update({ image: null })
+
+      await Drive.delete(filename)
+
+      return Service.httpResponse(200, this.getMessage('file.deleted'))
     }
 
     const file = await Drive.getStream(filename)
 
     return response.stream(file)
-  }
-
-  public async deleteFile({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
-    const { filename } = params
-
-    const existsFile = await Drive.exists(filename)
-
-    if (!existsFile) {
-      return Service.httpResponse(404, this.getMessage('file.notExists'), {
-        existsFile
-      })
-    }
-
-    await Profile.query().where({ image: filename }).update({ image: null })
-
-    await Drive.delete(filename)
-
-    return Service.httpResponse(200, this.getMessage('file.deleted'))
   }
 }
