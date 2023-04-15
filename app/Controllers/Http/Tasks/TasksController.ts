@@ -9,9 +9,11 @@ export default class TasksController extends MessagesI18n {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)
 
+    const authUser = auth.use('api').user!
+
     const tasks = await Task.query()
-      .whereHas('user', query => {
-        query.where('users.id', auth.use('api').user!.id)
+      .whereHas('user', users => {
+        users.where('users.id', authUser.id)
       })
       .where({ active: true })
       .orderBy('id', 'desc')
@@ -40,6 +42,8 @@ export default class TasksController extends MessagesI18n {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)
 
+    const authUser = auth.use('api').user!
+
     try {
       var create_task = await request.validate(TaskValidator)
     } catch (error) {
@@ -53,7 +57,7 @@ export default class TasksController extends MessagesI18n {
     const { title, description } = create_task
 
     await Task.create({
-      user_id: auth.use('api').user!.id,
+      user_id: authUser.id,
       title,
       description,
       active: true,
@@ -116,5 +120,4 @@ export default class TasksController extends MessagesI18n {
       `status.${task.active ? 'activated' : 'desactivated'}`
     ))
   }
-
 }
