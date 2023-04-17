@@ -10,12 +10,6 @@ export default class Role extends BaseModel {
     EDITOR: 3
   }
 
-  /* public static async getRoles() {
-    const roles = await Role.query()
-      .select(['id', 'name'])
-      .orderBy('id', 'asc')
-  } */
-
   @column({ isPrimary: true })
   public id: number
 
