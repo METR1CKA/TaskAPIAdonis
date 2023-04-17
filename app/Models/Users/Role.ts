@@ -2,12 +2,18 @@ import { BaseModel, column, HasMany, hasMany, manyToMany, ManyToMany } from '@io
 import User from './User'
 import View from './View'
 import RoleView from './RoleView'
+import Database from '@ioc:Adonis/Lucid/Database'
 
 export default class Role extends BaseModel {
-  public static ROLES = {
-    DEV: 1,
-    ADMIN: 2,
-    EDITOR: 3
+  public static async getRoles() {
+    const currentRoles = await Database.query()
+      .from('roles')
+      .select(['id', 'name'])
+      .orderBy('id', 'asc')
+
+    const values = currentRoles.map(role => Object.values(role).reverse())
+
+    return Object.fromEntries(values)
   }
 
   @column({ isPrimary: true })
