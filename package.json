@@ -29,6 +29,7 @@
     "@adonisjs/lucid-slugify": "^2.2.1",
     "@adonisjs/repl": "^3.1.11",
     "@japa/core": "^7.0.0",
+    "adonis5-swagger": "^1.4.1",
     "luxon": "^3.0.4",
     "openapi-types": ">=7",
     "pg": "^8.8.0",
