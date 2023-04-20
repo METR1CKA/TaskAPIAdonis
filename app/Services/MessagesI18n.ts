@@ -20,7 +20,7 @@ export default class MessagesI18n {
    * @param {any} request - The request object from the client
    */
   public setLocaleRequest(request: any): void {
-    this.locale = request.header(this.header)
+    this.locale = request.header(this.header) ?? I18n.defaultLocale
   }
 
   /**
