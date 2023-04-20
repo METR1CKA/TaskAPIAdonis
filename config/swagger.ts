@@ -12,19 +12,20 @@ export default {
 		definition: {
 			openapi: '3.0.0',
 			info: {
-				title: 'Application with swagger docs',
+				title: 'API TASKS',
 				version: '1.0.0',
-				description: 'My application with swagger docs'
+				description: 'Api documentation with swagger docs'
 			}
 		},
 
 		apis: [
 			'app/**/*.ts',
+			'app/**/*.yml',
 			'docs/swagger/**/*.yml',
 			'start/routes.ts'
 		],
 		basePath: '/'
 	},
 	mode: process.env.NODE_ENV === 'production' ? 'PRODUCTION' : 'RUNTIME',
-  specFilePath: 'docs/swagger.json'
+	specFilePath: 'docs/swagger.json'
 } as SwaggerConfig
