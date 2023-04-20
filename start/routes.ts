@@ -19,26 +19,27 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import MessagesI18n from 'App/Services/MessagesI18n'
-import Service from '@ioc:Adonis/Providers/Services'
 import './Auth/routes'
 import './Tasks/routes'
 import './Users/routes'
 
 Route.get('/', ({ response }) => {
-  Service.setResponseObject(response)
-  return Service.httpResponse(200, 'API TASKS')
+  return response.ok({
+    statusResponse: 'Success',
+    data: {
+      message: 'API TASKS'
+    }
+  })
 })
 
 Route.any('*', ({ response, request }) => {
-  const lang = new MessagesI18n()
-
-  lang.setLocaleRequest(request)
-  Service.setResponseObject(response)
-
-  return Service.httpResponse(404, lang.getMessage('notFound.route'), {
-    method: request.method(),
-    routeNotFound: request.url()
+  return response.ok({
+    statusResponse: 'Client Error',
+    data: {
+      message: 'Ruta no encontrada / Route not found',
+      method: request.method(),
+      routeNotFound: request.url()
+    }
   })
 })
   .middleware('lang')
