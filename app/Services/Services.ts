@@ -3,7 +3,7 @@ import Application from '@ioc:Adonis/Core/Application'
 import Env from '@ioc:Adonis/Core/Env'
 
 export default class Services {
-  public res: any
+  private res: any
 
   constructor() {
     return this
@@ -74,21 +74,19 @@ export default class Services {
    */
   public httpResponse(status: number, message: string, data?: any) {
     const json = {
-      statusResponse: this.messageResponse(status),
+      statusResponse: ((code: number): string => {
+        if (code >= 100 && code < 200) return 'Info'
+        if (code >= 200 && code < 300) return 'Success'
+        if (code >= 300 && code < 400) return 'Redirect'
+        if (code >= 400 && code < 500) return 'Client Error'
+        if (code >= 500 && code < 600) return 'Server Error'
+        return 'Default'
+      })(status),
       data: { message }
     }
 
     json.data = Object.assign(json.data, data)
 
     return this.res.status(status).json(json)
-  }
-
-  private messageResponse(code: number): string {
-    if (code >= 100 && code < 200) { return 'Info' }
-    if (code >= 200 && code < 300) { return 'Success' }
-    if (code >= 300 && code < 400) { return 'Redirect' }
-    if (code >= 400 && code < 500) { return 'Client Error' }
-    if (code >= 500 && code < 600) { return 'Server Error' }
-    return 'Default'
   }
 }
