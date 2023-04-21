@@ -19,27 +19,22 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import Service from '@ioc:Adonis/Providers/Services'
 import './Auth/routes'
 import './Tasks/routes'
 import './Users/routes'
 
 Route.get('/', ({ response }) => {
-  return response.ok({
-    statusResponse: 'Success',
-    data: {
-      message: 'API TASKS'
-    }
-  })
+  Service.setResponseObject(response)
+
+  return Service.httpResponse(200, 'API TASKS')
 })
 
 Route.any('*', ({ response, request }) => {
-  return response.ok({
-    statusResponse: 'Client Error',
-    data: {
-      message: 'Ruta no encontrada / Route not found',
-      method: request.method(),
-      routeNotFound: request.url()
-    }
+  Service.setResponseObject(response)
+
+  return Service.httpResponse(200, 'Ruta no encontrada / Route not found', {
+    method: request.method(),
+    routeNotFound: request.url()
   })
 })
-  .middleware('lang')
