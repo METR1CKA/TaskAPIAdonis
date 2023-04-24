@@ -14,7 +14,76 @@ export default {
 			info: {
 				title: 'API TASKS',
 				version: '1.0.0',
-				description: 'Api documentation with swagger docs'
+				description: 'Api documentation with swagger docs',
+				termsOfService: 'http://127.0.0.1:3333/',
+				contact: {
+					email: 'ferchosalazar054@gmail.com'
+				},
+				license: {}
+			},
+			externalDocs: {
+				url: 'http://127.0.0.1:3333/docs',
+				description: 'About Api Tasks'
+			},
+			servers: [
+				{
+					url: 'http://127.0.0.1:3333',
+					description: 'Base url'
+				},
+				{
+					url: 'http://127.0.0.1:3333/api/v1',
+					description: 'Endpoint'
+				}
+			],
+			tags: [
+				{
+					name: 'Endpoints',
+					description: 'Main routes',
+				},
+				{
+					name: 'Auth',
+					description: 'Authentification',
+				},
+				{
+					name: 'Users',
+					description: 'Administration for users',
+				},
+				{
+					name: 'Categories',
+					description: 'Administration for categories',
+				},
+				{
+					name: 'Views',
+					description: 'Administration for views',
+				},
+				{
+					name: 'Roles_views',
+					description: 'Administration for roles and views',
+				},
+				{
+					name: 'Passwords',
+					description: 'Administration for passwords',
+				},
+				{
+					name: 'Roles',
+					description: 'Administration for roles',
+				},
+				{
+					name: 'Files',
+					description: 'Use for files',
+				},
+				{
+					name: 'Tasks',
+					description: 'Use for tasks',
+				},
+			],
+			components: {
+				securitySchemes: {
+					bearerAuth: {
+						type: 'http',
+						scheme: 'bearer',
+					}
+				}
 			}
 		},
 
