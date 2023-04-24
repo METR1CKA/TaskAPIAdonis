@@ -4,51 +4,50 @@
 
 ## REQUISITOS:
 
-1. Usar node o nvm (mas recomendable nvm) con la version que indica el archivo [`.nvmrc`](./.nvmrc)
+1. Usar node con la version que indica el archivo [`.nvmrc`](./.nvmrc)
 
-2. Por defecto el proyecto usa como base de datos `PostgreSQL`, aunque lo puedes reconfigurar como se indica en la documentación. [Configuración de base de datos](https://docs.adonisjs.com/guides/database/introduction "AdonisJs")
+2. Por defecto el proyecto usa como BD `PostgreSQL`, aunque lo puedes reconfigurar como se indica en la documentación. [Configuración de base de datos](https://docs.adonisjs.com/guides/database/introduction "AdonisJs")
 
 ## CONFIGURACIÓN:
 
 1. Instalar las dependencias de `node`
 
-~~~console
+```console
 $ npm install
-~~~
+```
 
 2. Configurar un archivo `.env` en base al archivo [`.env.example`](./.env.example)
 
 3. Poner en `false` el `loader` de `db` antes de correr las `migraciones` y los `seeders`, en el archivo `Env`
 
-~~~typescript
-DB_I18n=false
-~~~
+```env
+DB_I18n=false;
+```
 
 4. Correr las `migraciones` con el siguiente comando
 
-~~~console
-$ npm run db:run
-~~~
+```console
+$ npm run db:fresh
+```
 
 5. Poner en `true` el `loader` de `db` antes de correr las `migraciones` y los `seeders`, en el archivo `Env`
 
-~~~typescript
-DB_I18n=true
-~~~
+```env
+DB_I18n=true;
+```
 
 6. Inicializar el servidor con el siguiente comando
 
-~~~console
+```console
 $ npm run dev
-~~~
+```
 
 ## NODE SCRIPTS:
 
-|       SCRIPT        |             FUNCIÓN             |
-|---------------------|---------------------------------|
-| npm run dev         | Iniciar el servidor             |
-| npm run db:refresh  | Refresca la BD y correr seeders |
-| npm run db:run      | Corre migraciones y seeders     |
-| npm run migration   | Corre migraciones               |
-| npm run seed        | Corre el seeder que elijas      |
-| npm run seeds       | Corre todos los seeders         |
+| SCRIPT             | FUNCIÓN                         |
+| ------------------ | ------------------------------- |
+| npm run dev        | Iniciar el servidor             |
+| npm run db:refresh | Refresca la BD y correr seeders |
+| npm run db:fresh   | Corre migraciones y seeders     |
+| npm run seed       | Corre el seeder que elijas      |
+| npm run seeds      | Corre todos los seeders         |
