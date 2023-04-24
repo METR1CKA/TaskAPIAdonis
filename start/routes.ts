@@ -24,16 +24,65 @@ import './Auth/routes'
 import './Tasks/routes'
 import './Users/routes'
 
+/** Componentes default y ruta raiz
+ * @swagger
+ * components:
+ *  schemas:
+ *    DefaultDataResponse:
+ *      type: object
+ *      properties:
+ *        statusResponse:
+ *          type: string
+ *        data:
+ *          type: object
+ *          properties:
+ *            message:
+ *              type: string
+ *  responses:
+ *    ok:
+ *      description: Base url
+ *      content:
+ *        application/json:
+ *          description: Success
+ *          schema:
+ *            $ref: '#/components/schemas/DefaultDataResponse'
+ *  parameters:
+ *    localeHeader:
+ *      name: Accept-Language
+ *      in: header
+ *      description: Locale to request and response
+ *      required: true
+ *      schema:
+ *        type: string,
+ *        enum: [es, en]
+ *        default: es
+ * /:
+ *  get:
+ *    tags:
+ *      - Endpoints
+ *    summary: Base url
+ *    description: Base url
+ *    produces:
+ *      - application/json
+ *    responses:
+ *      '200':
+ *        $ref: '#/components/responses/ok'
+ */
 Route.get('/', ({ response }) => {
   Service.setResponseObject(response)
 
-  return Service.httpResponse(200, 'API TASKS')
+  const GREETING = 'API TASKS'
+
+  return Service.httpResponse(200, GREETING)
 })
 
+/* Wildcard */
 Route.any('*', ({ response, request }) => {
   Service.setResponseObject(response)
 
-  return Service.httpResponse(200, 'Ruta no encontrada / Route not found', {
+  const ROUTE_NOT_FOUND = 'Ruta no encontrada / Route not found'
+
+  return Service.httpResponse(404, ROUTE_NOT_FOUND, {
     method: request.method(),
     routeNotFound: request.url()
   })
