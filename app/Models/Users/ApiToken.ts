@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
+import Service from '@ioc:Adonis/Providers/Services'
 
 export default class ApiToken extends BaseModel {
   @column({ isPrimary: true })
@@ -23,20 +24,20 @@ export default class ApiToken extends BaseModel {
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value) => value?.toFormat('dd-MM-yyyy  HH:mm:ss')
+    serialize: (value) => value!.toFormat(Service.formatDate)
   })
   public expires_at?: DateTime
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value) => value?.toFormat('dd-MM-yyyy  HH:mm:ss')
+    serialize: (value) => value!.toFormat(Service.formatDate)
   })
   public createdAt?: DateTime
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value) => value?.toFormat('dd-MM-yyyy  HH:mm:ss')
+    serialize: (value) => value!.toFormat(Service.formatDate)
   })
   public updatedAt?: DateTime
 

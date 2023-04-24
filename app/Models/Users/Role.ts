@@ -4,6 +4,28 @@ import View from './View'
 import RoleView from './RoleView'
 import Database from '@ioc:Adonis/Lucid/Database'
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Role:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *        name:
+ *          type: string
+ *        active:
+ *          type: boolean
+ *        description:
+ *          type: string
+ *        users:
+ *          $ref: '#/components/schemas/User'
+ *        views:
+ *          $ref: '#/components/schemas/View'
+ *        role_views:
+ *          $ref: '#/components/schemas/RoleView'
+ */
 export default class Role extends BaseModel {
   public static async getRoles() {
     const currentRoles = await Database.query()

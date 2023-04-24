@@ -2,6 +2,34 @@ import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import Lang from './Lang'
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Profile:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *        user_id:
+ *          type: number
+ *        lang_id:
+ *          type: number
+ *        name:
+ *          type: string
+ *        lastname:
+ *          type: string
+ *        phone:
+ *          type: string
+ *        address:
+ *          type: string
+ *        image:
+ *          type: string
+ *        user:
+ *          $ref: '#/components/schemas/User'
+ *        lang:
+ *          $ref: '#/components/schemas/Lang'
+ */
 export default class Profile extends BaseModel {
   @column({ isPrimary: true })
   public id: number

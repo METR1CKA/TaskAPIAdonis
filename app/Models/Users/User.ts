@@ -3,7 +3,36 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, hasOne, HasOne, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import Profile from './Profile'
 import Role from './Role'
+import Service from '@ioc:Adonis/Providers/Services'
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    User:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *        email:
+ *          type: string
+ *        rememberMeToken:
+ *          type: string | null
+ *        active:
+ *          type: boolean
+ *        role_id:
+ *          type: number
+ *        created_at:
+ *          type: string
+ *          example: 'dd-MM-yyyy  HH:mm:ss'
+ *        updated_at:
+ *          type: string
+ *          example: 'dd-MM-yyyy  HH:mm:ss'
+ *        profile:
+ *          $ref: '#/components/schemas/Profile'
+ *        role:
+ *          $ref: '#/components/schemas/Role'
+ */
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -25,14 +54,14 @@ export default class User extends BaseModel {
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value) => value?.toFormat('dd-MM-yyyy  HH:mm:ss')
+    serialize: (value) => value!.toFormat(Service.formatDate)
   })
   public createdAt?: DateTime
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value) => value?.toFormat('dd-MM-yyyy  HH:mm:ss')
+    serialize: (value) => value!.toFormat(Service.formatDate)
   })
   public updatedAt?: DateTime
 

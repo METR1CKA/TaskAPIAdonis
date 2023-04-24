@@ -2,6 +2,30 @@ import { BaseModel, HasMany, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import View from './View'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Categories:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *        active:
+ *          type: boolean
+ *        key:
+ *          type: string
+ *        name:
+ *          type: string
+ *        order_index:
+ *          type: number
+ *        keyd:
+ *          type: string
+ *        description:
+ *          type: string
+ *        views:
+ *          $ref: '#/components/schemas/View'
+ */
 export default class Category extends BaseModel {
   @column({ isPrimary: true })
   public id: number

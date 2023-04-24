@@ -3,6 +3,38 @@ import RoleView from './RoleView'
 import Role from './Role'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    View:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *        category_id:
+ *          type: number
+ *        active:
+ *          type: boolean
+ *        key:
+ *          type: string
+ *        name:
+ *          type: string
+ *        order_index:
+ *          type: number
+ *        url:
+ *          type: string
+ *        keyd:
+ *          type: string
+ *        description:
+ *          type: string
+ *        category:
+ *          type: Category
+ *        role_views:
+ *          type: RoleView
+ *        role:
+ *          type: Role
+ */
 export default class View extends BaseModel {
   @column({ isPrimary: true })
   public id: number

@@ -4,6 +4,7 @@ import Env from '@ioc:Adonis/Core/Env'
 
 export default class Services {
   private res: any
+  public formatDate = 'dd/MM/yyyy  HH:mm:ss'
 
   constructor() {
     return this
