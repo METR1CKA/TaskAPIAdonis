@@ -38,6 +38,10 @@ import './Users/routes'
  *          properties:
  *            message:
  *              type: string
+ *    LocaleSchema:
+ *      type: string
+ *      enum: [es, en]
+ *      default: es
  *  responses:
  *    ok:
  *      description: Base url
@@ -47,15 +51,13 @@ import './Users/routes'
  *          schema:
  *            $ref: '#/components/schemas/DefaultDataResponse'
  *  parameters:
- *    localeHeader:
+ *    LocaleHeader:
  *      name: Accept-Language
  *      in: header
  *      description: Locale to request and response
  *      required: true
  *      schema:
- *        type: string,
- *        enum: [es, en]
- *        default: es
+ *        $ref: '#/components/schemas/LocaleSchema'
  * /:
  *  get:
  *    tags:

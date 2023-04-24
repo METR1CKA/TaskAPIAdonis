@@ -9,8 +9,8 @@
     "start": "node server.js",
     "db:refresh": "node ace migration:refresh --seed",
     "db:fresh": "node ace migration:fresh --seed",
-    "seed": "node ace db:seed -i",
-    "seeds": "node ace db:seed"
+    "db:seed": "node ace db:seed -i",
+    "db:seeds": "node ace db:seed"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.9.3",

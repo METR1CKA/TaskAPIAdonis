@@ -49,5 +49,5 @@ $ npm run dev
 | npm run dev        | Iniciar el servidor             |
 | npm run db:refresh | Refresca la BD y correr seeders |
 | npm run db:fresh   | Corre migraciones y seeders     |
-| npm run seed       | Corre el seeder que elijas      |
-| npm run seeds      | Corre todos los seeders         |
+| npm run db:seed    | Corre el seeder que elijas      |
+| npm run db:seeds   | Corre todos los seeders         |
