@@ -3,7 +3,7 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
   Route.group(() => {
     Route.post('upload', 'FilesController.uploadFile')
-    Route.patch('get/:filename', 'FilesController.files')
+    Route.get('get/:filename', 'FilesController.files')
     Route.delete('delete/:filename', 'FilesController.files')
   }).prefix('files')
 
