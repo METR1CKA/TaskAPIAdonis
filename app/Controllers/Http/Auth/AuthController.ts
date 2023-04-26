@@ -9,6 +9,28 @@ import Service from '@ioc:Adonis/Providers/Services'
 import MessagesI18n from 'App/Services/MessagesI18n'
 
 export default class AuthController extends MessagesI18n {
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    RegisterRequest:
+   *      description: Data for register in app
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/RegisterValidator'
+   *  responses:
+   *    RegisterBadRequest:
+   *      description: Bad response
+   *      content:
+   *        application/json:
+   *          description: Validation for request or user exists
+   *          schema:
+   *            anyOf:
+   *              - $ref: '#/components/schemas/ValidationError'
+   *              - $ref: '#/components/schemas/ExistsUserSchema'
+   */
   public async register({ response, request }: HttpContextContract) {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)
@@ -66,6 +88,35 @@ export default class AuthController extends MessagesI18n {
     return Service.httpResponse(201, this.getMessage('created'))
   }
 
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    LoginRequest:
+   *      description: Data for sign in the app
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/LoginValidator'
+   *  responses:
+   *    LoginBadRequest:
+   *      description: Bad response
+   *      content:
+   *        application/json:
+   *          description: Validation for request or user exists
+   *          schema:
+   *            anyOf:
+   *              - $ref: '#/components/schemas/ValidationError'
+   *              - $ref: '#/components/schemas/ResponseText'
+   *    LoginSuccess:
+   *      description: Success sign in
+   *      content:
+   *        application/json:
+   *          description: Generation of token to access
+   *          schema:
+   *            $ref: '#/components/schemas/LoginSchema'
+   */
   public async login({ response, request, auth }: HttpContextContract) {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)
@@ -135,6 +186,18 @@ export default class AuthController extends MessagesI18n {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  responses:
+   *    LogoutSuccess:
+   *      description: Success sign out
+   *      content:
+   *        application/json:
+   *          description: Token revocater
+   *          schema:
+   *            $ref: '#/components/schemas/LogoutSchema'
+   */
   public async logout({ response, request, auth }: HttpContextContract) {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)
@@ -152,6 +215,18 @@ export default class AuthController extends MessagesI18n {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  responses:
+   *    MeSuccess:
+   *      description: Success to get auth User data
+   *      content:
+   *        application/json:
+   *          description: Token revocater
+   *          schema:
+   *            $ref: '#/components/schemas/MeSchema'
+   */
   public async me({ request, response, auth }: HttpContextContract) {
     this.setLocaleRequest(request)
     Service.setResponseObject(response)

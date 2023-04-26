@@ -1,0 +1,70 @@
+components:
+  schemas:
+    ExistsUserSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            existUser:
+              type: boolean
+    ResponseText:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            errors:
+              type: string
+    LoginSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            auth:
+              type: object
+              properties:
+                type:
+                  type: string
+                token:
+                  type: string
+                expires_at:
+                  type: string
+                  example: "dd/MM/yyyy  HH:mm:ss"
+    LogoutSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            tokensRevoked:
+              type: boolean
+    MeSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            user:
+              $ref: "#/components/schemas/User"
