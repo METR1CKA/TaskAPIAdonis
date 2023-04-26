@@ -24,40 +24,8 @@ import './Auth/routes'
 import './Tasks/routes'
 import './Users/routes'
 
-/** Componentes default y ruta raiz
+/** Ruta Raiz
  * @swagger
- * components:
- *  schemas:
- *    DefaultDataResponse:
- *      type: object
- *      properties:
- *        statusResponse:
- *          type: string
- *        data:
- *          type: object
- *          properties:
- *            message:
- *              type: string
- *    LocaleSchema:
- *      type: string
- *      enum: [es, en]
- *      default: es
- *  responses:
- *    ok:
- *      description: Base url
- *      content:
- *        application/json:
- *          description: Success
- *          schema:
- *            $ref: '#/components/schemas/DefaultDataResponse'
- *  parameters:
- *    LocaleHeader:
- *      name: Accept-Language
- *      in: header
- *      description: Locale to request and response
- *      required: true
- *      schema:
- *        $ref: '#/components/schemas/LocaleSchema'
  * /:
  *  get:
  *    tags:
@@ -68,7 +36,7 @@ import './Users/routes'
  *      - application/json
  *    responses:
  *      '200':
- *        $ref: '#/components/responses/ok'
+ *        $ref: '#/components/responses/DefaultResponse'
  */
 Route.get('/', ({ response }) => {
   Service.setResponseObject(response)
@@ -77,6 +45,7 @@ Route.get('/', ({ response }) => {
 
   return Service.httpResponse(200, GREETING)
 })
+
 
 /* Wildcard */
 Route.any('*', ({ response, request }) => {
