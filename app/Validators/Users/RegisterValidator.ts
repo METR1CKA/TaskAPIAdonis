@@ -3,6 +3,41 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class RegisterValidator {
   constructor(protected ctx: HttpContextContract) { }
+  /**
+   * @swagger
+   * components:
+   *  schemas:
+   *    RegisterValidator:
+   *      type: object
+   *      properties:
+   *        email:
+   *          type: string
+   *        password:
+   *          type: string
+   *        active:
+   *          type: boolean
+   *        role_id:
+   *          type: number
+   *        lang_id:
+   *          type: number
+   *        name:
+   *          type: string
+   *        lastname:
+   *          type: string
+   *        phone:
+   *          type: string
+   *          maxLength: 10
+   *        address:
+   *          type: string
+   *      required:
+   *        - email
+   *        - password
+   *        - active
+   *        - role_id
+   *        - lang_id
+   *        - name
+   *        - lastname
+   */
   public schema = schema.create({
     email: schema.string([
       rules.required(),
