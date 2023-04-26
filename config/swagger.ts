@@ -6,33 +6,30 @@ export default {
 	specEnabled: true, //disable or enable swagger.json route
 	specUrl: '/swagger.json',
 
-	middleware: [], // middlewares array, for protect your swagger docs and spec endpoints
+	middleware: ['lang'], // middlewares array, for protect your swagger docs and spec endpoints
 
+	// Options to swagger
 	options: {
 		definition: {
-			openapi: '3.0.0',
-			info: {
+			openapi: '3.0.0', // Version to openapi
+			info: { // Info docs
 				title: 'API TASKS',
 				version: '1.0.0',
 				description: 'Api documentation with swagger docs',
-				termsOfService: 'http://127.0.0.1:3333/',
+				termsOfService: 'http://127.0.0.1:3333/', // not terms of service
 				contact: {
 					email: 'ferchosalazar054@gmail.com'
 				},
-				license: {}
+				license: {} // Not license
 			},
 			externalDocs: {
-				url: 'http://127.0.0.1:3333/docs',
+				url: 'http://127.0.0.1:3333/docs', // not external docs
 				description: 'About Api Tasks'
 			},
 			servers: [
 				{
 					url: 'http://127.0.0.1:3333',
 					description: 'Base url'
-				},
-				{
-					url: 'http://127.0.0.1:3333/api/v1',
-					description: 'Endpoint'
 				}
 			],
 			tags: [
@@ -42,39 +39,39 @@ export default {
 				},
 				{
 					name: 'Auth',
-					description: 'Authentification',
+					description: 'Auth group',
 				},
 				{
 					name: 'Users',
-					description: 'Administration for users',
+					description: 'Users group',
 				},
 				{
 					name: 'Categories',
-					description: 'Administration for categories',
+					description: 'Categories group',
 				},
 				{
 					name: 'Views',
-					description: 'Administration for views',
+					description: 'Views group',
 				},
 				{
 					name: 'Roles_views',
-					description: 'Administration for roles and views',
+					description: 'Roles and views group',
 				},
 				{
 					name: 'Passwords',
-					description: 'Administration for passwords',
+					description: 'Passwords group',
 				},
 				{
 					name: 'Roles',
-					description: 'Administration for roles',
+					description: 'Roles group',
 				},
 				{
 					name: 'Files',
-					description: 'Use for files',
+					description: 'Files group',
 				},
 				{
 					name: 'Tasks',
-					description: 'Use for tasks',
+					description: 'Tasks group',
 				},
 			],
 			components: {
@@ -90,8 +87,10 @@ export default {
 		apis: [
 			'app/**/*.ts',
 			'app/**/*.yml',
+			'docs/swagger/**/*.ts',
 			'docs/swagger/**/*.yml',
-			'start/routes.ts'
+			'start/**/*.ts',
+			'start/routes.ts',
 		],
 		basePath: '/'
 	},
