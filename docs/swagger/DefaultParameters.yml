@@ -1,0 +1,9 @@
+components:
+  parameters:
+    LocaleHeader:
+      name: Accept-Language
+      in: header
+      description: Locale to request and response
+      required: true
+      schema:
+        $ref: "#/components/schemas/LocaleSchema"

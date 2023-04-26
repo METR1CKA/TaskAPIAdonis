@@ -1,0 +1,18 @@
+components:
+  responses:
+    DefaultResponse:
+      description: Base url
+      content:
+        application/json:
+          description: Success
+          schema:
+            $ref: "#/components/schemas/DefaultDataResponse"
+    ResponseNotFound:
+      description: Not found response
+      content:
+        application/json:
+          description: Not Found Role
+          schema:
+            anyOf:
+              - $ref: "#/components/schemas/NotFound"
+              - $ref: "#/components/schemas/RouteNotFound"

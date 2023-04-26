@@ -1,0 +1,63 @@
+components:
+  schemas:
+    RouteNotFound:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            method:
+              type: string
+            routeNotFound:
+              type: string
+    ErrorsValidationSchema:
+      type: object
+      properties:
+        rule:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+    ValidationError:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            errors:
+              $ref: "#/components/schemas/ErrorsValidationSchema"
+    NotFound:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            dataNotFound:
+              type: string
+    DefaultDataResponse:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+    LocaleSchema:
+      type: string
+      enum: [es, en]
+      default: es
