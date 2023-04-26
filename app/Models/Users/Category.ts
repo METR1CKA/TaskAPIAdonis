@@ -6,7 +6,7 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  * @swagger
  * components:
  *  schemas:
- *    Categories:
+ *    Category:
  *      type: object
  *      properties:
  *        id:
@@ -24,7 +24,9 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *        description:
  *          type: string
  *        views:
- *          $ref: '#/components/schemas/View'
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/View'
  */
 export default class Category extends BaseModel {
   @column({ isPrimary: true })

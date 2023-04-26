@@ -17,7 +17,8 @@ import Service from '@ioc:Adonis/Providers/Services'
  *        email:
  *          type: string
  *        rememberMeToken:
- *          type: string | null
+ *          type: string
+ *          nullable: true
  *        active:
  *          type: boolean
  *        role_id:

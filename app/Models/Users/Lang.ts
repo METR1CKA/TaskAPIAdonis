@@ -15,7 +15,9 @@ import Profile from './Profile'
  *        code:
  *          type: string
  *        profiles:
- *          $ref: '#/components/schemas/Profile'
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/Profile'
  */
 export default class Lang extends BaseModel {
   @column({ isPrimary: true })

@@ -2,6 +2,34 @@ import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from '../Users/User'
 
+/** Componente schema de traducciones
+ * @swagger
+ * components:
+ *  schemas:
+ *    Task:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *        user_id:
+ *          type: number
+ *        title:
+ *          type: string
+ *        description:
+ *          type: string
+ *        completed:
+ *          type: boolean
+ *        active:
+ *          type: boolean
+ *        created_at:
+ *          type: string
+ *          example: 'dd/MM/yyyy  HH:mm:ss'
+ *        updated_at:
+ *          type: string
+ *          example: 'dd/MM/yyyy  HH:mm:ss'
+ *        user:
+ *          $ref: '#/components/schemas/User'
+ */
 export default class Task extends BaseModel {
   @column({ isPrimary: true })
   public id: number

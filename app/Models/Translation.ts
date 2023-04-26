@@ -6,7 +6,7 @@ import Service from '@ioc:Adonis/Providers/Services'
  * @swagger
  * components:
  *  schemas:
- *    Translations:
+ *    Translation:
  *      type: object
  *      properties:
  *        id:

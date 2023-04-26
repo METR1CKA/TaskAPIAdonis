@@ -29,11 +29,15 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
  *        description:
  *          type: string
  *        category:
- *          type: Category
+ *          $ref: '#/components/schemas/Category'
  *        role_views:
- *          type: RoleView
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/RoleView'
  *        role:
- *          type: Role
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/Role'
  */
 export default class View extends BaseModel {
   @column({ isPrimary: true })

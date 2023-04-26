@@ -20,11 +20,17 @@ import Database from '@ioc:Adonis/Lucid/Database'
  *        description:
  *          type: string
  *        users:
- *          $ref: '#/components/schemas/User'
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/User'
  *        views:
- *          $ref: '#/components/schemas/View'
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/View'
  *        role_views:
- *          $ref: '#/components/schemas/RoleView'
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/RoleView'
  */
 export default class Role extends BaseModel {
   public static async getRoles() {
