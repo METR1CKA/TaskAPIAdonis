@@ -6,19 +6,21 @@ export default class extends BaseSeeder {
   public async run() {
     // Write your database queries inside the run method
 
-    const translations: Translation[] = JSON.parse(fs.readFileSync('resources/Translations/I18n.json').toString('utf-8'))
+    const translations: Translation[] = JSON.parse(
+      fs.readFileSync('resources/Translations/I18n.json').toString('utf-8')
+    )
 
     const currentTranslations = await Translation.query().where({ locale: 'en' })
 
     const updatableTranslations = translations.filter(
       tl => currentTranslations.findIndex(ct => ct.key == tl.key) != -1
     )
-    console.log("updatableTranslations:", updatableTranslations.length)
+    console.log('updatableTranslations:', updatableTranslations.length)
 
     const adddableTranslations = translations.filter(
       tl => currentTranslations.findIndex(ct => ct.key == tl.key) == -1
     )
-    console.log("adddableTranslations:", adddableTranslations.length)
+    console.log('adddableTranslations:', adddableTranslations.length)
 
     updatableTranslations.forEach(async upd => {
       await Translation.query()
