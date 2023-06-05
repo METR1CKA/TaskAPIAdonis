@@ -12,14 +12,14 @@ export default class AuthController {
   public async register({ response, request, i18n }: HttpContextContract) {
     try {
       await request.validate(RegisterValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error.messages)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation.messages)
+
+      const { messages: { errors: [error] } } = validation
 
       return response.badRequest({
         statusResponse: 'Client error',
-        data: {
-          message: error?.messages?.errors[0]?.message,
-        }
+        data: { message: error.message }
       })
     }
 
@@ -123,14 +123,14 @@ export default class AuthController {
   public async login({ response, request, auth, i18n }: HttpContextContract) {
     try {
       await request.validate(LoginValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation.messages)
+
+      const { messages: { errors: [error] } } = validation
 
       return response.badRequest({
         statusResponse: 'Client error',
-        data: {
-          message: error?.messages?.errors[0].message,
-        }
+        data: { message: error.message }
       })
     }
 
@@ -143,9 +143,7 @@ export default class AuthController {
 
       return response.badRequest({
         statusResponse: 'Client error',
-        data: {
-          message: i18n.formatMessage('login.error'),
-        }
+        data: { message: i18n.formatMessage('login.error') }
       })
     }
 
