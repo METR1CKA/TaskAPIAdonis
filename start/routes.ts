@@ -19,7 +19,6 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import Service from '@ioc:Adonis/Providers/Services'
 import './Auth/routes'
 import './Tasks/routes'
 import './Users/routes'
