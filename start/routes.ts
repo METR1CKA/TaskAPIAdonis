@@ -37,24 +37,35 @@ import './Users/routes'
  *    responses:
  *      '200':
  *        $ref: '#/components/responses/DefaultResponse'
+ *      '404':
+ *        description: Get user succcessful
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/RouteNotFound'
  */
 Route.get('/', ({ response }) => {
-  Service.setResponseObject(response)
-
   const GREETING = 'API TASKS'
 
-  return Service.httpResponse(200, GREETING)
+  return response.ok({
+    statusRessponse: 'Success',
+    data: {
+      message: GREETING,
+    }
+  })
 })
 
 
 /* Wildcard */
 Route.any('*', ({ response, request }) => {
-  Service.setResponseObject(response)
-
   const ROUTE_NOT_FOUND = 'Ruta no encontrada / Route not found'
 
-  return Service.httpResponse(404, ROUTE_NOT_FOUND, {
-    method: request.method(),
-    routeNotFound: request.url()
+  return response.badRequest({
+    statusResponse: 'Client error',
+    data: {
+      message: ROUTE_NOT_FOUND,
+      method: request.method(),
+      routeNotFound: request.url()
+    }
   })
 })
