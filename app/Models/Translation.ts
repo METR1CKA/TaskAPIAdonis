@@ -49,4 +49,36 @@ export default class Translation extends BaseModel {
     serialize: value => value!.toFormat(Service.formatDate)
   })
   public updatedAt: DateTime
+
+  // Functions
+  public static async updateKeys(data: any, locale: string) {
+    await Translation.query()
+      .where({ key: data.key, locale })
+      .update({ message: data.name })
+
+    await Translation.query()
+      .where({ key: data.keyd, locale })
+      .update({ message: data.description })
+  }
+
+  public static async createKeys(data: any, locales: string[]) {
+    const keys_name = locales.map(locale => {
+      return {
+        locale,
+        key: data.key,
+        message: data.name
+      }
+    })
+
+    const keys_desc = locales.map(locale => {
+      return {
+        locale,
+        key: data.keyd,
+        message: data.description
+      }
+    })
+
+    await Translation.createMany(keys_name)
+    await Translation.createMany(keys_desc)
+  }
 }
