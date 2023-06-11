@@ -170,8 +170,8 @@ export default class AuthController {
           message: i18n.formatMessage('remember_me_token'),
           auth: {
             type: 'bearer',
-            token: currentToken!.tokenNoHash,
-            expires_at: currentToken!.expires_at!.toFormat(Service.formatDate)
+            token: currentToken?.tokenNoHash,
+            expires_at: currentToken?.expires_at?.toFormat(Service.formatDate)
           }
         }
       })
@@ -215,13 +215,13 @@ export default class AuthController {
    *            $ref: '#/components/schemas/LogoutSchema'
    */
   public async logout({ response, i18n, auth }: HttpContextContract) {
-    const user = await User.find(auth.use('api').user!.id)
+    const user = await User.find(auth.use('api').user?.id)
 
-    await user!.merge({ rememberMeToken: null }).save()
+    await user?.merge({ rememberMeToken: null })?.save()
 
-    await ApiToken.query().where({ user_id: user!.id }).delete()
+    await ApiToken.query().where({ user_id: user?.id }).delete()
 
-    const revoked = await ApiToken.query().where({ user_id: user!.id })
+    const revoked = await ApiToken.query().where({ user_id: user?.id })
 
     return response.ok({
       statusResponse: 'Success',
@@ -245,8 +245,12 @@ export default class AuthController {
    *            $ref: '#/components/schemas/MeSchema'
    */
   public async me({ i18n, response, auth }: HttpContextContract) {
-    const user = await User.query()
-      .where({ id: auth.user!.id, email: auth.user!.email })
+    const { user } = auth.use('api')
+
+    const { id, email } = user!
+
+    const user_db = await User.query()
+      .where({ id, email })
       .preload('profile')
       .preload('role')
       .first()
@@ -255,7 +259,7 @@ export default class AuthController {
       statusResponse: 'Success',
       data: {
         message: i18n.formatMessage('auth.user'),
-        user
+        user: user_db
       }
     })
   }
