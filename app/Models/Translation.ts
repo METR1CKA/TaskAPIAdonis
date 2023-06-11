@@ -62,23 +62,24 @@ export default class Translation extends BaseModel {
   }
 
   public static async createKeys(data: any, locales: string[]) {
-    const keys_name = locales.map(locale => {
+    const { key, name, keyd, description } = data
+    const keys = locales.map(locale => {
       return {
         locale,
-        key: data.key,
-        message: data.name
+        key,
+        message: name
       }
     })
 
-    const keys_desc = locales.map(locale => {
+    const keysd = locales.map(locale => {
       return {
         locale,
-        key: data.keyd,
-        message: data.description
+        key: keyd,
+        message: description
       }
     })
 
-    await Translation.createMany(keys_name)
-    await Translation.createMany(keys_desc)
+    await Translation.createMany(keys)
+    await Translation.createMany(keysd)
   }
 }
