@@ -1,3 +1,4 @@
+import I18n from '@ioc:Adonis/Addons/I18n'
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import Category from 'App/Models/Users/Category'
 import Profile from 'App/Models/Users/Profile'
@@ -5,6 +6,7 @@ import Role from 'App/Models/Users/Role'
 import RoleView from 'App/Models/Users/RoleView'
 import User from 'App/Models/Users/User'
 import View from 'App/Models/Users/View'
+import Translation from 'App/Models/Translation'
 
 export default class extends BaseSeeder {
   public async run() {
@@ -100,7 +102,7 @@ export default class extends BaseSeeder {
       },
     ])
 
-    await View.createMany([
+    const views = await View.createMany([
       // Users
       {
         category_id: 1,
@@ -209,5 +211,30 @@ export default class extends BaseSeeder {
       { role_id: rol_admin.id, view_id: 7, active: true },
       { role_id: rol_editor.id, view_id: 7, active: true },
     ])
+
+    const locales = I18n.supportedLocales()
+
+    let keys: any, keysd: any
+
+    views.forEach(view => {
+      keys = locales.map(locale => {
+        return {
+          locale,
+          key: view.key,
+          message: view.name
+        }
+      })
+
+      keysd = locales.map(locale => {
+        return {
+          locale,
+          key: view.keyd,
+          message: view.description
+        }
+      })
+    })
+
+    await Translation.createMany(keys)
+    await Translation.createMany(keysd)
   }
 }
