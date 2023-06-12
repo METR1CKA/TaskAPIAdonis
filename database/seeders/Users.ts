@@ -152,7 +152,7 @@ export default class extends BaseSeeder {
         order_index: 5,
         url: 'admin/roles_views',
         description: 'Roles Views',
-        keyd: 'view.roles.desc'
+        keyd: 'view.roles_views.desc'
       },
 
       // Tasks
@@ -214,10 +214,8 @@ export default class extends BaseSeeder {
 
     const locales = I18n.supportedLocales()
 
-    let keys: any, keysd: any
-
-    views.forEach(view => {
-      keys = locales.map(locale => {
+    for (const view of views) {
+      const keys = locales.map(locale => {
         return {
           locale,
           key: view.key,
@@ -225,16 +223,16 @@ export default class extends BaseSeeder {
         }
       })
 
-      keysd = locales.map(locale => {
+      const keysd = locales.map(locale => {
         return {
           locale,
           key: view.keyd,
           message: view.description
         }
       })
-    })
 
-    await Translation.createMany(keys)
-    await Translation.createMany(keysd)
+      await Translation.createMany(keys)
+      await Translation.createMany(keysd)
+    }
   }
 }
