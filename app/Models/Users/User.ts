@@ -21,8 +21,6 @@ import Service from '@ioc:Adonis/Providers/Services'
  *          nullable: true
  *        active:
  *          type: boolean
- *        role_id:
- *          type: number
  *        created_at:
  *          type: string
  *          example: 'dd-MM-yyyy  HH:mm:ss'
@@ -50,19 +48,19 @@ export default class User extends BaseModel {
   @column()
   public active: boolean
 
-  @column()
+  @column({ serializeAs: null })
   public role_id: number
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value) => value!.toFormat(Service.formatDate)
+    serialize: (value) => value?.toFormat(Service.formatDate)
   })
   public createdAt?: DateTime
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value) => value!.toFormat(Service.formatDate)
+    serialize: (value) => value?.toFormat(Service.formatDate)
   })
   public updatedAt?: DateTime
 

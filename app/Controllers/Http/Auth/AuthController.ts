@@ -3,7 +3,6 @@ import LoginValidator from 'App/Validators/Auth/LoginValidator'
 import User from 'App/Models/Users/User'
 import RegisterValidator from 'App/Validators/Users/RegisterValidator'
 import Profile from 'App/Models/Users/Profile'
-import Role from 'App/Models/Users/Role'
 import ApiToken from 'App/Models/Users/ApiToken'
 import Service from '@ioc:Adonis/Providers/Services'
 import Lang from 'App/Models/Users/Lang'
@@ -24,20 +23,8 @@ export default class AuthController {
     }
 
     const {
-      email, password, active, role_id, name, lastname, phone, address, lang_id
+      email, password, name, lastname, phone, address, lang_id
     } = request.body()
-
-    const role = await Role.find(role_id)
-
-    if (!role) {
-      return response.notFound({
-        statusResponse: 'Client error',
-        data: {
-          message: i18n.formatMessage('notFound'),
-          dataNotFound: 'Role'
-        }
-      })
-    }
 
     const lang = await Lang.find(lang_id)
 
@@ -67,8 +54,8 @@ export default class AuthController {
       {
         email,
         password,
-        active,
-        role_id
+        active: true,
+        role_id: 3 // Default role EDITOR
       }
     )
 
@@ -196,7 +183,7 @@ export default class AuthController {
         auth: {
           type: newToken.type,
           token: newToken.token,
-          expires_at: newToken.expiresAt!.toFormat(Service.formatDate)
+          expires_at: newToken.expiresAt?.toFormat(Service.formatDate)
         }
       }
     })
@@ -251,7 +238,9 @@ export default class AuthController {
 
     const user_db = await User.query()
       .where({ id, email })
-      .preload('profile')
+      .preload('profile', profile => {
+        profile.preload('lang')
+      })
       .preload('role')
       .first()
 

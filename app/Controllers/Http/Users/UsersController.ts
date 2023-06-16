@@ -2,18 +2,29 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Profile from 'App/Models/Users/Profile'
 import Role from 'App/Models/Users/Role'
 import User from 'App/Models/Users/User'
-import RegisterValidator from 'App/Validators/Users/RegisterValidator'
 import UpdateValidator from 'App/Validators/Users/UpdateValidator'
 import Service from '@ioc:Adonis/Providers/Services'
-import MessagesI18n from 'App/Services/MessagesI18n'
+import RegisterAuthValidator from 'App/Validators/Users/RegisterAuthValidator'
 
-export default class UsersController extends MessagesI18n {
-  public async read({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+export default class UsersController {
+  /**
+   * @swagger
+   * components:
+   *  responses:
+   *    UsersGetSuccess:
+   *      description: Get user succcessful
+   *      content:
+   *        application/json:
+   *          schema:
+   *            anyOf:
+   *              - $ref: '#/components/schemas/GetAllUserSchema'
+   *              - $ref: '#/components/schemas/GetOneUserSchema'
+   */
+  public async read({ i18n, response, params }: HttpContextContract) {
     const users = await User.query()
-      .preload('profile')
+      .preload('profile', profile => {
+        profile.preload('lang')
+      })
       .preload('role')
       .orderBy('id', 'desc')
 
@@ -21,53 +32,75 @@ export default class UsersController extends MessagesI18n {
       const user = users.find(user => user.id == params.id)
 
       if (!user) {
-        return Service.httpResponse(404, this.getMessage('notFound'), {
-          dataNotFound: 'User'
+        return response.notFound({
+          statusResponse: 'Client error',
+          data: {
+            message: i18n.formatMessage('notFound'),
+            dataNotFound: 'User'
+          }
         })
       }
 
-      return Service.httpResponse(200, this.getMessage('data'), {
-        user
+      return response.ok({
+        statusResponse: 'Success',
+        data: {
+          message: i18n.formatMessage('data'),
+          user
+        }
       })
     }
 
-    return Service.httpResponse(200, this.getMessage('data'), {
-      total: users.length,
-      users
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('data'),
+        total: users.length,
+        users
+      }
     })
   }
 
-  public async create({ request, response }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async create({ request, response, i18n }: HttpContextContract) {
     try {
-      var dataUser = await request.validate(RegisterValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+      await request.validate(RegisterAuthValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
 
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error.message,
+        }
       })
     }
 
     const {
-      email, password, active, role_id, name, lastname, phone, address, lang_id
-    } = dataUser
+      email, password, role_id, name, lastname, phone, address, lang_id
+    } = request.body()
 
     const role = await Role.find(role_id)
 
     if (!role) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'Role'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'Role'
+        }
       })
     }
 
     const existUser = await User.findBy('email', email)
 
     if (existUser) {
-      return Service.httpResponse(400, this.getMessage('user.exist'), {
-        existUser: !!existUser
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('user.exist'),
+          existUser: Boolean(existUser)
+        }
       })
     }
 
@@ -75,7 +108,7 @@ export default class UsersController extends MessagesI18n {
       {
         email,
         password,
-        active,
+        active: true,
         role_id
       }
     )
@@ -91,46 +124,77 @@ export default class UsersController extends MessagesI18n {
       }
     )
 
-    return Service.httpResponse(201, this.getMessage('created'))
+    return response.created({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('created')
+      }
+    })
   }
 
-  public async update({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    UsersUpdateRequest:
+   *      description:
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/UpdateValidator'
+   */
+  public async update({ request, response, params, i18n }: HttpContextContract) {
     try {
-      var dataUpdate = await request.validate(UpdateValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+      await request.validate(UpdateValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
 
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error.message
+        }
       })
     }
 
-    const { email, active, role_id, name, lastname, phone, address, lang_id } = dataUpdate
+    const { email, active, role_id, name, lastname, phone, address, lang_id } = request.body()
 
     const role = await Role.find(role_id)
 
     if (!role) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'Role'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'Role'
+        }
       })
     }
 
     const user = await User.find(params.id)
 
     if (!user) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'User'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'User'
+        }
       })
     }
 
     const profile = await Profile.findBy('user_id', user.id)
 
     if (!profile) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'Profile'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'Profile'
+        }
       })
     }
 
@@ -153,21 +217,37 @@ export default class UsersController extends MessagesI18n {
       }
     ).save()
 
-    return Service.httpResponse(200, this.getMessage('updated'))
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('updated')
+      }
+    })
   }
 
-  public async delete({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  /*
+   *
+   * */
+  public async delete({ i18n, response, params }: HttpContextContract) {
     const user = await User.find(params.id)
 
     if (!user) {
-      return Service.httpResponse(404, this.getMessage('notFound'))
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'User'
+        }
+      })
     }
 
     await user.merge({ active: !user.active }).save()
 
-    return Service.httpResponse(200, this.getMessage(`status.${user.active ? 'activated' : 'desactivated'}`))
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage(`status.${user.active ? 'activated' : 'desactivated'}`)
+      }
+    })
   }
 }

@@ -11,10 +11,6 @@ import Lang from './Lang'
  *      properties:
  *        id:
  *          type: number
- *        user_id:
- *          type: number
- *        lang_id:
- *          type: number
  *        name:
  *          type: string
  *        lastname:
@@ -25,8 +21,6 @@ import Lang from './Lang'
  *          type: string
  *        image:
  *          type: string
- *        user:
- *          $ref: '#/components/schemas/User'
  *        lang:
  *          $ref: '#/components/schemas/Lang'
  */
@@ -34,10 +28,10 @@ export default class Profile extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
+  @column({ serializeAs: null })
   public user_id: number
 
-  @column()
+  @column({ serializeAs: null })
   public lang_id: number
 
   @column()

@@ -16,8 +16,6 @@ export default class RegisterValidator {
    *          type: string
    *        active:
    *          type: boolean
-   *        role_id:
-   *          type: number
    *        lang_id:
    *          type: number
    *        name:
@@ -33,7 +31,6 @@ export default class RegisterValidator {
    *        - email
    *        - password
    *        - active
-   *        - role_id
    *        - lang_id
    *        - name
    *        - lastname
@@ -41,25 +38,23 @@ export default class RegisterValidator {
   public schema = schema.create({
     email: schema.string([
       rules.required(),
-      rules.email()
+      rules.email(),
+      rules.maxLength(255)
     ]),
     password: schema.string([
-      rules.required()
-    ]),
-    active: schema.boolean([
-      rules.required()
-    ]),
-    role_id: schema.number([
-      rules.required()
+      rules.required(),
+      rules.maxLength(200)
     ]),
     lang_id: schema.number([
       rules.required()
     ]),
     name: schema.string([
-      rules.required()
+      rules.required(),
+      rules.maxLength(200)
     ]),
     lastname: schema.string([
-      rules.required()
+      rules.required(),
+      rules.maxLength(200)
     ]),
     phone: schema.string.optional([
       rules.maxLength(10)
@@ -74,6 +69,5 @@ export default class RegisterValidator {
     confirmed: this.ctx.i18n.formatMessage('field.confirm', { field: '{{ field }}' }),
     string: this.ctx.i18n.formatMessage('field.type', { field: '{{ field }}', type: '{{ rule }}' }),
     number: this.ctx.i18n.formatMessage('field.type', { field: '{{ field }}', type: '{{ rule }}' }),
-    boolean: this.ctx.i18n.formatMessage('field.type', { field: '{{ field }}', type: '{{ rule }}' }),
   }
 }
