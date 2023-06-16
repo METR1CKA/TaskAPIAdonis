@@ -33,7 +33,7 @@ import Database from '@ioc:Adonis/Lucid/Database'
  *            $ref: '#/components/schemas/RoleView'
  */
 export default class Role extends BaseModel {
-  public static async getRoles() {
+  public static async getRoles(): Promise<any> {
     const currentRoles = await Database.query()
       .from('roles')
       .select(['id', 'name'])

@@ -21,6 +21,8 @@ import Lang from './Lang'
  *          type: string
  *        image:
  *          type: string
+ *        user:
+ *          $ref: '#/components/schemas/User'
  *        lang:
  *          $ref: '#/components/schemas/Lang'
  */

@@ -24,20 +24,20 @@ export default class ApiToken extends BaseModel {
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value) => value!.toFormat(Service.formatDate)
+    serialize: (value) => value?.toFormat(Service.formatDate)
   })
   public expires_at?: DateTime
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value) => value!.toFormat(Service.formatDate)
+    serialize: (value) => value?.toFormat(Service.formatDate)
   })
   public createdAt?: DateTime
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value) => value!.toFormat(Service.formatDate)
+    serialize: (value) => value?.toFormat(Service.formatDate)
   })
   public updatedAt?: DateTime
 

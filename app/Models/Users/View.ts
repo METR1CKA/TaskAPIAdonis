@@ -43,7 +43,7 @@ export default class View extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
+  @column({ serializeAs: null })
   public category_id: number
 
   @column()
