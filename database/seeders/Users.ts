@@ -75,7 +75,7 @@ export default class extends BaseSeeder {
       ]
     )
 
-    await Category.createMany([
+    const categories = await Category.createMany([
       {
         active: true,
         order_index: 1,
@@ -154,7 +154,6 @@ export default class extends BaseSeeder {
         description: 'Roles Views',
         keyd: 'view.roles_views.desc'
       },
-
       // Tasks
       {
         category_id: 2,
@@ -166,7 +165,6 @@ export default class extends BaseSeeder {
         description: 'Tasks',
         keyd: 'view.task.desc'
       },
-
       // Settings
       {
         category_id: 3,
@@ -228,6 +226,27 @@ export default class extends BaseSeeder {
           locale,
           key: view.keyd,
           message: view.description
+        }
+      })
+
+      await Translation.createMany(keys)
+      await Translation.createMany(keysd)
+    }
+
+    for (const category of categories) {
+      const keys = locales.map(locale => {
+        return {
+          locale,
+          key: category.key,
+          message: category.name
+        }
+      })
+
+      const keysd = locales.map(locale => {
+        return {
+          locale,
+          key: category.keyd,
+          message: category.description
         }
       })
 
