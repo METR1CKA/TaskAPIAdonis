@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import Service from '@ioc:Adonis/Providers/Services'
+import I18n from '@ioc:Adonis/Addons/I18n'
 
 /** Componente schema de traducciones
  * @swagger
@@ -52,17 +53,24 @@ export default class Translation extends BaseModel {
 
   // Functions
   public static async updateKeys(data: any, locale: string) {
-    await Translation.query()
-      .where({ key: data.key, locale })
-      .update({ message: data.name })
+    const { key, name, keyd, description } = data
 
     await Translation.query()
-      .where({ key: data.keyd, locale })
-      .update({ message: data.description })
+      .where({ key, locale })
+      .update({ message: name })
+
+    await Translation.query()
+      .where({ key: keyd, locale })
+      .update({ message: description })
+
+    await I18n.reloadTranslations()
   }
 
-  public static async createKeys(data: any, locales: string[]) {
+  public static async createKeys(data: any) {
+    const locales = I18n.supportedLocales()
+
     const { key, name, keyd, description } = data
+
     const keys = locales.map(locale => {
       return {
         locale,
@@ -81,5 +89,7 @@ export default class Translation extends BaseModel {
 
     await Translation.createMany(keys)
     await Translation.createMany(keysd)
+
+    await I18n.reloadTranslations()
   }
 }
