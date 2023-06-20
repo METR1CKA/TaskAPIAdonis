@@ -1,106 +1,133 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Service from '@ioc:Adonis/Providers/Services'
+import Translation from 'App/Models/Translation'
 import View from 'App/Models/Users/View'
-import MessagesI18n from 'App/Services/MessagesI18n'
 import ViewValidator from 'App/Validators/View/ViewValidator'
 
-export default class ViewsController extends MessagesI18n {
-  public async get({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
-    const views = (
-      await View.all()
-    ).map(view => {
-      view.name = this.getMessage(view.key)
-      view.description = this.getMessage(view.keyd)
+export default class ViewsController {
+  public async get({ i18n, response, params }: HttpContextContract) {
+    const views = (await View.all()).map(view => {
+      view.name = i18n.formatMessage(view.key)
+      view.description = i18n.formatMessage(view.keyd)
       return view
     })
 
     if (params.id) {
-      const view = views.find(cat => cat.id == params.id)
+      const view = views.find(view => view.id == params.id)
 
       if (!view) {
-        return Service.httpResponse(404, this.getMessage('notFound'), {
-          dataNotFound: 'View'
+        return response.notFound({
+          statusResponse: 'Client error',
+          data: {
+            message: i18n.formatMessage('notFound'),
+            dataNotFound: 'View'
+          }
         })
       }
 
-      return Service.httpResponse(200, this.getMessage('data'), {
-        view
+      return response.ok({
+        statusResponse: 'Success',
+        data: {
+          message: i18n.formatMessage('data'),
+          view
+        }
       })
     }
 
-    return Service.httpResponse(200, this.getMessage('data'), {
-      total: views.length,
-      views
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('data'),
+        total: views.length,
+        views
+      }
     })
   }
 
-  public async create({ request, response }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async create({ request, response, i18n }: HttpContextContract) {
     try {
-      var viewCreate = await request.validate(ViewValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+      await request.validate(ViewValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
 
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: { message: error.message }
       })
     }
 
-    const view = await View.create(viewCreate)
+    const viewData = request.body()
 
-    await this.dbTranslations(view, 'create')
+    const view = await View.create(viewData)
 
-    return Service.httpResponse(201, this.getMessage('created'))
+    await Translation.createKeys(view)
+
+    return response.created({
+      statusResponse: 'Success',
+      data: { message: i18n.formatMessage('created') }
+    })
   }
 
-  public async update({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async update({ request, response, params, i18n }: HttpContextContract) {
     try {
-      var viewUpdate = await request.validate(ViewValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+      await request.validate(ViewValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
 
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: { message: error.message }
       })
     }
+
+    const viewUpdate = request.body()
 
     const view = await View.find(params.id)
 
     if (!view) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'View'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'View'
+        }
       })
     }
 
     await view.merge(viewUpdate).save()
 
-    await this.dbTranslations(view, 'update')
+    await Translation.updateKeys(view, i18n.locale)
 
-    return Service.httpResponse(200, this.getMessage('updated'))
+    return response.ok({
+      statusResponse: 'Success',
+      data: { message: i18n.formatMessage('updated') }
+    })
   }
 
-  public async delete({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async delete({ i18n, response, params }: HttpContextContract) {
     const view = await View.find(params.id)
 
     if (!view) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'View'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'View'
+        }
       })
     }
 
     await view.merge({ active: !view.active }).save()
 
-    return Service.httpResponse(200, this.getMessage(`status.${view.active ? 'activated' : 'desactivated'}`))
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage(`status.${view.active ? 'activated' : 'desactivated'}`)
+      }
+    })
   }
 }
