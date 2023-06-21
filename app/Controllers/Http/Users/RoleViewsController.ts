@@ -6,26 +6,12 @@ import RolesViewValidator from 'App/Validators/RoleView/RolesViewValidator'
 
 export default class RoleViewsController {
   public async get({ i18n, response, params }: HttpContextContract) {
-    const roles_query = await Role.query()
-      .preload('views', views => {
-        views.preload('role_views')
-          .orderBy('views.order_index', 'asc')
-          .where('role_views.active', true)
-      })
-      .orderBy('id', 'desc')
-
-    const roles = roles_query.map((role: any) => {
-      role.views = role.views.map((view: any) => {
-        view.role_views = view.role_views.filter((role_view: any) => role_view.role_id == role.id)
-        return view
-      })
-      return role
-    })
+    const roles_views = await RoleView.getRolesViews()
 
     if (params.id) {
-      const role = roles.find(role => role.id == params.id)
+      const role_view = roles_views.find(role => role.id == params.id)
 
-      if (!role) {
+      if (!role_view) {
         return response.notFound({
           statusResponse: 'Client error',
           data: {
@@ -39,7 +25,7 @@ export default class RoleViewsController {
         statusResponse: 'Success',
         data: {
           message: i18n.formatMessage('data'),
-          role
+          role_view
         }
       })
     }
@@ -48,8 +34,8 @@ export default class RoleViewsController {
       statusResponse: 'Success',
       data: {
         message: i18n.formatMessage('data'),
-        total: roles.length,
-        roles
+        total: roles_views.length,
+        roles_views
       }
     })
   }
