@@ -2,24 +2,21 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Service from '@ioc:Adonis/Providers/Services'
 import Role from 'App/Models/Users/Role'
 import RoleView from 'App/Models/Users/RoleView'
-import MessagesI18n from 'App/Services/MessagesI18n'
 import RolesViewValidator from 'App/Validators/RoleView/RolesViewValidator'
 
-export default class RoleViewsController extends MessagesI18n {
-  public async get({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
-    let roles: any = await Role.query()
-      .preload('views', viewQuery => {
-        viewQuery.preload('role_views')
+export default class RoleViewsController {
+  public async get({ i18n, response, params }: HttpContextContract) {
+    const roles_query = await Role.query()
+      .preload('views', views => {
+        views.preload('role_views')
+          .orderBy('views.order_index', 'asc')
           .where('role_views.active', true)
       })
       .orderBy('id', 'desc')
 
-    roles = roles.map((role: any) => {
+    const roles = roles_query.map((role: any) => {
       role.views = role.views.map((view: any) => {
-        view.role_views = view.role_views.filter((rv: any) => rv.role_id == role.id)
+        view.role_views = view.role_views.filter((role_view: any) => role_view.role_id == role.id)
         return view
       })
       return role
@@ -29,82 +26,72 @@ export default class RoleViewsController extends MessagesI18n {
       const role = roles.find(role => role.id == params.id)
 
       if (!role) {
-        return Service.httpResponse(404, this.getMessage('notFound'), {
-          dataNotFound: 'Role'
+        return response.notFound({
+          statusResponse: 'Client error',
+          data: {
+            message: i18n.formatMessage('notFound'),
+            dataNotFound: 'Role'
+          }
         })
       }
 
-      return Service.httpResponse(200, this.getMessage('data'), {
-        role
+      return response.ok({
+        statusResponse: 'Success',
+        data: {
+          message: i18n.formatMessage('data'),
+          role
+        }
       })
     }
 
-    return Service.httpResponse(200, this.getMessage('data'), {
-      total: roles.length,
-      roles
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('data'),
+        total: roles.length,
+        roles
+      }
     })
   }
 
-  public async update({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async update({ request, response, params, i18n }: HttpContextContract) {
     try {
-      var rvData = await request.validate(RolesViewValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+      await request.validate(RolesViewValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
 
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error.message,
+        }
       })
     }
 
-    const { views } = rvData
+    const { views } = request.body()
 
     const role = await Role.find(params.id)
 
     if (!role) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'Role'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'Role'
+        }
       })
     }
 
-    const role_views = await RoleView.query().where({ role_id: role.id })
+    // await role.related('views').sync(views)
+    await RoleView.sync(role, views)
 
-    const role_views_ids = role_views.map(rv => rv.view_id)
-
-    let deletable: any[] = []
-    let addable: any[] = []
-    let editable: any[] = []
-
-    deletable = role_views.filter(
-      rv => rv.active && views.indexOf(rv.view_id) == -1
-    )
-
-    deletable = deletable.map(drv => drv.id)
-
-    addable = views.filter(
-      new_views => role_views_ids.indexOf(new_views) == -1
-    )
-
-    addable = addable.map(view_id => {
-      return {
-        role_id: role.id,
-        view_id,
-        active: true,
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('data')
       }
     })
-
-    editable = role_views.filter(
-      rol_view => !rol_view.active && views.indexOf(rol_view.view_id) != -1
-    )
-
-    editable = editable.map(rv => rv.id)
-
-    await RoleView.query().whereIn('id', deletable).update({ active: false })
-    await RoleView.query().whereIn('id', editable).update({ active: true })
-    await RoleView.createMany(addable)
-
-    return Service.httpResponse(200, this.getMessage('data'))
   }
 }
