@@ -71,7 +71,7 @@ export default class RoleView extends BaseModel {
         .where({ id, name })
         .first()
 
-      roles_views.push(new_role)
+      if (new_role) roles_views.push(new_role)
     }
 
     return roles_views
