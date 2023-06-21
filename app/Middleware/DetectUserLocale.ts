@@ -14,9 +14,6 @@ export default class DetectUserLocale {
 
     i18n.switchLocale(lang)
 
-    await I18n.loadTranslations()
-    await I18n.reloadTranslations()
-
     await next()
   }
 }
