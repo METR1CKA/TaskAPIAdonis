@@ -22,7 +22,12 @@ export default class RolesViewValidator {
   })
 
   public messages: CustomMessages = {
-    required: this.ctx.i18n.formatMessage('field', { field: '{{ field }}' }),
-    number: this.ctx.i18n.formatMessage('field.type', { field: 'views', type: '{{ rule }}' }),
+    required: this.ctx.i18n.formatMessage('field', {
+      field: '{{ field }}'
+    }),
+    number: this.ctx.i18n.formatMessage('field.type', {
+      field: 'views',
+      type: '{{ rule }}'
+    }),
   }
 }
