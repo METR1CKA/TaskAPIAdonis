@@ -62,11 +62,25 @@ export default class UpdateValidator {
   })
 
   public messages: CustomMessages = {
-    required: this.ctx.i18n.formatMessage('field', { field: '{{ field }}' }),
+    required: this.ctx.i18n.formatMessage('field', {
+      field: '{{ field }}'
+    }),
     email: this.ctx.i18n.formatMessage('email'),
-    maxLength: this.ctx.i18n.formatMessage('maxLength', { field: '{{ field }}', args: '{{ options.maxLength }}' }),
-    string: this.ctx.i18n.formatMessage('field.type', { field: '{{ field }}', type: '{{ rule }}' }),
-    number: this.ctx.i18n.formatMessage('field.type', { field: '{{ field }}', type: '{{ rule }}' }),
-    boolean: this.ctx.i18n.formatMessage('field.type', { field: '{{ field }}', type: '{{ rule }}' }),
+    maxLength: this.ctx.i18n.formatMessage('maxLength', {
+      field: '{{ field }}',
+      args: '{{ options.maxLength }}'
+    }),
+    string: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
+    number: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
+    boolean: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
   }
 }
