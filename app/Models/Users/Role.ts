@@ -33,17 +33,6 @@ import Database from '@ioc:Adonis/Lucid/Database'
  *            $ref: '#/components/schemas/RoleView'
  */
 export default class Role extends BaseModel {
-  public static async getRoles(): Promise<any> {
-    const currentRoles = await Database.query()
-      .from('roles')
-      .select(['id', 'name'])
-      .orderBy('id', 'asc')
-
-    const values = currentRoles.map(role => Object.values(role).reverse())
-
-    return Object.fromEntries(values)
-  }
-
   @column({ isPrimary: true })
   public id: number
 
@@ -55,6 +44,18 @@ export default class Role extends BaseModel {
 
   @column()
   public description: string
+
+  // Functions
+  public static async getRoles(): Promise<any> {
+    const currentRoles = await Database.query()
+      .from('roles')
+      .select(['id', 'name'])
+      .orderBy('id', 'asc')
+
+    const values = currentRoles.map(role => Object.values(role).reverse())
+
+    return Object.fromEntries(values)
+  }
 
   // Relations
   @hasMany(() => User, {
