@@ -5,12 +5,14 @@ export default class RoleUser {
   public async handle({ auth, response, i18n }: HttpContextContract, next: () => Promise<void>) {
     const { role_id } = auth.use('api').user!
 
-    const roles = await Role.getRoles()
+    const { EDITOR } = await Role.getRoles()
 
-    if (role_id >= roles.EDITOR) {
+    if (role_id >= EDITOR) {
       return response.forbidden({
         statusResponse: 'Client error',
-        data: { message: i18n.formatMessage('forbidden') }
+        data: {
+          message: i18n.formatMessage('forbidden')
+        }
       })
     }
 
