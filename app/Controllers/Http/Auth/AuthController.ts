@@ -18,7 +18,9 @@ export default class AuthController {
 
       return response.badRequest({
         statusResponse: 'Client error',
-        data: { message: error.message }
+        data: {
+          message: error.message
+        }
       })
     }
 
@@ -117,11 +119,17 @@ export default class AuthController {
 
       return response.badRequest({
         statusResponse: 'Client error',
-        data: { message: error.message }
+        data: {
+          message: error.message
+        }
       })
     }
 
-    const { email, password, remember_me_token } = request.body()
+    const {
+      email,
+      password,
+      remember_me_token
+    } = request.body()
 
     try {
       await auth.use('api').verifyCredentials(email, password)
@@ -130,7 +138,9 @@ export default class AuthController {
 
       return response.badRequest({
         statusResponse: 'Client error',
-        data: { message: i18n.formatMessage('login.error') }
+        data: {
+          message: i18n.formatMessage('login.error')
+        }
       })
     }
 
@@ -146,9 +156,11 @@ export default class AuthController {
       })
     }
 
-    if (user.rememberMeToken) {
+    const { id, rememberMeToken } = user
+
+    if (rememberMeToken) {
       const currentToken = await ApiToken.query()
-        .where({ user_id: user.id, token: user.rememberMeToken })
+        .where({ user_id: id, token: rememberMeToken })
         .first()
 
       return response.ok({
@@ -164,16 +176,16 @@ export default class AuthController {
       })
     }
 
-    const newToken = await auth.use('api').attempt(email, password, {
+    const { type, token, tokenHash, expiresAt } = await auth.use('api').attempt(email, password, {
       expiresIn: '1year',
     })
 
     await ApiToken.query()
-      .where({ user_id: user.id, token: newToken.tokenHash })
-      .update({ token_no_hash: newToken.token })
+      .where({ user_id: id, token: tokenHash })
+      .update({ token_no_hash: token })
 
     if (remember_me_token) {
-      await user.merge({ rememberMeToken: newToken.tokenHash }).save()
+      await user.merge({ rememberMeToken: tokenHash }).save()
     }
 
     return response.ok({
@@ -181,9 +193,9 @@ export default class AuthController {
       data: {
         message: i18n.formatMessage('login'),
         auth: {
-          type: newToken.type,
-          token: newToken.token,
-          expires_at: newToken.expiresAt?.toFormat(Service.formatDate)
+          type,
+          token,
+          expires_at: expiresAt?.toFormat(Service.formatDate)
         }
       }
     })
@@ -202,13 +214,18 @@ export default class AuthController {
    *            $ref: '#/components/schemas/LogoutSchema'
    */
   public async logout({ response, i18n, auth }: HttpContextContract) {
-    const user = await User.find(auth.use('api').user?.id)
+    const { id } = auth.use('api').user!
 
-    await user?.merge({ rememberMeToken: null })?.save()
+    await User.query()
+      .where({ id })
+      .update({ rememberMeToken: null })
 
-    await ApiToken.query().where({ user_id: user?.id }).delete()
+    await ApiToken.query()
+      .where({ user_id: id })
+      .delete()
 
-    const revoked = await ApiToken.query().where({ user_id: user?.id })
+    const revoked = await ApiToken.query()
+      .where({ user_id: id })
 
     return response.ok({
       statusResponse: 'Success',
@@ -232,12 +249,10 @@ export default class AuthController {
    *            $ref: '#/components/schemas/MeSchema'
    */
   public async me({ i18n, response, auth }: HttpContextContract) {
-    const { user } = auth.use('api')
+    const { id } = auth.use('api').user!
 
-    const { id, email } = user!
-
-    const user_db = await User.query()
-      .where({ id, email })
+    const user = await User.query()
+      .where({ id })
       .preload('profile', profile => {
         profile.preload('lang')
       })
@@ -248,7 +263,7 @@ export default class AuthController {
       statusResponse: 'Success',
       data: {
         message: i18n.formatMessage('auth.user'),
-        user: user_db
+        user
       }
     })
   }

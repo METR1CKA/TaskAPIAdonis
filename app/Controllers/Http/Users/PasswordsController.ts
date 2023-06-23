@@ -4,68 +4,98 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import PasswordAuthValidator from 'App/Validators/Passwords/PasswordAuthValidator'
 import PasswordIdValidator from 'App/Validators/Passwords/PasswordIdValidator'
 import Service from '@ioc:Adonis/Providers/Services'
-import MessagesI18n from 'App/Services/MessagesI18n'
 
-export default class PasswordsController extends MessagesI18n {
-  public async updateAuth({ request, response, auth }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
+export default class PasswordsController {
+  public async updateAuth({ request, response, auth, i18n }: HttpContextContract) {
+    try {
+      await request.validate(PasswordAuthValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
 
-    const user = await User.find(auth.user?.id)
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error.message
+        }
+      })
+    }
+
+    const { id } = auth.use('api').user!
+
+    const user = await User.find(id)
 
     if (!user) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'User'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound')
+        }
       })
     }
 
-    try {
-      var authPasswords = await request.validate(PasswordAuthValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
-
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
-      })
-    }
-
-    const { currentPassword, newPassword } = authPasswords
+    const { currentPassword, newPassword } = request.body()
 
     const isCorrectPassword = await Hash.verify(user.password, currentPassword)
 
     if (!isCorrectPassword) {
-      return Service.httpResponse(400, this.getMessage('password.error'), { isCorrectPassword })
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('password.error'),
+          isCorrectPassword
+        }
+      })
     }
 
     await user.merge({ password: newPassword }).save()
 
-    return Service.httpResponse(200, this.getMessage('updated'))
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('updated')
+      }
+    })
   }
 
-  public async updateId({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
+  public async updateId({ request, response, params, i18n }: HttpContextContract) {
+    try {
+      await request.validate(PasswordIdValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
+
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error.message,
+        }
+      })
+    }
+
+    const { newPassword } = request.body()
 
     const user = await User.find(params.id)
 
     if (!user) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'User'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'User'
+        }
       })
     }
 
-    try {
-      var idPasswords = await request.validate(PasswordIdValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+    await user.merge({ password: newPassword }).save()
 
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
-      })
-    }
-
-    await user.merge({ password: idPasswords.newPassword }).save()
-
-    return Service.httpResponse(200, this.getMessage('updated'))
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('updated')
+      }
+    })
   }
 }
