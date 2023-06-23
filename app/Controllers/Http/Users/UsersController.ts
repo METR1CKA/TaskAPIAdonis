@@ -77,7 +77,14 @@ export default class UsersController {
     }
 
     const {
-      email, password, role_id, name, lastname, phone, address, lang_id
+      email,
+      password,
+      role_id,
+      name,
+      lastname,
+      phone,
+      address,
+      lang_id
     } = request.body()
 
     const role = await Role.find(role_id)
@@ -160,7 +167,16 @@ export default class UsersController {
       })
     }
 
-    const { email, active, role_id, name, lastname, phone, address, lang_id } = request.body()
+    const {
+      email,
+      active,
+      role_id,
+      name,
+      lastname,
+      phone,
+      address,
+      lang_id
+    } = request.body()
 
     const role = await Role.find(role_id)
 
@@ -225,9 +241,9 @@ export default class UsersController {
     })
   }
 
-  /*
+  /**
    *
-   * */
+   */
   public async delete({ i18n, response, params }: HttpContextContract) {
     const user = await User.find(params.id)
 
