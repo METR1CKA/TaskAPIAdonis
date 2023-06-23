@@ -2,97 +2,138 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Role from 'App/Models/Users/Role'
 import RoleValidator from 'App/Validators/Roles/RoleValidator'
 import Service from '@ioc:Adonis/Providers/Services'
-import MessagesI18n from 'App/Services/MessagesI18n'
 
-export default class RolesController extends MessagesI18n {
-  public async read({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+export default class RolesController {
+  public async read({ i18n, response, params }: HttpContextContract) {
     const roles = await Role.query()
       .preload('users')
       .orderBy('id', 'asc')
 
     if (params.id) {
-      const role = roles.find(e => e.id == params.id)
+      const role = roles.find(role => role.id == params.id)
 
       if (!role) {
-        return Service.httpResponse(404, this.getMessage('notFound'), {
-          dataNotFound: 'Role'
+        return response.notFound({
+          statusResponse: 'Client error',
+          data: {
+            message: i18n.formatMessage('notFound'),
+            dataNotFound: 'Role'
+          }
         })
       }
 
-      return Service.httpResponse(200, this.getMessage('data'), {
-        role
+      return response.ok({
+        statusResponse: 'Success',
+        data: {
+          message: i18n.formatMessage('data'),
+          role
+        }
       })
     }
 
-    return Service.httpResponse(200, this.getMessage('data'), {
-      total: roles.length,
-      roles
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('data'),
+        total: roles.length,
+        roles
+      }
     })
   }
 
-  public async create({ request, response }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async create({ request, response, i18n }: HttpContextContract) {
     try {
-      var dataRole = await request.validate(RoleValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+      await request.validate(RoleValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
 
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error.message
+        }
       })
     }
+
+    const dataRole = request.only([
+      'name',
+      'active',
+      'description'
+    ])
 
     await Role.create(dataRole)
 
-    return Service.httpResponse(201, this.getMessage('created'))
+    return response.created({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('created')
+      }
+    })
   }
 
-  public async update({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
+  public async update({ request, response, params, i18n }: HttpContextContract) {
+    try {
+      await request.validate(RoleValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
+
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error.message
+        }
+      })
+    }
 
     const role = await Role.find(params.id)
 
     if (!role) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'Role'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'Role'
+        }
       })
     }
 
-    try {
-      var dataUpdate = await request.validate(RoleValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
-
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
-      })
-    }
+    const dataUpdate = request.only([
+      'name',
+      'active',
+      'description'
+    ])
 
     await role.merge(dataUpdate).save()
 
-    return Service.httpResponse(200, this.getMessage('updated'))
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('updated')
+      }
+    })
   }
 
-  public async delete({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async delete({ i18n, response, params }: HttpContextContract) {
     const role = await Role.find(params.id)
 
     if (!role) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
+      return response.notFound({
+        statusResponse: 'Client error',
         dataNotFound: 'Role'
       })
     }
 
     await role.merge({ active: !role.active }).save()
 
-    return Service.httpResponse(200, this.getMessage(`status.${role.active ? 'activated' : 'desactivated'}`))
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage(`status.${role.active ? 'activated' : 'desactivated'}`)
+      }
+    })
   }
 }
