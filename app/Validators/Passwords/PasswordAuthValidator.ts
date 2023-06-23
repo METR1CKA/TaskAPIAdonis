@@ -1,4 +1,4 @@
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class PasswordAuthValidator {
@@ -29,4 +29,25 @@ export default class PasswordAuthValidator {
       rules.confirmed('newPassword')
     ])
   })
+
+  public messages: CustomMessages = {
+    required: this.ctx.i18n.formatMessage('field', {
+      field: '{{ field }}'
+    }),
+    confirmed: this.ctx.i18n.formatMessage('field.confirm', {
+      field: '{{ field }}'
+    }),
+    string: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
+    number: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
+    boolean: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
+  }
 }
