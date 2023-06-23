@@ -1,4 +1,4 @@
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ViewValidator {
@@ -45,4 +45,26 @@ export default class ViewValidator {
       rules.required()
     ]),
   })
+
+  public messages: CustomMessages = {
+    required: this.ctx.i18n.formatMessage('field', {
+      field: '{{ field }}'
+    }),
+    maxLength: this.ctx.i18n.formatMessage('maxLength', {
+      field: '{{ field }}',
+      args: '{{ options.maxLength }}'
+    }),
+    string: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
+    number: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
+    boolean: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
+  }
 }

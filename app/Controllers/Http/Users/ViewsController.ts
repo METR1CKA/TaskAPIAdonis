@@ -6,7 +6,9 @@ import ViewValidator from 'App/Validators/View/ViewValidator'
 
 export default class ViewsController {
   public async get({ i18n, response, params }: HttpContextContract) {
-    const views = (await View.all()).map(view => {
+    const views = (
+      await View.all()
+    ).map(view => {
       view.name = i18n.formatMessage(view.key)
       view.description = i18n.formatMessage(view.keyd)
       return view
@@ -54,11 +56,20 @@ export default class ViewsController {
 
       return response.badRequest({
         statusResponse: 'Client error',
-        data: { message: error.message }
+        data: {
+          message: error.message
+        }
       })
     }
 
-    const viewData = request.body()
+    const viewData = request.only([
+      'category_id',
+      'active',
+      'name',
+      'order_index',
+      'url',
+      'description',
+    ])
 
     const view = await View.create(viewData)
 
@@ -66,7 +77,9 @@ export default class ViewsController {
 
     return response.created({
       statusResponse: 'Success',
-      data: { message: i18n.formatMessage('created') }
+      data: {
+        message: i18n.formatMessage('created')
+      }
     })
   }
 
@@ -80,11 +93,20 @@ export default class ViewsController {
 
       return response.badRequest({
         statusResponse: 'Client error',
-        data: { message: error.message }
+        data: {
+          message: error.message
+        }
       })
     }
 
-    const viewUpdate = request.body()
+    const viewUpdate = request.only([
+      'category_id',
+      'active',
+      'name',
+      'order_index',
+      'url',
+      'description',
+    ])
 
     const view = await View.find(params.id)
 
@@ -104,7 +126,9 @@ export default class ViewsController {
 
     return response.ok({
       statusResponse: 'Success',
-      data: { message: i18n.formatMessage('updated') }
+      data: {
+        message: i18n.formatMessage('updated')
+      }
     })
   }
 
