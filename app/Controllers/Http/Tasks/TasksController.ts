@@ -2,122 +2,186 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Task from 'App/Models/Tasks/Task'
 import TaskValidator from 'App/Validators/Tasks/TaskValidator'
 import Service from '@ioc:Adonis/Providers/Services'
-import MessagesI18n from 'App/Services/MessagesI18n'
 
-export default class TasksController extends MessagesI18n {
-  public async get({ request, response, params, auth }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
-    const authUser = auth.use('api').user!
+export default class TasksController {
+  public async get({ i18n, response, params, auth }: HttpContextContract) {
+    const { id } = auth.use('api').user!
 
     const tasks = await Task.query()
       .whereHas('user', users => {
-        users.where('users.id', authUser.id)
+        users.where('users.id', id)
       })
       .where({ active: true })
       .orderBy('id', 'desc')
 
     if (params.id) {
-      const task = tasks.find(element => element.id == params.id)
+      const task = tasks.find(task => task.id == params.id)
 
       if (!task) {
-        return Service.httpResponse(404, this.getMessage('notFound'), {
-          dataNotFound: 'Task'
+        return response.notFound({
+          statusResponse: 'Client error',
+          data: {
+            message: i18n.formatMessage('notFound'),
+            dataNotFound: 'Task'
+          }
         })
       }
 
-      return Service.httpResponse(200, this.getMessage('data'), {
-        task
+      return response.ok({
+        statusResponse: 'Success',
+        data: {
+          message: i18n.formatMessage('data'),
+          task
+        }
       })
     }
 
-    return Service.httpResponse(200, this.getMessage('data'), {
-      total: tasks.length,
-      tasks
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('data'),
+        total: tasks.length,
+        tasks
+      }
     })
   }
 
-  public async create({ request, response, auth }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
-    const authUser = auth.use('api').user!
+  public async create({ request, response, auth, i18n }: HttpContextContract) {
+    const { id } = auth.use('api').user!
 
     try {
-      var create_task = await request.validate(TaskValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+      await request.validate(TaskValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
 
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error.message
+        }
       })
     }
 
-    const { title, description } = create_task
+    const { title, description } = request.body()
 
     await Task.create({
-      user_id: authUser.id,
+      user_id: id,
       title,
       description,
       active: true,
       completed: false
     })
 
-    return Service.httpResponse(201, this.getMessage('created'))
+    return response.created({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('created')
+      }
+    })
   }
 
-  public async update({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async update({ request, response, params, i18n }: HttpContextContract) {
     try {
-      var update_task = await request.validate(TaskValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+      await request.validate(TaskValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
 
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error.message
+        }
       })
     }
+
+    const update_task = request.only([
+      'title',
+      'description',
+    ])
 
     const task = await Task.find(params.id)
 
     if (!task) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'Task'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'Task'
+        }
       })
     }
 
     await task.merge(update_task).save()
 
-    return Service.httpResponse(200, this.getMessage('updated'))
+    return response.ok({
+      statusResponse: 'success',
+      data: {
+        message: i18n.formatMessage('updated')
+      }
+    })
   }
 
-  public async taskStatus({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
+  public async taskStatus({ request, response, params, i18n }: HttpContextContract) {
+    const { STATUS, COMPLETED_STATUS, ACTIVE_STATUS } = Task
+
+    const { status } = request.qs()
+
+    if (!status) {
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('queryNotFound'),
+          dataNotFound: 'status'
+        }
+      })
+    }
+
+    if (!Object.keys(STATUS).includes(status)) {
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('invalidStatus')
+        }
+      })
+    }
 
     const task = await Task.find(params.id)
 
     if (!task) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'Task'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'Task'
+        }
       })
     }
 
-    if (request.method() == 'PATCH') {
-      await task.merge({ completed: !task.completed }).save()
+    let key = ''
 
-      return Service.httpResponse(200, this.getMessage(
-        `task.${task.completed ? 'complete' : 'noComplete'}`
-      ))
+    if (COMPLETED_STATUS.includes(status)) {
+      task.completed = STATUS[status]
+
+      key = `task.${task.completed ? 'complete' : 'noComplete'}`
     }
 
-    await task.merge({ active: !task.active }).save()
+    if (ACTIVE_STATUS.includes(status)) {
+      task.active = STATUS[status]
 
-    return Service.httpResponse(200, this.getMessage(
-      `status.${task.active ? 'activated' : 'desactivated'}`
-    ))
+      key = `status.${task.active ? 'activated' : 'desactivated'}`
+    }
+
+    await task.save()
+
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage(key)
+      },
+    })
   }
 }
