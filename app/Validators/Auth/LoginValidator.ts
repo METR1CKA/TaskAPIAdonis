@@ -33,9 +33,17 @@ export default class LoginValidator {
   })
 
   public messages: CustomMessages = {
-    required: this.ctx.i18n.formatMessage('field', { field: '{{ field }}' }),
+    required: this.ctx.i18n.formatMessage('field', {
+      field: '{{ field }}'
+    }),
     email: this.ctx.i18n.formatMessage('email'),
-    string: this.ctx.i18n.formatMessage('field.type', { field: '{{ field }}', type: '{{ rule }}' }),
-    boolean: this.ctx.i18n.formatMessage('field.type', { field: '{{ field }}', type: '{{ rule }}' }),
+    string: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
+    boolean: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
   }
 }

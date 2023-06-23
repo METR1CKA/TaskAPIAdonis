@@ -69,11 +69,24 @@ export default class RegisterAuthValidator {
   })
 
   public messages: CustomMessages = {
-    required: this.ctx.i18n.formatMessage('field', { field: '{{ field }}' }),
+    required: this.ctx.i18n.formatMessage('field', {
+      field: '{{ field }}'
+    }),
     email: this.ctx.i18n.formatMessage('email'),
-    maxLength: this.ctx.i18n.formatMessage('maxLength', { field: '{{ field }}', args: '{{ options.maxLength }}' }),
-    confirmed: this.ctx.i18n.formatMessage('field.confirm', { field: '{{ field }}' }),
-    string: this.ctx.i18n.formatMessage('field.type', { field: '{{ field }}', type: '{{ rule }}' }),
-    number: this.ctx.i18n.formatMessage('field.type', { field: '{{ field }}', type: '{{ rule }}' }),
+    maxLength: this.ctx.i18n.formatMessage('maxLength', {
+      field: '{{ field }}',
+      args: '{{ options.maxLength }}'
+    }),
+    confirmed: this.ctx.i18n.formatMessage('field.confirm', {
+      field: '{{ field }}'
+    }),
+    string: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
+    number: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
   }
 }
