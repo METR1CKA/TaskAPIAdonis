@@ -48,7 +48,6 @@ export default class RoleView extends BaseModel {
   public view: BelongsTo<typeof View>
 
   // Functions
-
   public static async getRolesViews(): Promise<Role[]> {
     let roles_views: any[] = []
 
@@ -77,7 +76,7 @@ export default class RoleView extends BaseModel {
     return roles_views
   }
 
-  public static async sync(role: Role, views: number[]) {
+  public static async sync(role: Role, views: number[]): Promise<void> {
     const roles_views = await RoleView.query()
       .where({ role_id: role.id })
 

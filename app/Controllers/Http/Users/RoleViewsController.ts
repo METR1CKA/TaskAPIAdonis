@@ -9,7 +9,7 @@ export default class RoleViewsController {
     const roles_views = await RoleView.getRolesViews()
 
     if (params.id) {
-      const role_view = roles_views.find(role => role.id == params.id)
+      const role_view = roles_views.find(rv => rv.id == params.id)
 
       if (!role_view) {
         return response.notFound({
