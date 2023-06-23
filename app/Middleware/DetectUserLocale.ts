@@ -8,7 +8,9 @@ export default class DetectUserLocale {
     if (!lang) {
       return response.badRequest({
         statusResponse: 'Client error',
-        data: { message: i18n.formatMessage('lang.error') }
+        data: {
+          message: i18n.formatMessage('lang.error')
+        }
       })
     }
 

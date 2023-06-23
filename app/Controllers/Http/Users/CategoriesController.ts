@@ -1,106 +1,152 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Service from '@ioc:Adonis/Providers/Services'
+import Translation from 'App/Models/Translation'
 import Category from 'App/Models/Users/Category'
-import MessagesI18n from 'App/Services/MessagesI18n'
 import CategoryValidator from 'App/Validators/Category/CategoryValidator'
 
-export default class CategoriesController extends MessagesI18n {
-  public async get({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+export default class CategoriesController {
+  public async get({ i18n, response, params }: HttpContextContract) {
     const categories = (
       await Category.all()
     ).map(cat => {
-      cat.name = this.getMessage(cat.key)
-      cat.description = this.getMessage(cat.keyd)
+      cat.name = i18n.formatMessage(cat.key)
+      cat.description = i18n.formatMessage(cat.keyd)
       return cat
     })
 
     if (params.id) {
-      const category = categories.find(cat => cat.id == params.id)
+      const category = categories.find(category => category.id == params.id)
 
       if (!category) {
-        return Service.httpResponse(404, this.getMessage('notFound'), {
-          dataNotFound: 'Category'
+        return response.notFound({
+          statusResponse: 'Client error',
+          data: {
+            message: i18n.formatMessage('not_found'),
+            dataNotFound: 'Category'
+          }
         })
       }
 
-      return Service.httpResponse(200, this.getMessage('data'), {
-        category
+      return response.ok({
+        statusResponse: 'Success',
+        data: {
+          message: i18n.formatMessage('data'),
+          category
+        }
       })
     }
 
-    return Service.httpResponse(200, this.getMessage('data'), {
-      total: categories.length,
-      categories
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('data'),
+        total: categories.length,
+        categories
+      }
     })
   }
 
-  public async create({ request, response }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async create({ request, response, i18n }: HttpContextContract) {
     try {
-      var categoryCreate = await request.validate(CategoryValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+      await request.validate(CategoryValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation.messages)
 
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error.message,
+        }
       })
     }
 
-    const category = await Category.create(categoryCreate)
+    const categoryData = request.only([
+      'name',
+      'active',
+      'order_index',
+      'description'
+    ])
 
-    await this.dbTranslations(category, 'create')
+    const category = await Category.create(categoryData)
 
-    return Service.httpResponse(201, this.getMessage('created'))
+    await Translation.createKeys(category)
+
+    return response.created({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('created')
+      }
+    })
   }
 
-  public async update({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async update({ request, response, params, i18n }: HttpContextContract) {
     try {
-      var categoryUpdate = await request.validate(CategoryValidator)
-    } catch (error) {
-      Service.logsOfDeveloper(error)
+      await request.validate(CategoryValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation)
 
-      return Service.httpResponse(400, this.validationErr(error), {
-        errors: error?.messages?.errors[0]
+      const { messages: { errors: [error] } } = validation
+
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error.message
+        }
       })
     }
+
+    const categoryData = request.only([
+      'name',
+      'active',
+      'order_index',
+      'description'
+    ])
 
     const category = await Category.find(params.id)
 
     if (!category) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'Category'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'Category'
+        }
       })
     }
 
-    await category.merge(categoryUpdate).save()
+    await category.merge(categoryData).save()
 
-    await this.dbTranslations(category, 'update')
+    await Translation.updateKeys(category, i18n.locale)
 
-    return Service.httpResponse(200, this.getMessage('updated'))
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('updated')
+      }
+    })
   }
 
-  public async delete({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async delete({ i18n, response, params }: HttpContextContract) {
     const category = await Category.find(params.id)
 
     if (!category) {
-      return Service.httpResponse(404, this.getMessage('notFound'), {
-        dataNotFound: 'Category'
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('notFound')
+        }
       })
     }
 
     await category.merge({ active: !category.active }).save()
 
-    return Service.httpResponse(200, this.getMessage(`status.${category.active ? 'activated' : 'desactivated'}`))
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage(`status.${category.active ? 'activated' : 'desactivated'}`)
+      }
+    })
   }
 }
