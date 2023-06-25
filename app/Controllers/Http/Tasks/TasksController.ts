@@ -140,15 +140,6 @@ export default class TasksController {
       })
     }
 
-    if (!Object.keys(STATUS).includes(status)) {
-      return response.badRequest({
-        statusResponse: 'Client error',
-        data: {
-          message: i18n.formatMessage('invalidStatus')
-        }
-      })
-    }
-
     const task = await Task.find(params.id)
 
     if (!task) {
@@ -157,6 +148,15 @@ export default class TasksController {
         data: {
           message: i18n.formatMessage('notFound'),
           dataNotFound: 'Task'
+        }
+      })
+    }
+
+    if (!Object.keys(STATUS).includes(status)) {
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('invalidStatus')
         }
       })
     }
