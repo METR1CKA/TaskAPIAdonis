@@ -1,10 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Service from '@ioc:Adonis/Providers/Services'
-import MessagesI18n from 'App/Services/MessagesI18n'
 import FileValidator from 'App/Validators/Tasks/FileValidator'
 
-export default class FilesController extends MessagesI18n {
+export default class FilesController {
   public async uploadFile({ request, response, i18n }: HttpContextContract) {
     try {
       await request.validate(FileValidator)

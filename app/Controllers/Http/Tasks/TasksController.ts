@@ -134,7 +134,9 @@ export default class TasksController {
       return response.badRequest({
         statusResponse: 'Client error',
         data: {
-          message: i18n.formatMessage('queryNotFound'),
+          message: i18n.formatMessage('query', {
+            data: 'status'
+          }),
           dataNotFound: 'status'
         }
       })
