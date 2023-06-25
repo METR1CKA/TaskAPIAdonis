@@ -1,4 +1,4 @@
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract, } from '@ioc:Adonis/Core/HttpContext'
 
 export default class TaskValidator {
@@ -23,4 +23,14 @@ export default class TaskValidator {
       rules.required()
     ])
   })
+
+  public messages: CustomMessages = {
+    required: this.ctx.i18n.formatMessage('field', {
+      field: '{{ field }}'
+    }),
+    string: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
+      type: '{{ rule }}'
+    }),
+  }
 }
