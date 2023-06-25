@@ -36,9 +36,7 @@ export default class FilesController {
   public async files({ request, response, params, i18n }: HttpContextContract) {
     const { filename } = params
 
-    const existsFile = await Drive.exists(filename)
-
-    if (!existsFile) {
+    if (!await Drive.exists(filename)) {
       return response.notFound({
         statusResponse: 'Client error',
         data: {
