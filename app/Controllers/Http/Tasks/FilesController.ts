@@ -2,64 +2,61 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Service from '@ioc:Adonis/Providers/Services'
 import MessagesI18n from 'App/Services/MessagesI18n'
-import Profile from 'App/Models/Users/Profile'
+import FileValidator from 'App/Validators/Tasks/FileValidator'
 
 export default class FilesController extends MessagesI18n {
-  public validations = {
-    size: '50mb',
-    extnames: [
-      'jpg',
-      'png',
-      'jpeg',
-      'gif',
-      'svg',
-      'jfif',
-    ],
-  }
+  public async uploadFile({ request, response, i18n }: HttpContextContract) {
+    try {
+      await request.validate(FileValidator)
+    } catch (validation) {
+      Service.logsOfDeveloper(validation?.messages)
 
-  public async uploadFile({ request, response }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
+      const { messages: { errors: [error] } } = validation
 
-    const file = request.file('file', this.validations)
-
-    if (!file) {
-      return Service.httpResponse(204, this.getMessage('nocontent'))
+      return response.badRequest({
+        statusResponse: 'Client error',
+        data: {
+          message: error?.message
+        }
+      })
     }
 
-    if (!file.isValid) {
-      const errMessage = this.validationErrFile(file.errors[0].type, this.validations)
+    const file = request.file('file')!
 
-      return Service.httpResponse(400, errMessage)
-    }
+    const filename = await Service.storeFile(file)
 
-    const filename = await Service.storeFile(file, this.validations.extnames)
-
-    return Service.httpResponse(201, this.getMessage('file'), {
-      filename
+    return response.created({
+      statusResponse: 'success',
+      data: {
+        message: i18n.formatMessage('file'),
+        filename
+      }
     })
   }
 
-  public async files({ request, response, params }: HttpContextContract) {
-    this.setLocaleRequest(request)
-    Service.setResponseObject(response)
-
+  public async files({ request, response, params, i18n }: HttpContextContract) {
     const { filename } = params
 
     const existsFile = await Drive.exists(filename)
 
     if (!existsFile) {
-      return Service.httpResponse(404, this.getMessage('file.notExists'), {
-        existsFile
+      return response.notFound({
+        statusResponse: 'Client error',
+        data: {
+          message: i18n.formatMessage('file.notExists'),
+        }
       })
     }
 
     if (request.method() == 'DELETE') {
-      await Profile.query().where({ image: filename }).update({ image: null })
-
       await Drive.delete(filename)
 
-      return Service.httpResponse(200, this.getMessage('file.deleted'))
+      return response.ok({
+        statusResponse: 'Success',
+        data: {
+          message: i18n.formatMessage('file.deleted')
+        }
+      })
     }
 
     const file = await Drive.getStream(filename)

@@ -16,6 +16,12 @@
 $ npm install
 ```
 
+O
+
+```console
+$ pnpm install
+```
+
 2. Configurar un archivo `.env` en base al archivo [`.env.example`](./.env.example)
 
 3. Poner en `false` el `loader` de `db` antes de correr las `migraciones` y los `seeders`, en el archivo `Env`
@@ -30,7 +36,7 @@ DB_I18n=false;
 $ npm run db:fresh
 ```
 
-5. Poner en `true` el `loader` de `db` antes de correr las `migraciones` y los `seeders`, en el archivo `Env`
+5. Poner en `true` el `loader` de `db` despues de correr las `migraciones` y los `seeders`, en el archivo `Env`
 
 ```env
 DB_I18n=true;
