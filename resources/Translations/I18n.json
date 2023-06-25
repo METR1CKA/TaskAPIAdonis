@@ -458,5 +458,25 @@
     "locale": "en",
     "key": "task.noComplete",
     "message": "The task has not been completed successfully"
+  },
+  {
+    "locale": "es",
+    "key": "query",
+    "message": "No se proporciono un valor correcto para {data}"
+  },
+  {
+    "locale": "en",
+    "key": "query",
+    "message": "A correct value was not supplied to {data}"
+  },
+  {
+    "locale": "es",
+    "key": "invalidStatus",
+    "message": "Estado inválido"
+  },
+  {
+    "locale": "en",
+    "key": "invalidStatus",
+    "message": "Invalid status"
   }
 ]
