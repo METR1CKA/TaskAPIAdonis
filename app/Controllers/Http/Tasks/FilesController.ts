@@ -33,6 +33,23 @@ export default class FilesController {
     })
   }
 
+  public async getFile({ response, filename }) {
+    return response.stream(
+      await Drive.getStream(filename)
+    )
+  }
+
+  public async deleteFile({ response, i18n, filename }) {
+    await Drive.delete(filename)
+
+    return response.ok({
+      statusResponse: 'Success',
+      data: {
+        message: i18n.formatMessage('file.deleted')
+      }
+    })
+  }
+
   public async files({ request, response, params, i18n }: HttpContextContract) {
     const { filename } = params
 
@@ -46,18 +63,9 @@ export default class FilesController {
     }
 
     if (request.method() == 'DELETE') {
-      await Drive.delete(filename)
-
-      return response.ok({
-        statusResponse: 'Success',
-        data: {
-          message: i18n.formatMessage('file.deleted')
-        }
-      })
+      return this.deleteFile({ response, i18n, filename })
     }
 
-    const file = await Drive.getStream(filename)
-
-    return response.stream(file)
+    return this.getFile({ response, filename })
   }
 }
