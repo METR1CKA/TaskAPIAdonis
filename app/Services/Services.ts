@@ -33,13 +33,13 @@ export default class Services {
     if (Env.get('NODE_ENV') == 'development') console.log(Err)
   }
 
-  public generateSlug({ value, separator, extname }): string {
-    value = value.toLowerCase()
-    value = value.replace(/[`~!@#$%^&*()_\-+=\[\]{};:'"\\|\/,<>.?\s]/g, ' ')
-    value = value.replace(extname, '')
-    value = value.replace(/^\s+|\s+$/gm, '')
-    value = value.replace(/\s+/g, separator)
+  public generateFileSlug({ value, separator, extname }): string {
     return value
+      .toLowerCase()
+      .replace(/[`~!@#$%^&*()_\-+=\[\]{};:'"\\|\/,<>.?\s]/g, ' ')
+      .replace(extname, '')
+      .replace(/^\s+|\s+$/gm, '')
+      .replace(/\s+/g, separator)
   }
 
   public async storeFile(file: MultipartFileContract): Promise<string> {
@@ -49,7 +49,7 @@ export default class Services {
 
     const extname = extnames.find(extn => clientName.includes(`.${extn}`))
 
-    const slugCurrentName = this.generateSlug({
+    const slugCurrentName = this.generateFileSlug({
       value: clientName,
       separator: '_',
       extname
