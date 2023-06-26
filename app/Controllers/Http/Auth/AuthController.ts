@@ -25,7 +25,13 @@ export default class AuthController {
     }
 
     const {
-      email, password, name, lastname, phone, address, lang_id
+      email,
+      password,
+      name,
+      lastname,
+      phone,
+      address,
+      lang_id
     } = request.body()
 
     const lang = await Lang.find(lang_id)
