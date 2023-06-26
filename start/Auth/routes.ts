@@ -38,12 +38,12 @@ Route.group(() => {
    *    summary: Sign up
    *    description: Register to app
    *    requestBody:
-   *      $ref: '#/components/requestBodies/RegisterRequest'
+   *      $ref: '#/components/requestBodies/UserCreateRequest'
    *    responses:
    *      '200':
    *        $ref: '#/components/responses/DefaultResponse'
    *      '400':
-   *        $ref: '#/components/responses/RegisterBadRequest'
+   *        $ref: '#/components/responses/UserCreateBadRequest'
    *      '404':
    *        $ref: '#/components/responses/ResponseNotFound'
    */
@@ -89,7 +89,8 @@ Route.group(() => {
      *        $ref: '#/components/responses/MeSuccess'
      */
     Route.get('me', 'AuthController.me')
-  }).middleware('auth')
+  })
+    .middleware('auth')
 })
   .prefix('api/v1/auth')
   .namespace('App/Controllers/Http/Auth')

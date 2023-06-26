@@ -16,9 +16,13 @@ export default class UsersController {
    *      content:
    *        application/json:
    *          schema:
-   *            anyOf:
-   *              - $ref: '#/components/schemas/GetAllUserSchema'
-   *              - $ref: '#/components/schemas/GetOneUserSchema'
+   *            $ref: '#/components/schemas/GetAllUserSchema'
+   *    UserGetOneSuccess:
+   *      description: Get user by id
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/GetOneUserSchema'
    */
   public async read({ i18n, response, params }: HttpContextContract) {
     const users = await User.query()
@@ -241,9 +245,6 @@ export default class UsersController {
     })
   }
 
-  /**
-   *
-   */
   public async delete({ i18n, response, params }: HttpContextContract) {
     const user = await User.find(params.id)
 

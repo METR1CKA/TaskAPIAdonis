@@ -1,6 +1,6 @@
 components:
   schemas:
-    RouteNotFound:
+    ExistsUserSchema:
       type: object
       properties:
         statusResponse:
@@ -10,20 +10,9 @@ components:
           properties:
             message:
               type: string
-            method:
-              type: string
-            routeNotFound:
-              type: string
-    ErrorsValidationSchema:
-      type: object
-      properties:
-        rule:
-          type: string
-        field:
-          type: string
-        message:
-          type: string
-    ValidationError:
+            existUser:
+              type: boolean
+    ResponseText:
       type: object
       properties:
         statusResponse:
@@ -34,8 +23,8 @@ components:
             message:
               type: string
             errors:
-              $ref: "#/components/schemas/ErrorsValidationSchema"
-    NotFound:
+              type: string
+    LoginSchema:
       type: object
       properties:
         statusResponse:
@@ -45,9 +34,17 @@ components:
           properties:
             message:
               type: string
-            dataNotFound:
-              type: string
-    DefaultDataResponse:
+            auth:
+              type: object
+              properties:
+                type:
+                  type: string
+                token:
+                  type: string
+                expires_at:
+                  type: string
+                  example: "dd/MM/yyyy  HH:mm:ss"
+    LogoutSchema:
       type: object
       properties:
         statusResponse:
@@ -57,9 +54,17 @@ components:
           properties:
             message:
               type: string
-    LocaleSchema:
-      type: string
-      enum: [es, en]
-      default: es
-    IdSchema:
-      type: number
+            tokensRevoked:
+              type: boolean
+    MeSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            user:
+              $ref: "#/components/schemas/User"

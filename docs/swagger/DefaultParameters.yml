@@ -7,3 +7,10 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/LocaleSchema"
+    IdParam:
+      name: id
+      in: path
+      description: Id to find data in database
+      required: false
+      schema:
+        $ref: "#/components/schemas/IdSchema"

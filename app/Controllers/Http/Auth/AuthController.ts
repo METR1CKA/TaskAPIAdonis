@@ -170,7 +170,7 @@ export default class AuthController {
           auth: {
             type: 'bearer',
             token: currentToken?.tokenNoHash,
-            expires_at: currentToken?.expires_at?.toFormat(Service.formatDate)
+            expires_at: currentToken?.expires_at?.toFormat(Service.getFormatDate())
           }
         }
       })
@@ -195,7 +195,7 @@ export default class AuthController {
         auth: {
           type,
           token,
-          expires_at: expiresAt?.toFormat(Service.formatDate)
+          expires_at: expiresAt?.toFormat(Service.getFormatDate())
         }
       }
     })

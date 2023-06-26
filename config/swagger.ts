@@ -6,7 +6,7 @@ export default {
 	specEnabled: true, //disable or enable swagger.json route
 	specUrl: '/swagger.json',
 
-	middleware: ['lang'], // middlewares array, for protect your swagger docs and spec endpoints
+	middleware: [], // middlewares array, for protect your swagger docs and spec endpoints
 
 	// Options to swagger
 	options: {

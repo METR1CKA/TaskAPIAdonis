@@ -1,0 +1,114 @@
+components:
+  schemas:
+    GetOneCategorySchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            category:
+              $ref: "#/components/schemas/Category"
+    GetAllCategorySchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            total:
+              type: number
+            categories:
+              type: array
+              items:
+                $ref: "#/components/schemas/Category"
+    GetOneRoleSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            role:
+              $ref: "#/components/schemas/Role"
+    GetAllRoleSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            total:
+              type: number
+            categories:
+              type: array
+              items:
+                $ref: "#/components/schemas/Role"
+    GetOneUserSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            user:
+              $ref: "#/components/schemas/User"
+    GetAllUserSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            total:
+              type: number
+            users:
+              type: array
+              items:
+                $ref: "#/components/schemas/User"
+    GetOneViewSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            view:
+              $ref: "#/components/schemas/View"
+    GetAllViewSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            total:
+              type: number
+            views:
+              type: array
+              items:
+                $ref: "#/components/schemas/View"

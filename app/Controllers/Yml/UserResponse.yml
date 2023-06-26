@@ -1,0 +1,9 @@
+components:
+  requestBodies:
+    UserCreateRequest:
+      description: Data for register in app
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RegisterValidator"
