@@ -1,1 +1,1446 @@
-{"openapi":"3.0.0","info":{"title":"Application with swagger docs","version":"1.0.0","description":"My application with swagger docs"},"paths":{},"components":{},"tags":[]}
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API TASKS",
+    "version": "1.0.0",
+    "description": "Api documentation with swagger docs",
+    "termsOfService": "http://127.0.0.1:3333/",
+    "contact": {
+      "email": "ferchosalazar054@gmail.com"
+    },
+    "license": {}
+  },
+  "externalDocs": {
+    "url": "http://127.0.0.1:3333/docs",
+    "description": "About Api Tasks"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:3333",
+      "description": "Base url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Endpoints",
+      "description": "Main routes"
+    },
+    {
+      "name": "Auth",
+      "description": "Auth group"
+    },
+    {
+      "name": "Users",
+      "description": "Users group"
+    },
+    {
+      "name": "Categories",
+      "description": "Categories group"
+    },
+    {
+      "name": "Views",
+      "description": "Views group"
+    },
+    {
+      "name": "Roles_views",
+      "description": "Roles and views group"
+    },
+    {
+      "name": "Passwords",
+      "description": "Passwords group"
+    },
+    {
+      "name": "Roles",
+      "description": "Roles group"
+    },
+    {
+      "name": "Files",
+      "description": "Files group"
+    },
+    {
+      "name": "Tasks",
+      "description": "Tasks group"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "requestBodies": {
+      "LoginRequest": {
+        "description": "Data for sign in the app",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LoginValidator"
+            }
+          }
+        }
+      },
+      "UsersUpdateRequest": {
+        "description": null,
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UpdateValidator"
+            }
+          }
+        }
+      },
+      "UserCreateRequest": {
+        "description": "Data for register in app",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RegisterValidator"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "LoginBadRequest": {
+        "description": "Bad response",
+        "content": {
+          "application/json": {
+            "description": "Validation for request or user exists",
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ValidationError"
+                },
+                {
+                  "$ref": "#/components/schemas/ResponseText"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "LoginSuccess": {
+        "description": "Success sign in",
+        "content": {
+          "application/json": {
+            "description": "Generation of token to access",
+            "schema": {
+              "$ref": "#/components/schemas/LoginSchema"
+            }
+          }
+        }
+      },
+      "LogoutSuccess": {
+        "description": "Success sign out",
+        "content": {
+          "application/json": {
+            "description": "Token revocater",
+            "schema": {
+              "$ref": "#/components/schemas/LogoutSchema"
+            }
+          }
+        }
+      },
+      "MeSuccess": {
+        "description": "Success to get auth User data",
+        "content": {
+          "application/json": {
+            "description": "Token revocater",
+            "schema": {
+              "$ref": "#/components/schemas/MeSchema"
+            }
+          }
+        }
+      },
+      "UsersGetSuccess": {
+        "description": "Get user succcessful",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetAllUserSchema"
+            }
+          }
+        }
+      },
+      "UserGetOneSuccess": {
+        "description": "Get user by id",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetOneUserSchema"
+            }
+          }
+        }
+      },
+      "DefaultResponse": {
+        "description": "Base url",
+        "content": {
+          "application/json": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/components/schemas/DefaultDataResponse"
+            }
+          }
+        }
+      },
+      "ResponseNotFound": {
+        "description": "Not found response",
+        "content": {
+          "application/json": {
+            "description": "Not Found Role",
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/NotFound"
+                },
+                {
+                  "$ref": "#/components/schemas/RouteNotFound"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "user_id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "dd/MM/yyyy  HH:mm:ss"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "dd/MM/yyyy  HH:mm:ss"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "Translation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "dd/MM/yyyy  HH:mm:ss"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "dd/MM/yyyy  HH:mm:ss"
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "order_index": {
+            "type": "number"
+          },
+          "keyd": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "views": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/View"
+            }
+          }
+        }
+      },
+      "Lang": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "profiles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Profile"
+            }
+          }
+        }
+      },
+      "Profile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "lang": {
+            "$ref": "#/components/schemas/Lang"
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "views": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/View"
+            }
+          },
+          "role_views": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleView"
+            }
+          }
+        }
+      },
+      "RoleView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "role_id": {
+            "type": "number"
+          },
+          "view_id": {
+            "type": "number"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "view": {
+            "$ref": "#/components/schemas/View"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "email": {
+            "type": "string"
+          },
+          "rememberMeToken": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "dd-MM-yyyy  HH:mm:ss"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "dd-MM-yyyy  HH:mm:ss"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/Profile"
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          }
+        }
+      },
+      "View": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "category_id": {
+            "type": "number"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "order_index": {
+            "type": "number"
+          },
+          "url": {
+            "type": "string"
+          },
+          "keyd": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          },
+          "role_views": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleView"
+            }
+          },
+          "role": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            }
+          }
+        }
+      },
+      "LoginValidator": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "remember_me_token": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CategoryValidator": {
+        "type": "object",
+        "properties": {
+          "active": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "order_index": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "PasswordAuthValidator": {
+        "type": "object",
+        "properties": {
+          "currentPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          }
+        }
+      },
+      "PasswordIdValidator": {
+        "type": "object",
+        "properties": {
+          "newPassword": {
+            "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          }
+        }
+      },
+      "RoleValidator": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "active"
+        ]
+      },
+      "RolesViewsValidator": {
+        "type": "object",
+        "properties": {
+          "views": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "TaskValidator": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "RegisterAuthValidator": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "role_id": {
+            "type": "number"
+          },
+          "lang_id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "address": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "active",
+          "role_id",
+          "lang_id",
+          "name",
+          "lastname"
+        ]
+      },
+      "RegisterValidator": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "lang_id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "address": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "active",
+          "lang_id",
+          "name",
+          "lastname"
+        ]
+      },
+      "UpdateValidator": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "role_id": {
+            "type": "number"
+          },
+          "lang_id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "address": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "active",
+          "role_id",
+          "lang_id",
+          "name",
+          "lastname"
+        ]
+      },
+      "ViewValidator": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "type": "number"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "order_index": {
+            "type": "number"
+          },
+          "url": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "ExistsUserSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "existUser": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "ResponseText": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "errors": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "LoginSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "auth": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "token": {
+                    "type": "string"
+                  },
+                  "expires_at": {
+                    "type": "string",
+                    "example": "dd-MM-yyyy  HH:mm:ss"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "LogoutSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "tokensRevoked": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "MeSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "user": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        }
+      },
+      "GetOneCategorySchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "category": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          }
+        }
+      },
+      "GetAllCategorySchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "total": {
+                "type": "number"
+              },
+              "categories": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetOneRoleSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "role": {
+                "$ref": "#/components/schemas/Role"
+              }
+            }
+          }
+        }
+      },
+      "GetAllRoleSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "total": {
+                "type": "number"
+              },
+              "categories": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Role"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetOneUserSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "user": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        }
+      },
+      "GetAllUserSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "total": {
+                "type": "number"
+              },
+              "users": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetOneViewSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "view": {
+                "$ref": "#/components/schemas/View"
+              }
+            }
+          }
+        }
+      },
+      "GetAllViewSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "total": {
+                "type": "number"
+              },
+              "views": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/View"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RouteNotFound": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "method": {
+                "type": "string"
+              },
+              "routeNotFound": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ErrorsValidationSchema": {
+        "type": "object",
+        "properties": {
+          "rule": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "errors": {
+                "$ref": "#/components/schemas/ErrorsValidationSchema"
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "dataNotFound": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "DefaultDataResponse": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "LocaleSchema": {
+        "type": "string",
+        "enum": [
+          "es",
+          "en"
+        ],
+        "default": "es"
+      },
+      "IdSchema": {
+        "type": "number"
+      }
+    },
+    "parameters": {
+      "LocaleHeader": {
+        "name": "Accept-Language",
+        "in": "header",
+        "description": "Locale to request and response",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/LocaleSchema"
+        }
+      },
+      "IdParam": {
+        "name": "id",
+        "in": "path",
+        "description": "Id to find data in database",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/IdSchema"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "summary": "Sign in",
+        "description": "Login to authenticate",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/LoginRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/LoginSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/LoginBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "summary": "Sign up",
+        "description": "Register to app",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserCreateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/UserCreateBadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Sign out",
+        "description": "Revoke the session",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/LogoutSuccess"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Me",
+        "description": "Get my User info",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/MeSuccess"
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "Endpoints"
+        ],
+        "summary": "Base url",
+        "description": "Base url",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "description": "Get user succcessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/get": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get users",
+        "description": "Get all users",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UsersGetSuccess"
+          }
+        }
+      }
+    },
+    "/api/v1/users/get/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get users",
+        "description": "Get user by id",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UserGetOneSuccess"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/users/create": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create user",
+        "description": "Create users",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserCreateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/users/update/{id}": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create user",
+        "description": "Create users",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UsersUpdateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/users/delete/{id}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete users by id",
+        "description": "Delete users by id",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    }
+  }
+}

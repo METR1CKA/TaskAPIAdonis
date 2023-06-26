@@ -43,7 +43,7 @@ components:
                   type: string
                 expires_at:
                   type: string
-                  example: "dd/MM/yyyy  HH:mm:ss"
+                  example: "dd-MM-yyyy  HH:mm:ss"
     LogoutSchema:
       type: object
       properties:
