@@ -64,6 +64,18 @@ export default class UsersController {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    UserCreateRequest:
+   *      description: Data for create user
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: "#/components/schemas/RegisterValidator"
+   */
   public async create({ request, response, i18n }: HttpContextContract) {
     try {
       await request.validate(RegisterAuthValidator)

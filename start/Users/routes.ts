@@ -46,7 +46,7 @@ Route.group(() => {
        *      - $ref: '#/components/parameters/IdParam'
        *    security:
        *      - bearerAuth: []
-       *    summary: Get users
+       *    summary: Get user by id
        *    description: Get user by id
        *    responses:
        *      '200':
@@ -95,8 +95,8 @@ Route.group(() => {
        *      - $ref: '#/components/parameters/IdParam'
        *    security:
        *      - bearerAuth: []
-       *    summary: Create user
-       *    description: Create users
+       *    summary: Update user
+       *    description: Update users
        *    requestBody:
        *      $ref: '#/components/requestBodies/UsersUpdateRequest'
        *    responses:
@@ -136,7 +136,72 @@ Route.group(() => {
 
     // Categories
     Route.group(() => {
+      /**
+       * @swagger
+       * /api/v1/categories/get:
+       *  get:
+       *    tags:
+       *      - Categories
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Get all categories
+       *    description: Get all users
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/CategoriesGetSuccess'
+       */
+
+      /**
+       * @swagger
+       * /api/v1/categories/get/{id}:
+       *  get:
+       *    tags:
+       *      - Categories
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *      - $ref: '#/components/parameters/IdParam'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Get one category by id
+       *    description: Get category by id
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/CategoryGetOneSuccess'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.get('get/:id?', 'CategoriesController.get')
+
+      /**
+       * @swagger
+       * /api/v1/categories/create:
+       *  post:
+       *    tags:
+       *      - Categories
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Create category
+       *    description: Create category
+       *    requestBody:
+       *      $ref: '#/components/requestBodies/CategoryCreateRequest'
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '400':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.post('create', 'CategoriesController.create')
       Route.patch('update/:id', 'CategoriesController.update')
       Route.delete('delete/:id', 'CategoriesController.delete')

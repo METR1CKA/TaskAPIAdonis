@@ -38,12 +38,12 @@ Route.group(() => {
    *    summary: Sign up
    *    description: Register to app
    *    requestBody:
-   *      $ref: '#/components/requestBodies/UserCreateRequest'
+   *      $ref: '#/components/requestBodies/UserRegisterRequest'
    *    responses:
    *      '200':
    *        $ref: '#/components/responses/DefaultResponse'
    *      '400':
-   *        $ref: '#/components/responses/UserCreateBadRequest'
+   *        $ref: '#/components/responses/DefaultResponse'
    *      '404':
    *        $ref: '#/components/responses/ResponseNotFound'
    */

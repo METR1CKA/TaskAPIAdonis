@@ -1,7 +1,7 @@
 components:
   responses:
     DefaultResponse:
-      description: Base url
+      description: Default response
       content:
         application/json:
           description: Success

@@ -8,6 +8,18 @@ import Service from '@ioc:Adonis/Providers/Services'
 import Lang from 'App/Models/Users/Lang'
 
 export default class AuthController {
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    UserRegisterRequest:
+   *      description: Data for register users
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: "#/components/schemas/RegisterAuthValidator"
+   */
   public async register({ response, request, i18n }: HttpContextContract) {
     try {
       await request.validate(RegisterValidator)

@@ -5,6 +5,23 @@ import Category from 'App/Models/Users/Category'
 import CategoryValidator from 'App/Validators/Category/CategoryValidator'
 
 export default class CategoriesController {
+  /**
+   * @swagger
+   * components:
+   *  responses:
+   *    CategoriesGetSuccess:
+   *      description: Get categories succcessful
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/GetAllCategorySchema'
+   *    CategoryGetOneSuccess:
+   *      description: Get category by id
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/GetOneCategorySchema'
+   */
   public async get({ i18n, response, params }: HttpContextContract) {
     const categories = (
       await Category.all()
@@ -46,6 +63,18 @@ export default class CategoriesController {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    CategoryCreateRequest:
+   *      description: Data for create categories
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: "#/components/schemas/CategoryValidator"
+   */
   public async create({ request, response, i18n }: HttpContextContract) {
     try {
       await request.validate(CategoryValidator)
