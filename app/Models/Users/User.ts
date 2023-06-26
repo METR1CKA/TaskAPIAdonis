@@ -53,14 +53,14 @@ export default class User extends BaseModel {
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value) => value?.toFormat(Service.formatDate)
+    serialize: (value) => value?.toFormat(Service.getFormatDate())
   })
   public createdAt?: DateTime
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value) => value?.toFormat(Service.formatDate)
+    serialize: (value) => value?.toFormat(Service.getFormatDate())
   })
   public updatedAt?: DateTime
 

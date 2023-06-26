@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from '../Users/User'
+import Service from '@ioc:Adonis/Providers/Services'
 
 /** Componente schema de traducciones
  * @swagger
@@ -51,14 +52,14 @@ export default class Task extends BaseModel {
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value) => value?.toFormat('dd-MM-yyyy  HH:mm:ss')
+    serialize: (value) => value?.toFormat(Service.getFormatDate())
   })
   public createdAt?: DateTime
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value) => value?.toFormat('dd-MM-yyyy  HH:mm:ss')
+    serialize: (value) => value?.toFormat(Service.getFormatDate())
   })
   public updatedAt?: DateTime
 
