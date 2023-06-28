@@ -122,7 +122,7 @@ export default class UsersController {
         statusResponse: 'Client error',
         data: {
           message: i18n.formatMessage('user.exist'),
-          existUser: Boolean(existUser)
+          existUser: !!existUser
         }
       })
     }
