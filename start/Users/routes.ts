@@ -241,19 +241,121 @@ Route.group(() => {
 
     // Views
     Route.group(() => {
+      /**
+       * @swagger
+       * /api/v1/views/get:
+       *  get:
+       *    tags:
+       *      - Views
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Get all views
+       *    description: Get all views
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/ViewsGetSuccess'
+       * /api/v1/views/get/{id}:
+       *  get:
+       *    tags:
+       *      - Views
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *      - $ref: '#/components/parameters/IdParam'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Get one view by id
+       *    description: Get view by id
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/ViewGetOneSuccess'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.get('get/:id?', 'ViewsController.get')
+
+      /**
+       * @swagger
+       * /api/v1/views/create:
+       *  post:
+       *    tags:
+       *      - Views
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Create view
+       *    description: Create view
+       *    requestBody:
+       *      $ref: '#/components/requestBodies/ViewsCreateRequest'
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '400':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.post('create', 'ViewsController.create')
+
+      /**
+       * @swagger
+       * /api/v1/views/update/{id}:
+       *  patch:
+       *    tags:
+       *      - Views
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *      - $ref: '#/components/parameters/IdParam'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Update view by id
+       *    description: Update views by id
+       *    requestBody:
+       *      $ref: '#/components/requestBodies/ViewUpdateRequest'
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '400':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.patch('update/:id', 'ViewsController.update')
+
+      /**
+       * @swagger
+       * /api/v1/views/delete/{id}:
+       *  delete:
+       *    tags:
+       *      - Views
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *      - $ref: '#/components/parameters/IdParam'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Delete view by id
+       *    description: Delete views by id
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.delete('delete/:id', 'ViewsController.delete')
     })
       .prefix('views')
-
-    // Roles Views
-    Route.group(() => {
-      Route.get('get/:id?', 'RoleViewsController.get')
-      Route.patch('update/:id', 'RoleViewsController.update')
-    })
-      .prefix('roles_views')
 
     // Roles
     Route.group(() => {
@@ -263,12 +365,20 @@ Route.group(() => {
       Route.delete('delete/:id', 'RolesController.delete')
     })
       .prefix('roles')
+
+    // Roles Views
+    Route.group(() => {
+      Route.get('get/:id?', 'RoleViewsController.get')
+      Route.patch('update/:id', 'RoleViewsController.update')
+    })
+      .prefix('roles_views')
   })
     .middleware(['lang', 'auth', 'role_user'])
 
   // PASSWORDS
   Route.group(() => {
-    Route.patch('update/:id', 'PasswordsController.updateId').middleware('role_user')
+    Route.patch('update/:id', 'PasswordsController.updateId')
+      .middleware('role_user')
     Route.patch('update', 'PasswordsController.updateAuth')
   })
     .prefix('password')

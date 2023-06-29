@@ -54,16 +54,16 @@ export default {
 					description: 'Views group',
 				},
 				{
+					name: 'Roles',
+					description: 'Roles group',
+				},
+				{
 					name: 'Roles_views',
 					description: 'Roles and views group',
 				},
 				{
 					name: 'Passwords',
 					description: 'Passwords group',
-				},
-				{
-					name: 'Roles',
-					description: 'Roles group',
 				},
 				{
 					name: 'Files',

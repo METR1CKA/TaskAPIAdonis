@@ -115,7 +115,7 @@ export default class CategoriesController {
    * components:
    *  requestBodies:
    *    CategoryUpdateRequest:
-   *      description:
+   *      description: Data for update category
    *      required: true
    *      content:
    *        application/json:

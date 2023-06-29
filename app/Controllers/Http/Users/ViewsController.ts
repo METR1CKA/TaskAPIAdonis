@@ -5,6 +5,23 @@ import View from 'App/Models/Users/View'
 import ViewValidator from 'App/Validators/View/ViewValidator'
 
 export default class ViewsController {
+  /**
+   * @swagger
+   * components:
+   *  responses:
+   *    ViewsGetSuccess:
+   *      description: Get views succcessful
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/GetAllViewSchema'
+   *    ViewGetOneSuccess:
+   *      description: Get view by id
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/GetOneViewSchema'
+   */
   public async get({ i18n, response, params }: HttpContextContract) {
     const views = (
       await View.all()
@@ -46,6 +63,18 @@ export default class ViewsController {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    ViewsCreateRequest:
+   *      description: Data for create views
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: "#/components/schemas/ViewValidator"
+   */
   public async create({ request, response, i18n }: HttpContextContract) {
     try {
       await request.validate(ViewValidator)
@@ -83,6 +112,18 @@ export default class ViewsController {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    ViewUpdateRequest:
+   *      description: Data for update view
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/ViewValidator'
+   */
   public async update({ request, response, params, i18n }: HttpContextContract) {
     try {
       await request.validate(ViewValidator)
