@@ -359,9 +359,118 @@ Route.group(() => {
 
     // Roles
     Route.group(() => {
+      /**
+       * @swagger
+       * /api/v1/roles/get:
+       *  get:
+       *    tags:
+       *      - Roles
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Get all roles
+       *    description: Get all roles
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/RolesGetSuccess'
+       * /api/v1/roles/get/{id}:
+       *  get:
+       *    tags:
+       *      - Roles
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *      - $ref: '#/components/parameters/IdParam'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Get one role by id
+       *    description: Get roles by id
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/RoleGetOneSuccess'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.get('get/:id?', 'RolesController.read')
+
+      /**
+       * @swagger
+       * /api/v1/roles/create:
+       *  post:
+       *    tags:
+       *      - Roles
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Create roles
+       *    description: Create role
+       *    requestBody:
+       *      $ref: '#/components/requestBodies/RolesCreateRequest'
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '400':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.post('create', 'RolesController.create')
+
+      /**
+       * @swagger
+       * /api/v1/roles/update/{id}:
+       *  patch:
+       *    tags:
+       *      - Roles
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *      - $ref: '#/components/parameters/IdParam'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Update roles by id
+       *    description: Update role by id
+       *    requestBody:
+       *      $ref: '#/components/requestBodies/RolesUpdateRequest'
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '400':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.patch('update/:id', 'RolesController.update')
+
+      /**
+       * @swagger
+       * /api/v1/roles/delete/{id}:
+       *  delete:
+       *    tags:
+       *      - Roles
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *      - $ref: '#/components/parameters/IdParam'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Delete roles by id
+       *    description: Delete role by id
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.delete('delete/:id', 'RolesController.delete')
     })
       .prefix('roles')

@@ -4,6 +4,23 @@ import RoleValidator from 'App/Validators/Roles/RoleValidator'
 import Service from '@ioc:Adonis/Providers/Services'
 
 export default class RolesController {
+  /**
+   * @swagger
+   * components:
+   *  responses:
+   *    RolesGetSuccess:
+   *      description: Get roles succcessful
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/GetAllRoleSchema'
+   *    RoleGetOneSuccess:
+   *      description: Get role by id
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/GetOneRoleSchema'
+   */
   public async read({ i18n, response, params }: HttpContextContract) {
     const roles = await Role.query()
       .preload('users')
@@ -41,6 +58,18 @@ export default class RolesController {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    RolesCreateRequest:
+   *      description: Data for create roles
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: "#/components/schemas/RoleValidator"
+   */
   public async create({ request, response, i18n }: HttpContextContract) {
     try {
       await request.validate(RoleValidator)
@@ -73,6 +102,18 @@ export default class RolesController {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    RolesUpdateRequest:
+   *      description: Data for update roles
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/RoleValidator'
+   */
   public async update({ request, response, params, i18n }: HttpContextContract) {
     try {
       await request.validate(RoleValidator)
