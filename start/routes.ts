@@ -36,12 +36,6 @@ import './Users/routes'
  *    responses:
  *      '200':
  *        $ref: '#/components/responses/DefaultResponse'
- *      '404':
- *        description: Get user succcessful
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/RouteNotFound'
  */
 Route.get('/', ({ response }) => {
   const GREETING = 'API TASKS'
@@ -55,7 +49,80 @@ Route.get('/', ({ response }) => {
 })
 
 
-/* Wildcard */
+/** Wildcard
+ * @swagger
+ * /{*}:
+ *  get:
+ *    tags:
+ *      - Endpoints
+ *    summary: Wildcard url
+ *    description: Wildcard url
+ *    produces:
+ *      - application/json
+ *    responses:
+ *      '404':
+ *        description: Route not found
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/RouteNotFound'
+ *  post:
+ *    tags:
+ *      - Endpoints
+ *    summary: Wildcard url
+ *    description: Wildcard url
+ *    produces:
+ *      - application/json
+ *    responses:
+ *      '404':
+ *        description: Route not found
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/RouteNotFound'
+ *  put:
+ *    tags:
+ *      - Endpoints
+ *    summary: Wildcard url
+ *    description: Wildcard url
+ *    produces:
+ *      - application/json
+ *    responses:
+ *      '404':
+ *        description: Route not found
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/RouteNotFound'
+ *  patch:
+ *    tags:
+ *      - Endpoints
+ *    summary: Wildcard url
+ *    description: Wildcard url
+ *    produces:
+ *      - application/json
+ *    responses:
+ *      '404':
+ *        description: Route not found
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/RouteNotFound'
+ *  delete:
+ *    tags:
+ *      - Endpoints
+ *    summary: Wildcard url
+ *    description: Wildcard url
+ *    produces:
+ *      - application/json
+ *    responses:
+ *      '404':
+ *        description: Route not found
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/RouteNotFound'
+ */
 Route.any('*', ({ response, request }) => {
   const ROUTE_NOT_FOUND = 'Ruta no encontrada / Route not found'
 
