@@ -110,6 +110,18 @@ export default class CategoriesController {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    CategoryUpdateRequest:
+   *      description:
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/CategoryValidator'
+   */
   public async update({ request, response, params, i18n }: HttpContextContract) {
     try {
       await request.validate(CategoryValidator)
@@ -164,7 +176,8 @@ export default class CategoriesController {
       return response.notFound({
         statusResponse: 'Client error',
         data: {
-          message: i18n.formatMessage('notFound')
+          message: i18n.formatMessage('notFound'),
+          dataNotFound: 'Category'
         }
       })
     }

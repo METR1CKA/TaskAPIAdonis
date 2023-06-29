@@ -14,3 +14,10 @@ components:
       required: false
       schema:
         $ref: "#/components/schemas/IdSchema"
+    route:
+      name: url
+      in: path
+      description: Url
+      required: false
+      schema:
+        $ref: "#/components/schemas/route"

@@ -3,15 +3,6 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
   // Administration
   Route.group(() => {
-    // Roles
-    Route.group(() => {
-      Route.get('get/:id?', 'RolesController.read')
-      Route.post('create', 'RolesController.create')
-      Route.patch('update/:id', 'RolesController.update')
-      Route.delete('delete/:id', 'RolesController.delete')
-    })
-      .prefix('roles')
-
     // Users
     Route.group(() => {
       /**
@@ -31,10 +22,6 @@ Route.group(() => {
        *    responses:
        *      '200':
        *        $ref: '#/components/responses/UsersGetSuccess'
-       */
-
-      /**
-       * @swagger
        * /api/v1/users/get/{id}:
        *  get:
        *    tags:
@@ -95,8 +82,8 @@ Route.group(() => {
        *      - $ref: '#/components/parameters/IdParam'
        *    security:
        *      - bearerAuth: []
-       *    summary: Update user
-       *    description: Update users
+       *    summary: Update user by id
+       *    description: Update users by id
        *    requestBody:
        *      $ref: '#/components/requestBodies/UsersUpdateRequest'
        *    responses:
@@ -149,14 +136,10 @@ Route.group(() => {
        *    security:
        *      - bearerAuth: []
        *    summary: Get all categories
-       *    description: Get all users
+       *    description: Get all categories
        *    responses:
        *      '200':
        *        $ref: '#/components/responses/CategoriesGetSuccess'
-       */
-
-      /**
-       * @swagger
        * /api/v1/categories/get/{id}:
        *  get:
        *    tags:
@@ -203,7 +186,55 @@ Route.group(() => {
        *        $ref: '#/components/responses/ResponseNotFound'
        */
       Route.post('create', 'CategoriesController.create')
+
+      /**
+       * @swagger
+       * /api/v1/categories/update/{id}:
+       *  patch:
+       *    tags:
+       *      - Categories
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *      - $ref: '#/components/parameters/IdParam'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Update category by id
+       *    description: Update categories by id
+       *    requestBody:
+       *      $ref: '#/components/requestBodies/CategoryUpdateRequest'
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '400':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.patch('update/:id', 'CategoriesController.update')
+
+      /**
+       * @swagger
+       * /api/v1/categories/delete/{id}:
+       *  delete:
+       *    tags:
+       *      - Categories
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *      - $ref: '#/components/parameters/IdParam'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Delete category by id
+       *    description: Delete categories by id
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.delete('delete/:id', 'CategoriesController.delete')
     })
       .prefix('categories')
@@ -220,11 +251,18 @@ Route.group(() => {
     // Roles Views
     Route.group(() => {
       Route.get('get/:id?', 'RoleViewsController.get')
-      Route.post('create', 'RoleViewsController.create')
       Route.patch('update/:id', 'RoleViewsController.update')
-      Route.delete('delete/:id', 'RoleViewsController.delete')
     })
       .prefix('roles_views')
+
+    // Roles
+    Route.group(() => {
+      Route.get('get/:id?', 'RolesController.read')
+      Route.post('create', 'RolesController.create')
+      Route.patch('update/:id', 'RolesController.update')
+      Route.delete('delete/:id', 'RolesController.delete')
+    })
+      .prefix('roles')
   })
     .middleware(['lang', 'auth', 'role_user'])
 

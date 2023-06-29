@@ -63,3 +63,5 @@ components:
       default: es
     IdSchema:
       type: number
+    route:
+      type: string

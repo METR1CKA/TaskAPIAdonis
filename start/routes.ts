@@ -51,7 +51,7 @@ Route.get('/', ({ response }) => {
 
 /** Wildcard
  * @swagger
- * /{*}:
+ * /{route}:
  *  get:
  *    tags:
  *      - Endpoints
@@ -59,6 +59,8 @@ Route.get('/', ({ response }) => {
  *    description: Wildcard url
  *    produces:
  *      - application/json
+ *    parameters:
+ *      - $ref: '#/components/parameters/route'
  *    responses:
  *      '404':
  *        description: Route not found
