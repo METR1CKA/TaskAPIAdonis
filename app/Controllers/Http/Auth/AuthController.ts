@@ -70,12 +70,14 @@ export default class AuthController {
       })
     }
 
+    const DEFAULT_ROLE = 3
+
     const user = await User.create(
       {
         email,
         password,
         active: true,
-        role_id: 3 // Default role EDITOR
+        role_id: DEFAULT_ROLE // Default role EDITOR
       }
     )
 
@@ -194,9 +196,13 @@ export default class AuthController {
       })
     }
 
-    const { type, token, tokenHash, expiresAt } = await auth.use('api').attempt(email, password, {
-      expiresIn: '1year',
-    })
+    const { type, token, tokenHash, expiresAt } = await auth.use('api').attempt(
+      email,
+      password,
+      {
+        expiresIn: '1year'
+      }
+    )
 
     await ApiToken.query()
       .where({ user_id: id, token: tokenHash })
@@ -272,7 +278,8 @@ export default class AuthController {
     const user = await User.query()
       .where({ id })
       .preload('profile', profile => {
-        profile.preload('lang')
+        profile
+          .preload('lang')
       })
       .preload('role')
       .first()
