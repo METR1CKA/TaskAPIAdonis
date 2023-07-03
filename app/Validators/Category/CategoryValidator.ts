@@ -19,6 +19,11 @@ export default class CategoryValidator {
    *          type: number
    *        description:
    *          type: string
+   *      required:
+   *        - active
+   *        - name
+   *        - order_index
+   *        - description
    */
   public schema = schema.create({
     active: schema.boolean([

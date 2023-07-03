@@ -16,6 +16,10 @@ export default class PasswordAuthValidator {
    *          type: string
    *        confirmPassword:
    *          type: string
+   *      required:
+   *        - currentPassword
+   *        - newPassword
+   *        - confirmPassword
    */
   public schema = schema.create({
     currentPassword: schema.string([

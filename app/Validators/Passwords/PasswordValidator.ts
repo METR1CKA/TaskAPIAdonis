@@ -1,35 +1,35 @@
-import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class RolesViewValidator {
+export default class PasswordValidator {
   constructor(protected ctx: HttpContextContract) { }
+
   /**
    * @swagger
    * components:
    *  schemas:
-   *    RolesViewsValidator:
+   *    PasswordValidator:
    *      type: object
    *      properties:
-   *        views:
-   *          type: array
-   *          items:
-   *            type: number
+   *        email:
+   *          type: string
    *      required:
-   *        - views
+   *        - email
    */
   public schema = schema.create({
-    views: schema.array().members(schema.number([
-      rules.required(),
-    ])),
+    email: schema.string([
+      rules.required()
+    ])
   })
 
   public messages: CustomMessages = {
     required: this.ctx.i18n.formatMessage('field', {
       field: '{{ field }}'
     }),
-    number: this.ctx.i18n.formatMessage('field.type', {
-      field: 'views',
+    string: this.ctx.i18n.formatMessage('field.type', {
+      field: '{{ field }}',
       type: '{{ rule }}'
     }),
+    email: this.ctx.i18n.formatMessage('email')
   }
 }

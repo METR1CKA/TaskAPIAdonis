@@ -14,6 +14,9 @@ export default class PasswordIdValidator {
    *          type: string
    *        confirmPassword:
    *          type: string
+   *      required:
+   *        - newPassword
+   *        - confirmPassword
    */
   public schema = schema.create({
     newPassword: schema.string([

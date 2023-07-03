@@ -22,6 +22,13 @@ export default class ViewValidator {
    *          type: string
    *        description:
    *          type: string
+   *      required:
+   *        - category_id
+   *        - active
+   *        - name
+   *        - order_index
+   *        - url
+   *        - description
    */
   public schema = schema.create({
     category_id: schema.number([

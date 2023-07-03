@@ -18,6 +18,10 @@ export default class LoginValidator {
    *          format: password
    *        remember_me_token:
    *          type: boolean
+   *      required:
+   *        - email
+   *        - password
+   *        - remember_me_token
    */
   public schema = schema.create({
     email: schema.string([

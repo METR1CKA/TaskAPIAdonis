@@ -14,6 +14,9 @@ export default class TaskValidator {
    *          type: string
    *        description:
    *          type: string
+   *      required:
+   *        - title
+   *        - description
    */
   public schema = schema.create({
     title: schema.string([
