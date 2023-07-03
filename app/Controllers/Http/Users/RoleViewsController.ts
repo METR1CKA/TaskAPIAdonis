@@ -5,6 +5,23 @@ import RoleView from 'App/Models/Users/RoleView'
 import RolesViewValidator from 'App/Validators/RoleView/RolesViewValidator'
 
 export default class RoleViewsController {
+  /**
+   * @swagger
+   * components:
+   *  responses:
+   *    RolesViewsGetSuccess:
+   *      description: Get roles with views succcessful
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/GetAllRolesViewsSchema'
+   *    RoleViewGetOneSuccess:
+   *      description: Get role with views by id
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/GetOneRoleViewSchema'
+   */
   public async get({ i18n, response, params }: HttpContextContract) {
     const roles_views = await RoleView.getRolesViews()
 
@@ -40,6 +57,18 @@ export default class RoleViewsController {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    RolesViewsUpdateRequest:
+   *      description: Data for update roles with views
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/RolesViewsValidator'
+   */
   public async update({ request, response, params, i18n }: HttpContextContract) {
     try {
       await request.validate(RolesViewValidator)
