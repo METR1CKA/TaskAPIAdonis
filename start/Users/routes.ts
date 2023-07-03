@@ -477,7 +477,70 @@ Route.group(() => {
 
     // Roles Views
     Route.group(() => {
+      /**
+       * @swagger
+       * /api/v1/roles_views/get:
+       *  get:
+       *    tags:
+       *      - Roles_views
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Get all roles and views
+       *    description: Get all roles with views
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/RolesViewsGetSuccess'
+       * /api/v1/roles_views/get/{id}:
+       *  get:
+       *    tags:
+       *      - Roles_views
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *      - $ref: '#/components/parameters/IdParam'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Get one roles and view by id
+       *    description: Get role with by id
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/RoleViewGetOneSuccess'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.get('get/:id?', 'RoleViewsController.get')
+
+
+      /**
+       * @swagger
+       * /api/v1/roles_views/update/{id}:
+       *  patch:
+       *    tags:
+       *      - Roles_views
+       *    produces:
+       *      - application/json
+       *    parameters:
+       *      - $ref: '#/components/parameters/LocaleHeader'
+       *      - $ref: '#/components/parameters/IdParam'
+       *    security:
+       *      - bearerAuth: []
+       *    summary: Update roles with views by id
+       *    description: Update role with views by id
+       *    requestBody:
+       *      $ref: '#/components/requestBodies/RolesViewsUpdateRequest'
+       *    responses:
+       *      '200':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '400':
+       *        $ref: '#/components/responses/DefaultResponse'
+       *      '404':
+       *        $ref: '#/components/responses/ResponseNotFound'
+       */
       Route.patch('update/:id', 'RoleViewsController.update')
     })
       .prefix('roles_views')
@@ -486,11 +549,87 @@ Route.group(() => {
 
   // PASSWORDS
   Route.group(() => {
-    Route.patch('update/:id', 'PasswordsController.updateId')
+    /**
+     * @swagger
+     * /api/v1/password/update/{id}:
+     *  patch:
+     *    tags:
+     *      - Passwords
+     *    produces:
+     *      - application/json
+     *    parameters:
+     *      - $ref: '#/components/parameters/LocaleHeader'
+     *      - $ref: '#/components/parameters/IdParam'
+     *    security:
+     *      - bearerAuth: []
+     *    summary: Update password of users by id
+     *    description: Update password of user by id
+     *    requestBody:
+     *      $ref: '#/components/requestBodies/PasswordUpdateIdRequest'
+     *    responses:
+     *      '200':
+     *        $ref: '#/components/responses/DefaultResponse'
+     *      '400':
+     *        $ref: '#/components/responses/DefaultResponse'
+     *      '404':
+     *        $ref: '#/components/responses/ResponseNotFound'
+     */
+    Route.patch(':id', 'PasswordsController.updateId')
       .middleware('role_user')
-    Route.patch('update', 'PasswordsController.updateAuth')
+
+    /**
+     * @swagger
+     * /api/v1/password/update/auth:
+     *  patch:
+     *    tags:
+     *      - Passwords
+     *    produces:
+     *      - application/json
+     *    parameters:
+     *      - $ref: '#/components/parameters/LocaleHeader'
+     *    security:
+     *      - bearerAuth: []
+     *    summary: Update password of users by auth
+     *    description: Update password of user by auth
+     *    requestBody:
+     *      $ref: '#/components/requestBodies/PasswordUpdateAuthRequest'
+     *    responses:
+     *      '200':
+     *        $ref: '#/components/responses/DefaultResponse'
+     *      '400':
+     *        $ref: '#/components/responses/DefaultResponse'
+     *      '404':
+     *        $ref: '#/components/responses/ResponseNotFound'
+     */
+    Route.patch('auth', 'PasswordsController.updateAuth')
+
+    /**
+     * @swagger
+     * /api/v1/password/update/default:
+     *  patch:
+     *    tags:
+     *      - Passwords
+     *    produces:
+     *      - application/json
+     *    parameters:
+     *      - $ref: '#/components/parameters/LocaleHeader'
+     *    security:
+     *      - bearerAuth: []
+     *    summary: Update passwore of users to default password
+     *    description: Update password of user to default password
+     *    requestBody:
+     *      $ref: '#/components/requestBodies/PasswordUpdateRequest'
+     *    responses:
+     *      '200':
+     *        $ref: '#/components/responses/DefaultResponse'
+     *      '400':
+     *        $ref: '#/components/responses/DefaultResponse'
+     *      '404':
+     *        $ref: '#/components/responses/ResponseNotFound'
+     */
+    Route.patch('default', 'PasswordsController.updateDefault')
   })
-    .prefix('password')
+    .prefix('password/update')
     .middleware(['lang', 'auth'])
 })
   .prefix('api/v1')
