@@ -8,6 +8,21 @@ import Database from '@ioc:Adonis/Lucid/Database'
  * @swagger
  * components:
  *  schemas:
+ *    RolesViews:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *        name:
+ *          type: string
+ *        active:
+ *          type: boolean
+ *        description:
+ *          type: string
+ *        views:
+ *          type: array
+ *          items:
+ *            $ref: "#/components/schemas/View"
  *    Role:
  *      type: object
  *      properties:
