@@ -551,7 +551,7 @@ Route.group(() => {
   Route.group(() => {
     /**
      * @swagger
-     * /api/v1/password/update/{id}:
+     * /api/v1/password/update/default:
      *  patch:
      *    tags:
      *      - Passwords
@@ -559,13 +559,12 @@ Route.group(() => {
      *      - application/json
      *    parameters:
      *      - $ref: '#/components/parameters/LocaleHeader'
-     *      - $ref: '#/components/parameters/IdParam'
      *    security:
      *      - bearerAuth: []
-     *    summary: Update password of users by id
-     *    description: Update password of user by id
+     *    summary: Update passwore of users to default password
+     *    description: Update password of user to default password
      *    requestBody:
-     *      $ref: '#/components/requestBodies/PasswordUpdateIdRequest'
+     *      $ref: '#/components/requestBodies/PasswordUpdateRequest'
      *    responses:
      *      '200':
      *        $ref: '#/components/responses/DefaultResponse'
@@ -574,8 +573,7 @@ Route.group(() => {
      *      '404':
      *        $ref: '#/components/responses/ResponseNotFound'
      */
-    Route.patch(':id', 'PasswordsController.updateId')
-      .middleware('role_user')
+    Route.patch('default', 'PasswordsController.updateDefault')
 
     /**
      * @swagger
@@ -605,7 +603,7 @@ Route.group(() => {
 
     /**
      * @swagger
-     * /api/v1/password/update/default:
+     * /api/v1/password/update/{id}:
      *  patch:
      *    tags:
      *      - Passwords
@@ -613,12 +611,13 @@ Route.group(() => {
      *      - application/json
      *    parameters:
      *      - $ref: '#/components/parameters/LocaleHeader'
+     *      - $ref: '#/components/parameters/IdParam'
      *    security:
      *      - bearerAuth: []
-     *    summary: Update passwore of users to default password
-     *    description: Update password of user to default password
+     *    summary: Update password of users by id
+     *    description: Update password of user by id
      *    requestBody:
-     *      $ref: '#/components/requestBodies/PasswordUpdateRequest'
+     *      $ref: '#/components/requestBodies/PasswordUpdateIdRequest'
      *    responses:
      *      '200':
      *        $ref: '#/components/responses/DefaultResponse'
@@ -627,7 +626,8 @@ Route.group(() => {
      *      '404':
      *        $ref: '#/components/responses/ResponseNotFound'
      */
-    Route.patch('default', 'PasswordsController.updateDefault')
+    Route.patch(':id', 'PasswordsController.updateId')
+      .middleware('role_user')
   })
     .prefix('password/update')
     .middleware(['lang', 'auth'])
