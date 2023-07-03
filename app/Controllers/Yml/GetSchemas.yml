@@ -112,3 +112,31 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/View"
+    GetAllRolesViewsSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            total:
+              type: number
+            roles_views:
+              type: array
+              items:
+                $ref: "#/components/schemas/RolesViews"
+    GetOneRoleViewSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            role_view:
+              $ref: "#/components/schemas/RolesViews"
