@@ -69,16 +69,4 @@ export default class Task extends BaseModel {
     foreignKey: 'user_id'
   })
   public user: BelongsTo<typeof User>
-
-  // STATUS
-  public static STATUS = {
-    C: true,
-    I: false,
-    A: true,
-    D: false
-  }
-
-  public static COMPLETED_STATUS = ['C', 'I']
-
-  public static ACTIVE_STATUS = ['A', 'D']
 }
