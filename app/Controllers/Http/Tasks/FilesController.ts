@@ -62,10 +62,8 @@ export default class FilesController {
       })
     }
 
-    if (request.method() == 'DELETE') {
-      return this.deleteFile({ response, i18n, filename })
-    }
-
-    return this.getFile({ response, filename })
+    return request.method() == 'DELETE'
+      ? this.deleteFile({ response, i18n, filename })
+      : this.getFile({ response, filename })
   }
 }
