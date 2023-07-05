@@ -1,0 +1,16 @@
+components:
+  schemas:
+    FileResponseSchema:
+      type: object
+      properties:
+        statusResponse:
+          type: string
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+            filename:
+              type: string
+  FilenameSchema:
+    type: string
