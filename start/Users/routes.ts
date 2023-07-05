@@ -79,7 +79,7 @@ Route.group(() => {
        *      - application/json
        *    parameters:
        *      - $ref: '#/components/parameters/LocaleHeader'
-       *      - $ref: '#/components/parameters/IdParam'
+       *      - $ref: '#/components/parameters/IdRoute'
        *    security:
        *      - bearerAuth: []
        *    summary: Update user by id
@@ -106,7 +106,7 @@ Route.group(() => {
        *      - application/json
        *    parameters:
        *      - $ref: '#/components/parameters/LocaleHeader'
-       *      - $ref: '#/components/parameters/IdParam'
+       *      - $ref: '#/components/parameters/IdRoute'
        *    security:
        *      - bearerAuth: []
        *    summary: Delete users by id
@@ -197,7 +197,7 @@ Route.group(() => {
        *      - application/json
        *    parameters:
        *      - $ref: '#/components/parameters/LocaleHeader'
-       *      - $ref: '#/components/parameters/IdParam'
+       *      - $ref: '#/components/parameters/IdRoute'
        *    security:
        *      - bearerAuth: []
        *    summary: Update category by id
@@ -224,7 +224,7 @@ Route.group(() => {
        *      - application/json
        *    parameters:
        *      - $ref: '#/components/parameters/LocaleHeader'
-       *      - $ref: '#/components/parameters/IdParam'
+       *      - $ref: '#/components/parameters/IdRoute'
        *    security:
        *      - bearerAuth: []
        *    summary: Delete category by id
@@ -315,7 +315,7 @@ Route.group(() => {
        *      - application/json
        *    parameters:
        *      - $ref: '#/components/parameters/LocaleHeader'
-       *      - $ref: '#/components/parameters/IdParam'
+       *      - $ref: '#/components/parameters/IdRoute'
        *    security:
        *      - bearerAuth: []
        *    summary: Update view by id
@@ -342,7 +342,7 @@ Route.group(() => {
        *      - application/json
        *    parameters:
        *      - $ref: '#/components/parameters/LocaleHeader'
-       *      - $ref: '#/components/parameters/IdParam'
+       *      - $ref: '#/components/parameters/IdRoute'
        *    security:
        *      - bearerAuth: []
        *    summary: Delete view by id
@@ -433,7 +433,7 @@ Route.group(() => {
        *      - application/json
        *    parameters:
        *      - $ref: '#/components/parameters/LocaleHeader'
-       *      - $ref: '#/components/parameters/IdParam'
+       *      - $ref: '#/components/parameters/IdRoute'
        *    security:
        *      - bearerAuth: []
        *    summary: Update roles by id
@@ -460,7 +460,7 @@ Route.group(() => {
        *      - application/json
        *    parameters:
        *      - $ref: '#/components/parameters/LocaleHeader'
-       *      - $ref: '#/components/parameters/IdParam'
+       *      - $ref: '#/components/parameters/IdRoute'
        *    security:
        *      - bearerAuth: []
        *    summary: Delete roles by id
@@ -526,7 +526,7 @@ Route.group(() => {
        *      - application/json
        *    parameters:
        *      - $ref: '#/components/parameters/LocaleHeader'
-       *      - $ref: '#/components/parameters/IdParam'
+       *      - $ref: '#/components/parameters/IdRoute'
        *    security:
        *      - bearerAuth: []
        *    summary: Update roles with views by id
@@ -611,7 +611,7 @@ Route.group(() => {
      *      - application/json
      *    parameters:
      *      - $ref: '#/components/parameters/LocaleHeader'
-     *      - $ref: '#/components/parameters/IdParam'
+     *      - $ref: '#/components/parameters/IdRoute'
      *    security:
      *      - bearerAuth: []
      *    summary: Update password of users by id
