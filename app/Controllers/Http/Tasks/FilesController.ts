@@ -4,6 +4,18 @@ import Service from '@ioc:Adonis/Providers/Services'
 import FileValidator from 'App/Validators/Tasks/FileValidator'
 
 export default class FilesController {
+  /**
+   * @swagger
+   * components:
+   *  responses:
+   *    FileUploadResponse:
+   *      description: Response to file upload
+   *      content:
+   *        application/json:
+   *          description: Success
+   *          schema:
+   *            $ref: '#/components/schemas/FileResponseSchema'
+   */
   public async uploadFile({ request, response, i18n }: HttpContextContract) {
     try {
       await request.validate(FileValidator)
@@ -50,6 +62,18 @@ export default class FilesController {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  parameters:
+   *    FilenameParam:
+   *      name: filename
+   *      in: path
+   *      description: Parameter to find file
+   *      required: true
+   *      schema:
+   *        $ref: '#/components/schemas/FilenameSchema'
+   */
   public async files({ request, response, params, i18n }: HttpContextContract) {
     const { filename } = params
 
