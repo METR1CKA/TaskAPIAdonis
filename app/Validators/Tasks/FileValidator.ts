@@ -4,6 +4,23 @@ import Service from '@ioc:Adonis/Providers/Services'
 export default class FileValidator {
   constructor(protected ctx: HttpContextContract) { }
 
+  /**
+   * @swagger
+   * components:
+   *  schemas:
+   *    FileValidator:
+   *      type: object
+   *      properties:
+   *        size:
+   *          type: string
+   *        extnames:
+   *          type: array
+   *          items:
+   *            type: string
+   *      required:
+   *        - size
+   *        - extnames
+   */
   public schema = schema.create({
     file: schema.file.optional(
       Service.getFileValidations()
