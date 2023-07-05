@@ -14,6 +14,13 @@ components:
       required: false
       schema:
         $ref: "#/components/schemas/IdSchema"
+    IdRoute:
+      name: id
+      in: path
+      required: true
+      description: Id required to find data in database
+      schema:
+        $ref: "#/components/schemas/IdSchema"
     route:
       name: url
       in: path
