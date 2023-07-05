@@ -452,12 +452,12 @@
   {
     "locale": "es",
     "key": "task.noComplete",
-    "message": "La tarea no ha sido completada con exito"
+    "message": "La tarea no ha sido completada"
   },
   {
     "locale": "en",
     "key": "task.noComplete",
-    "message": "The task has not been completed successfully"
+    "message": "The task has not been completed"
   },
   {
     "locale": "es",
