@@ -4,6 +4,23 @@ import TaskValidator from 'App/Validators/Tasks/TaskValidator'
 import Service from '@ioc:Adonis/Providers/Services'
 
 export default class TasksController {
+  /**
+   * @swagger
+   * components:
+   *  responses:
+   *    TasksGetSuccess:
+   *      description: Get all tasks succcessful
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/GetAllTasksSchema'
+   *    TaskGetOneSuccess:
+   *      description: Get one task by id
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/GetOneTaskSchema'
+   */
   public async get({ i18n, response, params, auth }: HttpContextContract) {
     const { id } = auth.use('api').user!
 
@@ -46,6 +63,18 @@ export default class TasksController {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    TaskCreateRequest:
+   *      description: Data for create tasks
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: "#/components/schemas/TaskValidator"
+   */
   public async create({ request, response, auth, i18n }: HttpContextContract) {
     const { id } = auth.use('api').user!
 
@@ -82,6 +111,18 @@ export default class TasksController {
     })
   }
 
+  /**
+   * @swagger
+   * components:
+   *  requestBodies:
+   *    TaskUpdateRequest:
+   *      description:
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: '#/components/schemas/TaskValidator'
+   */
   public async update({ request, response, params, i18n }: HttpContextContract) {
     try {
       await request.validate(TaskValidator)
@@ -126,18 +167,17 @@ export default class TasksController {
   }
 
   public async taskStatus({ request, response, params, i18n }: HttpContextContract) {
-    const { STATUS, COMPLETED_STATUS, ACTIVE_STATUS } = Task
+    const { completed, active } = request.qs()
 
-    const { status } = request.qs()
-
-    if (!status) {
+    if (!completed || !active) {
       return response.badRequest({
         statusResponse: 'Client error',
         data: {
           message: i18n.formatMessage('query', {
-            data: 'status'
-          }),
-          dataNotFound: 'status'
+            data: !completed && !active
+              ? 'completed & active'
+              : !completed ? 'completed' : 'active'
+          })
         }
       })
     }
@@ -154,35 +194,19 @@ export default class TasksController {
       })
     }
 
-    if (!Object.keys(STATUS).includes(status)) {
-      return response.badRequest({
-        statusResponse: 'Client error',
-        data: {
-          message: i18n.formatMessage('invalidStatus')
-        }
-      })
-    }
+    await task.merge({
+      completed: completed.toLowerCase() == 'true',
+      active: active.toLowerCase() == 'true'
+    }).save()
 
-    let key = ''
+    const task_complete = i18n.formatMessage(`task.${task.completed ? 'complete' : 'noComplete'}`)
 
-    if (COMPLETED_STATUS.includes(status)) {
-      task.completed = STATUS[status]
-
-      key = `task.${task.completed ? 'complete' : 'noComplete'}`
-    }
-
-    if (ACTIVE_STATUS.includes(status)) {
-      task.active = STATUS[status]
-
-      key = `status.${task.active ? 'activated' : 'desactivated'}`
-    }
-
-    await task.save()
+    const task_active = i18n.formatMessage(`status.${task.active ? 'activated' : 'desactivated'}`)
 
     return response.ok({
       statusResponse: 'Success',
       data: {
-        message: i18n.formatMessage(key)
+        message: `${task_complete} & ${task_active}`
       },
     })
   }
