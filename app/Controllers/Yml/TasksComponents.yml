@@ -1,0 +1,21 @@
+components:
+  schemas:
+    CompletedSchema:
+      type: boolean
+    ActiveSchema:
+      type: boolean
+  parameters:
+    Completed:
+      name: completed
+      in: query
+      description: Update to property completed
+      required: true
+      schema:
+        $ref: "#/components/schemas/CompletedSchema"
+    Active:
+      name: active
+      in: query
+      description: Update to property active
+      required: true
+      schema:
+        $ref: "#/components/schemas/ActiveSchema"
