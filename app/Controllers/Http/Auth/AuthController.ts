@@ -6,6 +6,7 @@ import Profile from 'App/Models/Users/Profile'
 import ApiToken from 'App/Models/Users/ApiToken'
 import Service from '@ioc:Adonis/Providers/Services'
 import Lang from 'App/Models/Users/Lang'
+import Role from 'App/Models/Users/Role'
 
 export default class AuthController {
   /**
@@ -70,14 +71,14 @@ export default class AuthController {
       })
     }
 
-    const DEFAULT_ROLE = 3
+    const { EDITOR } = await Role.getRoles()
 
     const user = await User.create(
       {
         email,
         password,
         active: true,
-        role_id: DEFAULT_ROLE // Default role EDITOR
+        role_id: EDITOR // Default role EDITOR
       }
     )
 
