@@ -42,6 +42,10 @@
       "description": "Views group"
     },
     {
+      "name": "Roles",
+      "description": "Roles group"
+    },
+    {
       "name": "Roles_views",
       "description": "Roles and views group"
     },
@@ -50,16 +54,12 @@
       "description": "Passwords group"
     },
     {
-      "name": "Roles",
-      "description": "Roles group"
+      "name": "Tasks",
+      "description": "Tasks group"
     },
     {
       "name": "Files",
       "description": "Files group"
-    },
-    {
-      "name": "Tasks",
-      "description": "Tasks group"
     }
   ],
   "components": {
@@ -70,6 +70,17 @@
       }
     },
     "requestBodies": {
+      "UserRegisterRequest": {
+        "description": "Data for register users",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RegisterAuthValidator"
+            }
+          }
+        }
+      },
       "LoginRequest": {
         "description": "Data for sign in the app",
         "required": true,
@@ -77,6 +88,127 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/LoginValidator"
+            }
+          }
+        }
+      },
+      "TaskCreateRequest": {
+        "description": "Data for create tasks",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TaskValidator"
+            }
+          }
+        }
+      },
+      "TaskUpdateRequest": {
+        "description": null,
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TaskValidator"
+            }
+          }
+        }
+      },
+      "CategoryCreateRequest": {
+        "description": "Data for create categories",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CategoryValidator"
+            }
+          }
+        }
+      },
+      "CategoryUpdateRequest": {
+        "description": "Data for update category",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CategoryValidator"
+            }
+          }
+        }
+      },
+      "PasswordUpdateAuthRequest": {
+        "description": "Data for update password of users",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PasswordAuthValidator"
+            }
+          }
+        }
+      },
+      "PasswordUpdateIdRequest": {
+        "description": "Data for update password of users by id",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PasswordIdValidator"
+            }
+          }
+        }
+      },
+      "PasswordUpdateRequest": {
+        "description": "Data for update default password to users by email",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PasswordValidator"
+            }
+          }
+        }
+      },
+      "RolesCreateRequest": {
+        "description": "Data for create roles",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RoleValidator"
+            }
+          }
+        }
+      },
+      "RolesUpdateRequest": {
+        "description": "Data for update roles",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RoleValidator"
+            }
+          }
+        }
+      },
+      "RolesViewsUpdateRequest": {
+        "description": "Data for update roles with views",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RolesViewsValidator"
+            }
+          }
+        }
+      },
+      "UserCreateRequest": {
+        "description": "Data for create user",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RegisterValidator"
             }
           }
         }
@@ -92,13 +224,24 @@
           }
         }
       },
-      "UserCreateRequest": {
-        "description": "Data for register in app",
+      "ViewsCreateRequest": {
+        "description": "Data for create views",
         "required": true,
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/RegisterValidator"
+              "$ref": "#/components/schemas/ViewValidator"
+            }
+          }
+        }
+      },
+      "ViewUpdateRequest": {
+        "description": "Data for update view",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ViewValidator"
             }
           }
         }
@@ -156,6 +299,97 @@
           }
         }
       },
+      "FileUploadResponse": {
+        "description": "Response to file upload",
+        "content": {
+          "application/json": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/components/schemas/FileResponseSchema"
+            }
+          }
+        }
+      },
+      "TasksGetSuccess": {
+        "description": "Get all tasks succcessful",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetAllTasksSchema"
+            }
+          }
+        }
+      },
+      "TaskGetOneSuccess": {
+        "description": "Get one task by id",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetOneTaskSchema"
+            }
+          }
+        }
+      },
+      "CategoriesGetSuccess": {
+        "description": "Get categories succcessful",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetAllCategorySchema"
+            }
+          }
+        }
+      },
+      "CategoryGetOneSuccess": {
+        "description": "Get category by id",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetOneCategorySchema"
+            }
+          }
+        }
+      },
+      "RolesGetSuccess": {
+        "description": "Get roles succcessful",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetAllRoleSchema"
+            }
+          }
+        }
+      },
+      "RoleGetOneSuccess": {
+        "description": "Get role by id",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetOneRoleSchema"
+            }
+          }
+        }
+      },
+      "RolesViewsGetSuccess": {
+        "description": "Get roles with views succcessful",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetAllRolesViewsSchema"
+            }
+          }
+        }
+      },
+      "RoleViewGetOneSuccess": {
+        "description": "Get role with views by id",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetOneRoleViewSchema"
+            }
+          }
+        }
+      },
       "UsersGetSuccess": {
         "description": "Get user succcessful",
         "content": {
@@ -176,8 +410,28 @@
           }
         }
       },
+      "ViewsGetSuccess": {
+        "description": "Get views succcessful",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetAllViewSchema"
+            }
+          }
+        }
+      },
+      "ViewGetOneSuccess": {
+        "description": "Get view by id",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetOneViewSchema"
+            }
+          }
+        }
+      },
       "DefaultResponse": {
-        "description": "Base url",
+        "description": "Default response",
         "content": {
           "application/json": {
             "description": "Success",
@@ -203,6 +457,71 @@
               ]
             }
           }
+        }
+      }
+    },
+    "parameters": {
+      "FilenameParam": {
+        "name": "filename",
+        "in": "path",
+        "description": "Parameter to find file",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/FilenameSchema"
+        }
+      },
+      "Completed": {
+        "name": "completed",
+        "in": "query",
+        "description": "Update to property completed",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/CompletedSchema"
+        }
+      },
+      "Active": {
+        "name": "active",
+        "in": "query",
+        "description": "Update to property active",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/ActiveSchema"
+        }
+      },
+      "LocaleHeader": {
+        "name": "Accept-Language",
+        "in": "header",
+        "description": "Locale to request and response",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/LocaleSchema"
+        }
+      },
+      "IdParam": {
+        "name": "id",
+        "in": "path",
+        "description": "Id to find data in database",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/IdSchema"
+        }
+      },
+      "IdRoute": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "Id required to find data in database",
+        "schema": {
+          "$ref": "#/components/schemas/IdSchema"
+        }
+      },
+      "route": {
+        "name": "url",
+        "in": "path",
+        "description": "Url",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/route"
         }
       }
     },
@@ -344,6 +663,29 @@
           },
           "lang": {
             "$ref": "#/components/schemas/Lang"
+          }
+        }
+      },
+      "RolesViews": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "views": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/View"
+            }
           }
         }
       },
@@ -498,7 +840,12 @@
           "remember_me_token": {
             "type": "boolean"
           }
-        }
+        },
+        "required": [
+          "email",
+          "password",
+          "remember_me_token"
+        ]
       },
       "CategoryValidator": {
         "type": "object",
@@ -516,7 +863,13 @@
           "description": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "active",
+          "name",
+          "order_index",
+          "description"
+        ]
       },
       "PasswordAuthValidator": {
         "type": "object",
@@ -530,7 +883,12 @@
           "confirmPassword": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "currentPassword",
+          "newPassword",
+          "confirmPassword"
+        ]
       },
       "PasswordIdValidator": {
         "type": "object",
@@ -541,7 +899,22 @@
           "confirmPassword": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "newPassword",
+          "confirmPassword"
+        ]
+      },
+      "PasswordValidator": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ]
       },
       "RoleValidator": {
         "type": "object",
@@ -570,7 +943,28 @@
               "type": "number"
             }
           }
-        }
+        },
+        "required": [
+          "views"
+        ]
+      },
+      "FileValidator": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "string"
+          },
+          "extnames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "size",
+          "extnames"
+        ]
       },
       "TaskValidator": {
         "type": "object",
@@ -581,7 +975,11 @@
           "description": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "title",
+          "description"
+        ]
       },
       "RegisterAuthValidator": {
         "type": "object",
@@ -722,7 +1120,15 @@
           "description": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "category_id",
+          "active",
+          "name",
+          "order_index",
+          "url",
+          "description"
+        ]
       },
       "ExistsUserSchema": {
         "type": "object",
@@ -826,6 +1232,25 @@
               },
               "user": {
                 "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        }
+      },
+      "FileResponseSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "filename": {
+                "type": "string"
               }
             }
           }
@@ -1007,6 +1432,103 @@
           }
         }
       },
+      "GetAllRolesViewsSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "total": {
+                "type": "number"
+              },
+              "roles_views": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RolesViews"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetOneRoleViewSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "role_view": {
+                "$ref": "#/components/schemas/RolesViews"
+              }
+            }
+          }
+        }
+      },
+      "GetAllTasksSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "total": {
+                "type": "number"
+              },
+              "tasks": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetOneTaskSchema": {
+        "type": "object",
+        "properties": {
+          "statusResponse": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "total": {
+                "type": "number"
+              },
+              "task": {
+                "$ref": "#/components/schemas/Task"
+              }
+            }
+          }
+        }
+      },
+      "CompletedSchema": {
+        "type": "boolean"
+      },
+      "ActiveSchema": {
+        "type": "boolean"
+      },
       "RouteNotFound": {
         "type": "object",
         "properties": {
@@ -1107,27 +1629,13 @@
       },
       "IdSchema": {
         "type": "number"
+      },
+      "route": {
+        "type": "string"
       }
     },
-    "parameters": {
-      "LocaleHeader": {
-        "name": "Accept-Language",
-        "in": "header",
-        "description": "Locale to request and response",
-        "required": true,
-        "schema": {
-          "$ref": "#/components/schemas/LocaleSchema"
-        }
-      },
-      "IdParam": {
-        "name": "id",
-        "in": "path",
-        "description": "Id to find data in database",
-        "required": false,
-        "schema": {
-          "$ref": "#/components/schemas/IdSchema"
-        }
-      }
+    "FilenameSchema": {
+      "type": "string"
     }
   },
   "paths": {
@@ -1178,14 +1686,14 @@
         "summary": "Sign up",
         "description": "Register to app",
         "requestBody": {
-          "$ref": "#/components/requestBodies/UserCreateRequest"
+          "$ref": "#/components/requestBodies/UserRegisterRequest"
         },
         "responses": {
           "200": {
             "$ref": "#/components/responses/DefaultResponse"
           },
           "400": {
-            "$ref": "#/components/responses/UserCreateBadRequest"
+            "$ref": "#/components/responses/DefaultResponse"
           },
           "404": {
             "$ref": "#/components/responses/ResponseNotFound"
@@ -1260,9 +1768,28 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/DefaultResponse"
-          },
+          }
+        }
+      }
+    },
+    "/{route}": {
+      "get": {
+        "tags": [
+          "Endpoints"
+        ],
+        "summary": "Wildcard url",
+        "description": "Wildcard url",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/route"
+          }
+        ],
+        "responses": {
           "404": {
-            "description": "Get user succcessful",
+            "description": "Route not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1270,6 +1797,414 @@
                 }
               }
             }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Endpoints"
+        ],
+        "summary": "Wildcard url",
+        "description": "Wildcard url",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/route"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Route not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteNotFound"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Endpoints"
+        ],
+        "summary": "Wildcard url",
+        "description": "Wildcard url",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/route"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Route not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteNotFound"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Endpoints"
+        ],
+        "summary": "Wildcard url",
+        "description": "Wildcard url",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/route"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Route not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteNotFound"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Endpoints"
+        ],
+        "summary": "Wildcard url",
+        "description": "Wildcard url",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/route"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Route not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/files/upload": {
+      "post": {
+        "tags": [
+          "Files"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Upload files to type image",
+        "description": "Service to upload files (images)",
+        "requestBody": {
+          "description": "Data for upload files",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "contentType": "image/*"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FileUploadResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/files/get/{filename}": {
+      "get": {
+        "tags": [
+          "Files"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/FilenameParam"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get file (image)",
+        "description": "Get file (image) with filename",
+        "responses": {
+          "200": {
+            "description": "Return response file (image)",
+            "content": {
+              "image/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/files/delete/{filename}": {
+      "delete": {
+        "tags": [
+          "Files"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/FilenameParam"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete file (image)",
+        "description": "Delete file (image) with filename",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/get": {
+      "get": {
+        "tags": [
+          "Tasks"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get tasks",
+        "description": "Get all tasks",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TasksGetSuccess"
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/get/{id}": {
+      "get": {
+        "tags": [
+          "Tasks"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get tasks by id",
+        "description": "Get task by id",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetOneTaskSchema"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/create": {
+      "post": {
+        "tags": [
+          "Tasks"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create tasks",
+        "description": "Create task",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/TaskCreateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/update/{id}": {
+      "patch": {
+        "tags": [
+          "Tasks"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdRoute"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update tasks by id",
+        "description": "Update task by id",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/TaskUpdateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/status/{id}": {
+      "delete": {
+        "tags": [
+          "Tasks"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdRoute"
+          },
+          {
+            "$ref": "#/components/parameters/Completed"
+          },
+          {
+            "$ref": "#/components/parameters/Active"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Complete or deactivate tasks by id",
+        "description": "Complete or deactivate task by id",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
           }
         }
       }
@@ -1322,7 +2257,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get users",
+        "summary": "Get user by id",
         "description": "Get user by id",
         "responses": {
           "200": {
@@ -1383,7 +2318,7 @@
             "$ref": "#/components/parameters/LocaleHeader"
           },
           {
-            "$ref": "#/components/parameters/IdParam"
+            "$ref": "#/components/parameters/IdRoute"
           }
         ],
         "security": [
@@ -1391,8 +2326,8 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Create user",
-        "description": "Create users",
+        "summary": "Update user by id",
+        "description": "Update users by id",
         "requestBody": {
           "$ref": "#/components/requestBodies/UsersUpdateRequest"
         },
@@ -1422,7 +2357,7 @@
             "$ref": "#/components/parameters/LocaleHeader"
           },
           {
-            "$ref": "#/components/parameters/IdParam"
+            "$ref": "#/components/parameters/IdRoute"
           }
         ],
         "security": [
@@ -1434,6 +2369,720 @@
         "description": "Delete users by id",
         "responses": {
           "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/categories/get": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all categories",
+        "description": "Get all categories",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CategoriesGetSuccess"
+          }
+        }
+      }
+    },
+    "/api/v1/categories/get/{id}": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get one category by id",
+        "description": "Get category by id",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CategoryGetOneSuccess"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/categories/create": {
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create category",
+        "description": "Create category",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CategoryCreateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/categories/update/{id}": {
+      "patch": {
+        "tags": [
+          "Categories"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdRoute"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update category by id",
+        "description": "Update categories by id",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CategoryUpdateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/categories/delete/{id}": {
+      "delete": {
+        "tags": [
+          "Categories"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdRoute"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete category by id",
+        "description": "Delete categories by id",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/views/get": {
+      "get": {
+        "tags": [
+          "Views"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all views",
+        "description": "Get all views",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ViewsGetSuccess"
+          }
+        }
+      }
+    },
+    "/api/v1/views/get/{id}": {
+      "get": {
+        "tags": [
+          "Views"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get one view by id",
+        "description": "Get view by id",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ViewGetOneSuccess"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/views/create": {
+      "post": {
+        "tags": [
+          "Views"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create view",
+        "description": "Create view",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ViewsCreateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/views/update/{id}": {
+      "patch": {
+        "tags": [
+          "Views"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdRoute"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update view by id",
+        "description": "Update views by id",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ViewUpdateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/views/delete/{id}": {
+      "delete": {
+        "tags": [
+          "Views"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdRoute"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete view by id",
+        "description": "Delete views by id",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/roles/get": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all roles",
+        "description": "Get all roles",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/RolesGetSuccess"
+          }
+        }
+      }
+    },
+    "/api/v1/roles/get/{id}": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get one role by id",
+        "description": "Get roles by id",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/RoleGetOneSuccess"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/roles/create": {
+      "post": {
+        "tags": [
+          "Roles"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create roles",
+        "description": "Create role",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/RolesCreateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/roles/update/{id}": {
+      "patch": {
+        "tags": [
+          "Roles"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdRoute"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update roles by id",
+        "description": "Update role by id",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/RolesUpdateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/roles/delete/{id}": {
+      "delete": {
+        "tags": [
+          "Roles"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdRoute"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete roles by id",
+        "description": "Delete role by id",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/roles_views/get": {
+      "get": {
+        "tags": [
+          "Roles_views"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all roles and views",
+        "description": "Get all roles with views",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/RolesViewsGetSuccess"
+          }
+        }
+      }
+    },
+    "/api/v1/roles_views/get/{id}": {
+      "get": {
+        "tags": [
+          "Roles_views"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get one roles and view by id",
+        "description": "Get role with by id",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/RoleViewGetOneSuccess"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/roles_views/update/{id}": {
+      "patch": {
+        "tags": [
+          "Roles_views"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdRoute"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update roles with views by id",
+        "description": "Update role with views by id",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/RolesViewsUpdateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/password/update/default": {
+      "patch": {
+        "tags": [
+          "Passwords"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update passwore of users to default password",
+        "description": "Update password of user to default password",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PasswordUpdateRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/password/update/auth": {
+      "patch": {
+        "tags": [
+          "Passwords"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update password of users by auth",
+        "description": "Update password of user by auth",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PasswordUpdateAuthRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResponseNotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/password/update/{id}": {
+      "patch": {
+        "tags": [
+          "Passwords"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LocaleHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdRoute"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update password of users by id",
+        "description": "Update password of user by id",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PasswordUpdateIdRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DefaultResponse"
+          },
+          "400": {
             "$ref": "#/components/responses/DefaultResponse"
           },
           "404": {
