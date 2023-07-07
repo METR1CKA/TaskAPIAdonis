@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
-    "build:swagger": "node ace swagger:generate",
+    "swagger:build": "node ace swagger:generate",
+    "swagger:postbuild": "mkdir -p build/docs && cp docs/swagger.json build/docs/swagger.json",
     "start": "node server.js",
     "db:refresh": "node ace migration:refresh --seed",
     "db:fresh": "node ace migration:fresh --seed",
