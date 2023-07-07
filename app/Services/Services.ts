@@ -45,7 +45,7 @@ export default class Services {
   public async storeFile(file: MultipartFileContract): Promise<string> {
     const { clientName } = file
 
-    const { extnames } = this.validations
+    const { extnames } = this.getFileValidations()
 
     const extname = extnames.find(extn => clientName.includes(`.${extn}`))
 
