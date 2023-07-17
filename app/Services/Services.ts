@@ -33,7 +33,7 @@ export default class Services {
     if (Env.get('NODE_ENV') == 'development') console.log(Err)
   }
 
-  public generateFileSlug({ value, separator, extname }): string {
+  public generateFileSlug({ value = '', separator = '_', extname = '' }): string {
     return value
       .toLowerCase()
       .replace(/[`~!@#$%^&*()_\-+=\[\]{};:'"\\|\/,<>.?\s]/g, ' ')
